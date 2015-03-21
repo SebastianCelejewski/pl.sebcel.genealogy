@@ -231,7 +231,7 @@ public class DatabaseDelegate {
 		Osoba osoba = DatabaseLib.getOsoba(idOsoby);
 		DrzewoOsobaStruct osobaStruct = new DrzewoOsobaStruct();
 		osobaStruct.id= osoba.getId();
-		osobaStruct.nazwa = osoba.toString();
+		osobaStruct.nazwa = osoba.getImiona()+" "+osoba.getNazwisko();
 		osobaStruct.daneUrodzenia = DatabaseUtil.getUrInfo(osoba);
 		osobaStruct.daneSmierci = DatabaseUtil.getSmInfo(osoba);
 		osobaStruct.danePochowania = "";
