@@ -34,7 +34,7 @@ import com.sun.jimi.core.Jimi;
 public class GuiRysownik extends JFrame implements ActionListener, IDrawOptionsListener {
 
     public final static long serialVersionUID = 0l;
-
+    
     private static Color kolorOsoby = Color.RED;
     private static Color kolorMalzonka = Color.BLUE;
     private static Color kolorInfo = Color.GRAY;
@@ -89,7 +89,7 @@ public class GuiRysownik extends JFrame implements ActionListener, IDrawOptionsL
 
     private void rysuj(OpcjeRysowania opcjeRysowania) {
         System.out.println("rysujê");
-        Image obrazDrzewa = rysujDrzewo(diagramInfo.idKorzenia, new Font("Courier", Font.PLAIN, 12), 20, opcjeRysowania);
+        Image obrazDrzewa = rysujDrzewo(diagramInfo.idKorzenia, new Font("Courier", Font.PLAIN, 12 * opcjeRysowania.getZoom()), 20, opcjeRysowania);
         drzewo.setImage(obrazDrzewa);
         scrollPane.setViewportView(GuiRysownik.this.drzewo);
         repaint();

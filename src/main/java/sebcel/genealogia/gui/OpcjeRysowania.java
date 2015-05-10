@@ -11,6 +11,7 @@ public class OpcjeRysowania {
     private boolean pokazDaneSlubu;
     private boolean pokazDaneRozstaniaSie;
     private boolean pokazDaneRozwodu;
+    private int zoom = 1;
 
     public boolean isPokazId() {
         return pokazId;
@@ -82,5 +83,13 @@ public class OpcjeRysowania {
 
     public void setPokazDaneRozwodu(boolean pokazDaneRozwodu) {
         this.pokazDaneRozwodu = pokazDaneRozwodu;
+    }
+
+    public int getZoom() {
+        return zoom;
+    }
+
+    public void setZoom(int zoom) {
+        this.zoom = zoom;
     }
 }

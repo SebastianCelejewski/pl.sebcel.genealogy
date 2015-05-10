@@ -30,6 +30,7 @@ public class PanelOpcji extends JFrame implements ActionListener {
     private JCheckBox checkBoxShowMarriageInfo = new JCheckBox();
     private JCheckBox checkBoxShowSeparationInfo = new JCheckBox();
     private JCheckBox checkBoxShowDivorceInfo = new JCheckBox();
+    private ZoomPanel zoomPanel = new ZoomPanel();
 
     private IDrawOptionsListener drawOptionsListener;
 
@@ -64,6 +65,8 @@ public class PanelOpcji extends JFrame implements ActionListener {
         optionsPanel.add(checkBoxShowSeparationInfo, new GridBagConstraints(1, 7, 1, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(1, 1, 1, 1), 1, 1));
         optionsPanel.add(new JLabel("Dane o rozwodzie"), new GridBagConstraints(0, 8, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(1, 1, 1, 1), 1, 1));
         optionsPanel.add(checkBoxShowDivorceInfo, new GridBagConstraints(1, 8, 1, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(1, 1, 1, 1), 1, 1));
+        optionsPanel.add(new JLabel("Powiêkszenie"), new GridBagConstraints(0, 9, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(1, 1, 1, 1), 1, 1));
+        optionsPanel.add(zoomPanel, new GridBagConstraints(1, 9, 1, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(1, 1, 1, 1), 1, 1));
 
         checkBoxShowIds.addActionListener(this);
         checkBoxShowBirthData.addActionListener(this);
@@ -74,6 +77,7 @@ public class PanelOpcji extends JFrame implements ActionListener {
         checkBoxShowMarriageInfo.addActionListener(this);
         checkBoxShowSeparationInfo.addActionListener(this);
         checkBoxShowDivorceInfo.addActionListener(this);
+        zoomPanel.addActionListener(this);
 
         buttonZamknij.addActionListener(new ActionListener() {
             @Override
@@ -113,5 +117,6 @@ public class PanelOpcji extends JFrame implements ActionListener {
         opcjeRysowania.setPokazDaneSlubu(checkBoxShowMarriageInfo.isSelected());
         opcjeRysowania.setPokazDaneRozstaniaSie(checkBoxShowSeparationInfo.isSelected());
         opcjeRysowania.setPokazDaneRozwodu(checkBoxShowDivorceInfo.isSelected());
+        opcjeRysowania.setZoom(zoomPanel.getZoom());
     }
 }
