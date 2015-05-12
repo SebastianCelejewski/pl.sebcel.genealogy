@@ -26,6 +26,7 @@ public class Zwiazek {
 	private String miejsceRozstania;
 	private String dataRozwodu;
 	private String miejsceRozwodu;
+	private String opis;
 	private Collection<Osoba> dzieci;
 	
 	@Id
@@ -128,5 +129,12 @@ public class Zwiazek {
 		this.miejsceRozwodu = miejsceRozwodu;
 	}
 	
+	@Column (name="opis", nullable = true)
+    public String getOpis() {
+        return opis;
+    }
 	
+	public void setOpis(String opis) {
+	    this.opis = opis;
+	}
 }

@@ -81,6 +81,7 @@ CREATE TABLE `zwiazki` (
   `miejsce_rozstania` varchar(128) DEFAULT NULL,
   `data_rozwodu` varchar(45) DEFAULT NULL,
   `miejsce_rozwodu` varchar(128) DEFAULT NULL,
+  `opis` text,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=265 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;

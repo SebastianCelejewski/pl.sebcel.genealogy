@@ -13,4 +13,5 @@ public class DaneEdycjiZwiazkuStruct {
 	public String miejsceRozstania;
 	public String dataRozwodu;
 	public String miejsceRozwodu;
+	public String opis;
 }

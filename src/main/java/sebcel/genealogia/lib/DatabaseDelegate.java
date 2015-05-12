@@ -389,6 +389,7 @@ public class DatabaseDelegate {
 		daneZwiazku.miejsceRozstania = zwiazek.getMiejsceRozstania();
 		daneZwiazku.dataRozwodu = zwiazek.getDataRozwodu();
 		daneZwiazku.miejsceRozwodu = zwiazek.getMiejsceRozwodu();
+		daneZwiazku.opis = zwiazek.getOpis();
 		
 		return daneZwiazku;
 	}
@@ -456,6 +457,7 @@ public class DatabaseDelegate {
 		zwiazek.setMiejsceRozstania(daneZwiazku.miejsceRozstania);
 		zwiazek.setDataRozwodu(daneZwiazku.dataRozwodu);
 		zwiazek.setMiejsceRozwodu(daneZwiazku.miejsceRozwodu);
+		zwiazek.setOpis(daneZwiazku.opis);
 		
 		DatabaseLib.save(zwiazek);
 	}
@@ -524,6 +526,7 @@ public class DatabaseDelegate {
 		zwiazek.setMiejsceRozstania(daneZwiazku.miejsceRozstania);
 		zwiazek.setDataRozwodu(daneZwiazku.dataRozwodu);
 		zwiazek.setMiejsceRozwodu(daneZwiazku.miejsceRozwodu);
+		zwiazek.setOpis(daneZwiazku.opis);
 		
 		DatabaseLib.save(zwiazek);
 	}
