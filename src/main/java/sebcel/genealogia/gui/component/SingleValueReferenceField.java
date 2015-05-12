@@ -6,11 +6,11 @@ import java.awt.Insets;
 
 import javax.swing.JComboBox;
 
-public class Lista extends JComboBox {
+public class SingleValueReferenceField extends JComboBox {
 	
 	public final static long serialVersionUID = 0l;
 	
-	public Lista() {
+	public SingleValueReferenceField() {
 		super();
 		this.setMinimumSize(new Dimension(200,21));
 		this.setPreferredSize(new Dimension(400,21));

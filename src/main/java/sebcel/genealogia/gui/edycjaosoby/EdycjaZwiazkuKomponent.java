@@ -5,7 +5,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 
 import sebcel.genealogia.gui.component.Etykieta;
-import sebcel.genealogia.gui.component.Lista;
+import sebcel.genealogia.gui.component.SingleValueReferenceField;
 import sebcel.genealogia.gui.component.ObszarTekstowy;
 import sebcel.genealogia.gui.component.PoleTekstowe;
 import sebcel.genealogia.lib.DatabaseDelegate;
@@ -31,8 +31,8 @@ public class EdycjaZwiazkuKomponent extends EdycjaKomponent {
 	private Etykieta lMiejsceRozwodu = new Etykieta("Miejsce rozwodu:");
     private Etykieta lOpis = new Etykieta("Opis");	
 	
-	private Lista tMezczyzna = new Lista();
-	private Lista tKobieta = new Lista();
+	private SingleValueReferenceField tMezczyzna = new SingleValueReferenceField();
+	private SingleValueReferenceField tKobieta = new SingleValueReferenceField();
 	private PoleTekstowe tDataPoznania = new PoleTekstowe();
 	private PoleTekstowe tMiejscePoznania = new PoleTekstowe();
 	private PoleTekstowe tDataSlubu = new PoleTekstowe();

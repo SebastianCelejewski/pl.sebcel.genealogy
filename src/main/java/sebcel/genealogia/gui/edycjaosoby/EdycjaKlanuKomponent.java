@@ -5,7 +5,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 
 import sebcel.genealogia.gui.component.Etykieta;
-import sebcel.genealogia.gui.component.Lista;
+import sebcel.genealogia.gui.component.SingleValueReferenceField;
 import sebcel.genealogia.gui.component.PoleTekstowe;
 import sebcel.genealogia.lib.DatabaseDelegate;
 import sebcel.genealogia.struct.DaneEdycjiKlanuStruct;
@@ -24,7 +24,7 @@ public class EdycjaKlanuKomponent extends EdycjaKomponent {
 	
 	private PoleTekstowe tNazwa = new PoleTekstowe();
 	private PoleTekstowe tOpis = new PoleTekstowe();
-	private Lista tKorzen = new Lista();
+	private SingleValueReferenceField tKorzen = new SingleValueReferenceField();
 	
 	public EdycjaKlanuKomponent() {
 		
@@ -117,7 +117,4 @@ public class EdycjaKlanuKomponent extends EdycjaKomponent {
 		diagramInfo.opis = "Diagram klanu '"+daneKlanu.nazwa+"'";
 		return diagramInfo;
 	}
-	
-	
-	
 }
