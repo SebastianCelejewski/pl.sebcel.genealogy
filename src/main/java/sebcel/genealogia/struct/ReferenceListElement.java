@@ -5,6 +5,14 @@ public class ReferenceListElement {
     private long id;
     private String description;
 
+    public ReferenceListElement() {
+    }
+
+    public ReferenceListElement(long id, String description) {
+        this.id = id;
+        this.description = description;
+    }
+
     public long getId() {
         return id;
     }
@@ -19,6 +27,11 @@ public class ReferenceListElement {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Override
+    public String toString() {
+        return description + " (" + id + ")";
     }
 
     @Override

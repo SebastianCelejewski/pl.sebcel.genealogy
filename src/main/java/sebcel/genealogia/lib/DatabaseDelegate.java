@@ -24,7 +24,6 @@ import sebcel.genealogia.struct.ElementListyDokumentowStruct;
 import sebcel.genealogia.struct.ElementListyKlanowStruct;
 import sebcel.genealogia.struct.ElementListyOsobStruct;
 import sebcel.genealogia.struct.ElementListyZwiazkowStruct;
-import sebcel.genealogia.struct.OsobaStruct;
 import sebcel.genealogia.struct.ReferenceListElement;
 import sebcel.genealogia.struct.RodzinaStruct;
 import sebcel.genealogia.struct.ZwiazekStruct;
@@ -421,11 +420,11 @@ public class DatabaseDelegate {
                 }
                 RodzinaStruct rodzina = new RodzinaStruct();
                 if (malzonek != null)
-                    rodzina.malzonek = new OsobaStruct(malzonek.getId(), malzonek.toString());
-                rodzina.idDzieci = new Vector<OsobaStruct>();
+                    rodzina.malzonek = new ReferenceListElement(malzonek.getId(), malzonek.toString());
+                rodzina.idDzieci = new Vector<ReferenceListElement>();
                 if (zwiazek.getDzieci() != null && zwiazek.getDzieci().size() > 0) {
                     for (Osoba dziecko : zwiazek.getDzieci()) {
-                        rodzina.idDzieci.add(new OsobaStruct(dziecko.getId(), dziecko.toString()));
+                        rodzina.idDzieci.add(new ReferenceListElement(dziecko.getId(), dziecko.toString()));
                     }
                 }
                 daneOsoby.getRodziny().add(rodzina);
@@ -501,7 +500,26 @@ public class DatabaseDelegate {
         daneDokumentu.setSymbol(dokument.getSymbol());
         daneDokumentu.setOpis(dokument.getOpis());
 
+        daneDokumentu.setOsoby(osobyToReferenceListElements(dokument.getOsoby()));
+
         return daneDokumentu;
+    }
+
+    private static List<ReferenceListElement> osobyToReferenceListElements(List<Osoba> osoby) {
+        List<ReferenceListElement> result = new ArrayList<ReferenceListElement>();
+        for (Osoba osoba : osoby) {
+            result.add(osobaToReferenceListElement(osoba));
+        }
+
+        return result;
+    }
+
+    private static ReferenceListElement osobaToReferenceListElement(Osoba osoba) {
+        ReferenceListElement result = new ReferenceListElement();
+        result.setId(osoba.getId());
+        result.setDescription(osoba.getImiona() + " " + osoba.getNazwisko() + " (" + osoba.getId() + ")");
+
+        return result;
     }
 
     public static void zapiszDanePoEdycjiOsoby(DaneEdycjiOsoby daneOsoby) {
@@ -544,12 +562,12 @@ public class DatabaseDelegate {
         Zwiazek zwiazek = DatabaseLib.getZwiazek(daneZwiazku.id);
 
         if (daneZwiazku.mezczyzna != null) {
-            Long idMezczyzny = daneZwiazku.mezczyzna.id;
+            Long idMezczyzny = daneZwiazku.mezczyzna.getId();
             Osoba mezczyzna = DatabaseLib.getOsoba(idMezczyzny);
             zwiazek.setMezczyzna(mezczyzna);
         }
         if (daneZwiazku.kobieta != null) {
-            Long idKobiety = daneZwiazku.kobieta.id;
+            Long idKobiety = daneZwiazku.kobieta.getId();
             Osoba kobieta = DatabaseLib.getOsoba(idKobiety);
             zwiazek.setKobieta(kobieta);
         }
@@ -575,7 +593,7 @@ public class DatabaseDelegate {
         klan.setOpis(daneKlanu.opis);
 
         if (daneKlanu.korzen != null) {
-            Long idKorzenia = daneKlanu.korzen.id;
+            Long idKorzenia = daneKlanu.korzen.getId();
             Osoba osoba = DatabaseLib.getOsoba(idKorzenia);
             klan.setKorzen(osoba);
         }
@@ -590,6 +608,14 @@ public class DatabaseDelegate {
         dokument.setTytul(daneDokumentu.getTytul());
         dokument.setSymbol(daneDokumentu.getSymbol());
         dokument.setOpis(daneDokumentu.getOpis());
+
+        if (daneDokumentu.getOsoby() != null) {
+            dokument.getOsoby().clear();
+            for (ReferenceListElement osobaElement : daneDokumentu.getOsoby()) {
+                Osoba osoba = DatabaseLib.getOsoba(osobaElement.getId());
+                dokument.getOsoby().add(osoba);
+            }
+        }
 
         DatabaseLib.save(dokument);
     }
@@ -633,12 +659,12 @@ public class DatabaseDelegate {
         Zwiazek zwiazek = new Zwiazek();
 
         if (daneZwiazku.mezczyzna != null) {
-            Long idMezczyzny = daneZwiazku.mezczyzna.id;
+            Long idMezczyzny = daneZwiazku.mezczyzna.getId();
             Osoba mezczyzna = DatabaseLib.getOsoba(idMezczyzny);
             zwiazek.setMezczyzna(mezczyzna);
         }
         if (daneZwiazku.kobieta != null) {
-            Long idKobiety = daneZwiazku.kobieta.id;
+            Long idKobiety = daneZwiazku.kobieta.getId();
             Osoba kobieta = DatabaseLib.getOsoba(idKobiety);
             zwiazek.setKobieta(kobieta);
         }
@@ -664,7 +690,7 @@ public class DatabaseDelegate {
         klan.setOpis(daneKlanu.opis);
 
         if (daneKlanu.korzen != null) {
-            Long idKorzenia = daneKlanu.korzen.id;
+            Long idKorzenia = daneKlanu.korzen.getId();
             Osoba osoba = DatabaseLib.getOsoba(idKorzenia);
             klan.setKorzen(osoba);
         }
@@ -680,6 +706,14 @@ public class DatabaseDelegate {
         dokument.setSymbol(daneDokumentu.getSymbol());
         dokument.setOpis(daneDokumentu.getOpis());
 
+        List<Osoba> osoby = new ArrayList<Osoba>();
+        if (daneDokumentu.getOsoby() != null) {
+            for (ReferenceListElement osobaElement : daneDokumentu.getOsoby()) {
+                Osoba osoba = DatabaseLib.getOsoba(osobaElement.getId());
+                osoby.add(osoba);
+            }
+        }
+        dokument.setOsoby(osoby);
         DatabaseLib.save(dokument);
     }
 
@@ -695,19 +729,19 @@ public class DatabaseDelegate {
         return rezultat;
     }
 
-    public static List<OsobaStruct> getMezczyzni() {
+    public static List<ReferenceListElement> getMezczyzni() {
         System.out.println("[DatabaseDelegate][getMezczyzni]");
         Collection<Osoba> osoby = DatabaseLib.getMezczyzni();
         return toStruct(osoby);
     }
 
-    public static List<OsobaStruct> getKobiety() {
+    public static List<ReferenceListElement> getKobiety() {
         System.out.println("[DatabaseDelegate][getKobiety]");
         Collection<Osoba> osoby = DatabaseLib.getKobiety();
         return toStruct(osoby);
     }
 
-    public static List<OsobaStruct> getOsoby() {
+    public static List<ReferenceListElement> getOsoby() {
         System.out.println("[DatabaseDelegate][getOsoby]");
         Collection<Osoba> osoby = DatabaseLib.getOsoby();
         return toStruct(osoby);
@@ -727,13 +761,15 @@ public class DatabaseDelegate {
         return struct;
     }
 
-    private static OsobaStruct toStruct(Osoba osoba) {
-        OsobaStruct struct = new OsobaStruct(osoba.getId(), osoba.toString());
+    private static ReferenceListElement toStruct(Osoba osoba) {
+        ReferenceListElement struct = new ReferenceListElement();
+        struct.setId(osoba.getId());
+        struct.setDescription(osoba.toString());
         return struct;
     }
 
-    private static List<OsobaStruct> toStruct(Collection<Osoba> osoby) {
-        List<OsobaStruct> rezultat = new ArrayList<OsobaStruct>();
+    private static List<ReferenceListElement> toStruct(Collection<Osoba> osoby) {
+        List<ReferenceListElement> rezultat = new ArrayList<ReferenceListElement>();
         if (osoby != null && osoby.size() > 0) {
             for (Osoba osoba : osoby) {
                 rezultat.add(toStruct(osoba));

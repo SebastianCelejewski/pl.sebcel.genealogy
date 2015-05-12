@@ -10,15 +10,14 @@ import javax.swing.tree.TreeModel;
 
 import sebcel.genealogia.gui.component.Drzewo;
 import sebcel.genealogia.gui.component.Etykieta;
-import sebcel.genealogia.gui.component.SingleValueReferenceField;
 import sebcel.genealogia.gui.component.MultiValueReferenceField;
 import sebcel.genealogia.gui.component.ObszarTekstowy;
 import sebcel.genealogia.gui.component.PoleTekstowe;
+import sebcel.genealogia.gui.component.SingleValueReferenceField;
 import sebcel.genealogia.lib.DatabaseDelegate;
 import sebcel.genealogia.struct.DaneEdycjiOsoby;
 import sebcel.genealogia.struct.DiagramInfoStruct;
 import sebcel.genealogia.struct.ReferenceListElement;
-import sebcel.genealogia.struct.OsobaStruct;
 import sebcel.genealogia.struct.RodzinaStruct;
 import sebcel.genealogia.struct.ZwiazekStruct;
 
@@ -149,9 +148,9 @@ public class EdycjaOsobyKomponent extends EdycjaKomponent {
             for (RodzinaStruct rodzina : rodziny) {
                 DefaultMutableTreeNode nodeRodzina = new DefaultMutableTreeNode(rodzina.malzonek);
                 root.add(nodeRodzina);
-                List<OsobaStruct> dzieci = rodzina.idDzieci;
+                List<ReferenceListElement> dzieci = rodzina.idDzieci;
                 if (dzieci != null && dzieci.size() > 0) {
-                    for (OsobaStruct dziecko : dzieci) {
+                    for (ReferenceListElement dziecko : dzieci) {
                         DefaultMutableTreeNode nodeDziecko = new DefaultMutableTreeNode(dziecko);
                         nodeRodzina.add(nodeDziecko);
                     }
