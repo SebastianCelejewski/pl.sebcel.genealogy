@@ -22,6 +22,4 @@ public class OsobaStruct {
 		OsobaStruct osoba = (OsobaStruct) obj;
 		return this.id.equals(osoba.id);
 	}
-	
-	
 }
