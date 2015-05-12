@@ -6,6 +6,7 @@ import javax.swing.JOptionPane;
 
 import sebcel.genealogia.gui.component.Etykieta;
 import sebcel.genealogia.gui.component.Lista;
+import sebcel.genealogia.gui.component.ObszarTekstowy;
 import sebcel.genealogia.gui.component.PoleTekstowe;
 import sebcel.genealogia.lib.DatabaseDelegate;
 import sebcel.genealogia.struct.DaneEdycjiZwiazkuStruct;
@@ -28,6 +29,7 @@ public class EdycjaZwiazkuKomponent extends EdycjaKomponent {
 	private Etykieta lMiejsceRozstania = new Etykieta("Miejsce rozstania:");
 	private Etykieta lDataRozwodu = new Etykieta("Data rozwodu:");
 	private Etykieta lMiejsceRozwodu = new Etykieta("Miejsce rozwodu:");
+    private Etykieta lOpis = new Etykieta("Opis");	
 	
 	private Lista tMezczyzna = new Lista();
 	private Lista tKobieta = new Lista();
@@ -39,6 +41,7 @@ public class EdycjaZwiazkuKomponent extends EdycjaKomponent {
 	private PoleTekstowe tMiejsceRozstania = new PoleTekstowe();
 	private PoleTekstowe tDataRozwodu = new PoleTekstowe();
 	private PoleTekstowe tMiejsceRozwodu = new PoleTekstowe();
+    private ObszarTekstowy tOpis = new ObszarTekstowy();
 	
 	public EdycjaZwiazkuKomponent() {
 		int y=0;
@@ -52,6 +55,7 @@ public class EdycjaZwiazkuKomponent extends EdycjaKomponent {
 		this.add(lMiejsceRozstania, lMiejsceRozstania.getConstraints(0,y++));
 		this.add(lDataRozwodu, lDataRozwodu.getConstraints(0,y++));
 		this.add(lMiejsceRozwodu, lMiejsceRozwodu.getConstraints(0,y++));
+		this.add(lOpis,lOpis.getConstraints(0,  y++));
 
 		y=0;
 		this.add(tMezczyzna, tMezczyzna.getConstraints(1,y++));
@@ -64,6 +68,7 @@ public class EdycjaZwiazkuKomponent extends EdycjaKomponent {
 		this.add(tMiejsceRozstania, tMiejsceRozstania.getConstraints(1,y++));
 		this.add(tDataRozwodu, tDataRozwodu.getConstraints(1,y++));
 		this.add(tMiejsceRozwodu, tMiejsceRozwodu.getConstraints(1,y++));
+		this.add(tOpis, tOpis.getConstraints(1,  y++));
 	
 	}
 	
@@ -86,7 +91,7 @@ public class EdycjaZwiazkuKomponent extends EdycjaKomponent {
 		tMiejsceRozstania.setText(daneZwiazku.miejsceRozstania);
 		tDataRozwodu.setText(daneZwiazku.dataRozwodu);
 		tMiejsceRozwodu.setText(daneZwiazku.miejsceRozwodu);
-
+		tOpis.setText(daneZwiazku.opis);
 	}
 	
 	private void odswiezListy() {
@@ -130,6 +135,7 @@ public class EdycjaZwiazkuKomponent extends EdycjaKomponent {
 		daneZwiazku.miejsceRozstania= tMiejsceRozstania.getText().trim();
 		daneZwiazku.dataRozwodu = tDataRozwodu.getText().trim();
 		daneZwiazku.miejsceRozwodu= tMiejsceRozwodu.getText().trim();
+		daneZwiazku.opis = tOpis.getText().trim();
 		
 		if (trybPracy==TrybPracy.EDYCJA) {
 			DatabaseDelegate.zapiszDanePoEdycjiZwiazku(daneZwiazku);
@@ -151,6 +157,7 @@ public class EdycjaZwiazkuKomponent extends EdycjaKomponent {
 		tMiejsceRozstania.setText("");
 		tDataRozwodu.setText("");
 		tMiejsceRozwodu.setText("");
+		tOpis.setText("");
 	}
 
 	@Override
@@ -181,5 +188,4 @@ public class EdycjaZwiazkuKomponent extends EdycjaKomponent {
 		
 		return diagramInfo;
 	}
-	
 }
