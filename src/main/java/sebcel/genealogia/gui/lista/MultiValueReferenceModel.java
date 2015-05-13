@@ -24,6 +24,9 @@ public class MultiValueReferenceModel implements ListModel {
 
     public void setData(List<ReferenceListElement> data) {
         this.data = data;
+        for (ListDataListener l : listeners) {
+            l.contentsChanged(new ListDataEvent(this, ListDataEvent.CONTENTS_CHANGED, 0, data.size() - 1));
+        }
     }
 
     public List<ReferenceListElement> getData() {

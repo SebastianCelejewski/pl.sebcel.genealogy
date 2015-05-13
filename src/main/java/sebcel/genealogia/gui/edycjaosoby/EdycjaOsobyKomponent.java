@@ -1,6 +1,8 @@
 package sebcel.genealogia.gui.edycjaosoby;
 
 import java.awt.GridBagLayout;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.swing.JOptionPane;
@@ -160,10 +162,8 @@ public class EdycjaOsobyKomponent extends EdycjaKomponent {
         TreeModel treeModel = new DefaultTreeModel(root);
         tRodzina.setModel(treeModel);
 
-        List<ReferenceListElement> dokumentyWybrane = daneOsoby.getDokumentyWybrane();
-        List<ReferenceListElement> dokumentyWszystkie = daneOsoby.getDokumentyWszystkie();
+        List<ReferenceListElement> dokumentyWybrane = new ArrayList<ReferenceListElement>(daneOsoby.getDokumenty());
         tDokumenty.setSelectedItems(dokumentyWybrane);
-        tDokumenty.setAllItems(dokumentyWszystkie);
     }
 
     private void odswiezListy() {
@@ -208,7 +208,7 @@ public class EdycjaOsobyKomponent extends EdycjaKomponent {
         } else {
             daneOsoby.setRodzice((ZwiazekStruct) tRodzice.getSelectedItem());
         }
-        daneOsoby.setDokumentyWybrane(tDokumenty.getSelectedItems());
+        daneOsoby.setDokumenty(new HashSet<ReferenceListElement>(tDokumenty.getSelectedItems()));
 
         if (trybPracy == TrybPracy.EDYCJA) {
             DatabaseDelegate.zapiszDanePoEdycjiOsoby(daneOsoby);

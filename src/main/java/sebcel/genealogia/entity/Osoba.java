@@ -1,7 +1,7 @@
 package sebcel.genealogia.entity;
 
 import java.util.Collection;
-import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -40,7 +40,7 @@ public class Osoba {
     private String zawodyWykonywane;
     private Collection<Notatka> notatki;
     private String opis;
-    private List<Dokument> dokumenty;
+    private Set<Dokument> dokumenty;
 
     @Id
     @Column(name = "id")
@@ -212,11 +212,11 @@ public class Osoba {
         joinColumns = {@JoinColumn(name = "id_osoby", nullable = false)}, 
         inverseJoinColumns = {@JoinColumn (name = "id_dokumentu", nullable = false) }
     )
-    public List<Dokument> getDokumenty() {
+    public Set<Dokument> getDokumenty() {
         return dokumenty;
     }
 
-    public void setDokumenty(List<Dokument> dokumenty) {
+    public void setDokumenty(Set<Dokument> dokumenty) {
         this.dokumenty = dokumenty;
     }
 

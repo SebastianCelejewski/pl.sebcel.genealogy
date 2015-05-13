@@ -1,6 +1,6 @@
 package sebcel.genealogia.struct;
 
-import java.util.List;
+import java.util.Set;
 
 public class DaneEdycjiDokumentu {
 
@@ -8,7 +8,7 @@ public class DaneEdycjiDokumentu {
     private String tytul;
     private String symbol;
     private String opis;
-    private List<ReferenceListElement> osoby;
+    private Set<ReferenceListElement> osoby;
 
     public Long getId() {
         return id;
@@ -42,11 +42,11 @@ public class DaneEdycjiDokumentu {
         this.opis = opis;
     }
 
-    public List<ReferenceListElement> getOsoby() {
+    public Set<ReferenceListElement> getOsoby() {
         return osoby;
     }
 
-    public void setOsoby(List<ReferenceListElement> osoby) {
+    public void setOsoby(Set<ReferenceListElement> osoby) {
         this.osoby = osoby;
     }
 }

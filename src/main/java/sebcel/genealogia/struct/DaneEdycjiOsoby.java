@@ -1,6 +1,7 @@
 package sebcel.genealogia.struct;
 
 import java.util.List;
+import java.util.Set;
 
 public class DaneEdycjiOsoby {
 
@@ -15,8 +16,7 @@ public class DaneEdycjiOsoby {
     private String miejscePochowania;
     private ZwiazekStruct rodzice;
     private List<RodzinaStruct> rodziny;
-    private List<ReferenceListElement> dokumentyWybrane;
-    private List<ReferenceListElement> dokumentyWszystkie;
+    private Set<ReferenceListElement> dokumenty;
     private String plec;
     private String wyksztalcenie;
     private String zawodyWykonywane;
@@ -151,20 +151,11 @@ public class DaneEdycjiOsoby {
         this.miejsceZamieszkania = miejsceZamieszkania;
     }
 
-    public List<ReferenceListElement> getDokumentyWybrane() {
-        return dokumentyWybrane;
+    public Set<ReferenceListElement> getDokumenty() {
+        return dokumenty;
     }
 
-    public void setDokumentyWybrane(List<ReferenceListElement> dokumentyWybrane) {
-        this.dokumentyWybrane = dokumentyWybrane;
+    public void setDokumenty(Set<ReferenceListElement> dokumenty) {
+        this.dokumenty = dokumenty;
     }
-
-    public List<ReferenceListElement> getDokumentyWszystkie() {
-        return dokumentyWszystkie;
-    }
-
-    public void setDokumentyWszystkie(List<ReferenceListElement> dokumentyWszystkie) {
-        this.dokumentyWszystkie = dokumentyWszystkie;
-    }
-
 }

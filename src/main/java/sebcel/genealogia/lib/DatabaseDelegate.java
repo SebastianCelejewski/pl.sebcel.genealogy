@@ -7,7 +7,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.Vector;
 
 import sebcel.genealogia.entity.Dokument;
@@ -431,21 +433,14 @@ public class DatabaseDelegate {
             }
         }
 
-        List<ReferenceListElement> wybraneDokumenty = new ArrayList<ReferenceListElement>();
+        Set<ReferenceListElement> wybraneDokumenty = new HashSet<ReferenceListElement>();
         if (osoba.getDokumenty() != null && osoba.getDokumenty().size() > 0) {
             for (Dokument dokument : osoba.getDokumenty()) {
                 wybraneDokumenty.add(dokumentToReferencedListElement(dokument));
             }
         }
 
-        List<ReferenceListElement> wszystkieDokumenty = new ArrayList<ReferenceListElement>();
-        for (Dokument dokument : DatabaseLib.getDokumenty()) {
-            wszystkieDokumenty.add(dokumentToReferencedListElement(dokument));
-        }
-
-        daneOsoby.setDokumentyWszystkie(wszystkieDokumenty);
-        daneOsoby.setDokumentyWybrane(wybraneDokumenty);
-
+        daneOsoby.setDokumenty(wybraneDokumenty);
         return daneOsoby;
     }
 
@@ -505,8 +500,8 @@ public class DatabaseDelegate {
         return daneDokumentu;
     }
 
-    private static List<ReferenceListElement> osobyToReferenceListElements(List<Osoba> osoby) {
-        List<ReferenceListElement> result = new ArrayList<ReferenceListElement>();
+    private static Set<ReferenceListElement> osobyToReferenceListElements(Set<Osoba> osoby) {
+        Set<ReferenceListElement> result = new HashSet<ReferenceListElement>();
         for (Osoba osoba : osoby) {
             result.add(osobaToReferenceListElement(osoba));
         }
@@ -546,11 +541,12 @@ public class DatabaseDelegate {
             osoba.setZwiazekRodzicow(zwiazekRodzicow);
         }
 
-        if (daneOsoby.getDokumentyWybrane() != null) {
+        if (daneOsoby.getDokumenty() != null) {
             osoba.getDokumenty().clear();
-            for (ReferenceListElement dokumentElement : daneOsoby.getDokumentyWybrane()) {
+            for (ReferenceListElement dokumentElement : daneOsoby.getDokumenty()) {
                 Dokument dokument = DatabaseLib.getDokument(dokumentElement.getId());
                 osoba.getDokumenty().add(dokument);
+                dokument.getOsoby().add(osoba);
             }
         }
 
@@ -614,6 +610,7 @@ public class DatabaseDelegate {
             for (ReferenceListElement osobaElement : daneDokumentu.getOsoby()) {
                 Osoba osoba = DatabaseLib.getOsoba(osobaElement.getId());
                 dokument.getOsoby().add(osoba);
+                osoba.getDokumenty().add(dokument);
             }
         }
 
@@ -642,11 +639,12 @@ public class DatabaseDelegate {
             osoba.setZwiazekRodzicow(zwiazekRodzicow);
         }
 
-        if (daneOsoby.getDokumentyWybrane() != null) {
-            List<Dokument> dokumenty = new ArrayList<Dokument>();
-            for (ReferenceListElement dokumentElement : daneOsoby.getDokumentyWybrane()) {
+        if (daneOsoby.getDokumenty() != null) {
+            Set<Dokument> dokumenty = new HashSet<Dokument>();
+            for (ReferenceListElement dokumentElement : daneOsoby.getDokumenty()) {
                 Dokument dokument = DatabaseLib.getDokument(dokumentElement.getId());
                 dokumenty.add(dokument);
+                dokument.getOsoby().add(osoba);
             }
             osoba.setDokumenty(dokumenty);
         }
@@ -706,11 +704,12 @@ public class DatabaseDelegate {
         dokument.setSymbol(daneDokumentu.getSymbol());
         dokument.setOpis(daneDokumentu.getOpis());
 
-        List<Osoba> osoby = new ArrayList<Osoba>();
+        Set<Osoba> osoby = new HashSet<Osoba>();
         if (daneDokumentu.getOsoby() != null) {
             for (ReferenceListElement osobaElement : daneDokumentu.getOsoby()) {
                 Osoba osoba = DatabaseLib.getOsoba(osobaElement.getId());
                 osoby.add(osoba);
+                osoba.getDokumenty().add(dokument);
             }
         }
         dokument.setOsoby(osoby);
