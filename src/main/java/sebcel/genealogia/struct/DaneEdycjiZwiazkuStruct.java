@@ -3,8 +3,8 @@ package sebcel.genealogia.struct;
 public class DaneEdycjiZwiazkuStruct {
 
 	public Long id;
-	public OsobaStruct mezczyzna;
-	public OsobaStruct kobieta;
+	public ReferenceListElement mezczyzna;
+	public ReferenceListElement kobieta;
 	public String dataPoznania;
 	public String miejscePoznania;
 	public String dataSlubu;

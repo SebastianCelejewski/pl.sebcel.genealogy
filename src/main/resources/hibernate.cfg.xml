@@ -35,6 +35,7 @@
         <mapping class="sebcel.genealogia.entity.Klan"/>
         <mapping class="sebcel.genealogia.entity.Osoba"/>
         <mapping class="sebcel.genealogia.entity.Zwiazek"/>
+        <mapping class="sebcel.genealogia.entity.Dokument"/>
         <mapping class="sebcel.genealogia.entity.Notatka"/>
 
     </session-factory>
