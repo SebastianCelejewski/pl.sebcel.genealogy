@@ -12,7 +12,9 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
 
 import sebcel.genealogia.gui.lista.MultiValueReferenceModel;
 import sebcel.genealogia.struct.ReferenceListElement;
@@ -35,6 +37,7 @@ public class MultiValueReferenceField extends JPanel implements ActionListener {
         this.add(buttonPanel, BorderLayout.SOUTH);
         this.add(scrollPanel, BorderLayout.CENTER);
         this.scrollPanel.setViewportView(listPanel);
+        this.scrollPanel.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         this.buttonPanel.add(buttonAdd);
         this.buttonPanel.add(buttonDelete);
         this.listPanel.setModel(listModel);

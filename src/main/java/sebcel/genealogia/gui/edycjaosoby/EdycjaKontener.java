@@ -29,8 +29,8 @@ public class EdycjaKontener extends JDialog {
         this.edycjaKomponent = edycjaKomponent;
         Dimension screenDimension = Toolkit.getDefaultToolkit().getScreenSize();
         int width = screenDimension.width / 2;
-        int height = screenDimension.height / 2;
-        this.setBounds(width / 2, height / 2, width, height);
+        int height = 2 * screenDimension.height / 3;
+        this.setBounds(width / 2, height / 3, width, height);
         this.setLayout(new BorderLayout());
         this.add(edycjaKomponent, BorderLayout.CENTER);
         this.add(panelPrzyciskow, BorderLayout.SOUTH);

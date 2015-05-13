@@ -422,11 +422,11 @@ public class DatabaseDelegate {
                 }
                 RodzinaStruct rodzina = new RodzinaStruct();
                 if (malzonek != null)
-                    rodzina.malzonek = new ReferenceListElement(malzonek.getId(), malzonek.toString());
+                    rodzina.malzonek = new ReferenceListElement(malzonek.getId(), malzonek.getImiona() + " " + malzonek.getNazwisko());
                 rodzina.idDzieci = new Vector<ReferenceListElement>();
                 if (zwiazek.getDzieci() != null && zwiazek.getDzieci().size() > 0) {
                     for (Osoba dziecko : zwiazek.getDzieci()) {
-                        rodzina.idDzieci.add(new ReferenceListElement(dziecko.getId(), dziecko.toString()));
+                        rodzina.idDzieci.add(new ReferenceListElement(dziecko.getId(), dziecko.getImiona() + " " + dziecko.getNazwisko()));
                     }
                 }
                 daneOsoby.getRodziny().add(rodzina);
@@ -544,7 +544,7 @@ public class DatabaseDelegate {
         for (Dokument dokument : osoba.getDokumenty()) {
             dokument.getOsoby().remove(osoba);
         }
-        
+
         osoba.getDokumenty().clear();
         for (ReferenceListElement dokumentElement : daneOsoby.getDokumenty()) {
             Dokument dokument = DatabaseLib.getDokument(dokumentElement.getId());
@@ -767,7 +767,7 @@ public class DatabaseDelegate {
     private static ReferenceListElement toStruct(Osoba osoba) {
         ReferenceListElement struct = new ReferenceListElement();
         struct.setId(osoba.getId());
-        struct.setDescription(osoba.toString());
+        struct.setDescription(osoba.getImiona() + " " + osoba.getNazwisko());
         return struct;
     }
 
