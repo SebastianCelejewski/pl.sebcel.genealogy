@@ -541,13 +541,15 @@ public class DatabaseDelegate {
             osoba.setZwiazekRodzicow(zwiazekRodzicow);
         }
 
-        if (daneOsoby.getDokumenty() != null) {
-            osoba.getDokumenty().clear();
-            for (ReferenceListElement dokumentElement : daneOsoby.getDokumenty()) {
-                Dokument dokument = DatabaseLib.getDokument(dokumentElement.getId());
-                osoba.getDokumenty().add(dokument);
-                dokument.getOsoby().add(osoba);
-            }
+        for (Dokument dokument : osoba.getDokumenty()) {
+            dokument.getOsoby().remove(osoba);
+        }
+        
+        osoba.getDokumenty().clear();
+        for (ReferenceListElement dokumentElement : daneOsoby.getDokumenty()) {
+            Dokument dokument = DatabaseLib.getDokument(dokumentElement.getId());
+            osoba.getDokumenty().add(dokument);
+            dokument.getOsoby().add(osoba);
         }
 
         DatabaseLib.save(osoba);
@@ -605,13 +607,15 @@ public class DatabaseDelegate {
         dokument.setSymbol(daneDokumentu.getSymbol());
         dokument.setOpis(daneDokumentu.getOpis());
 
-        if (daneDokumentu.getOsoby() != null) {
-            dokument.getOsoby().clear();
-            for (ReferenceListElement osobaElement : daneDokumentu.getOsoby()) {
-                Osoba osoba = DatabaseLib.getOsoba(osobaElement.getId());
-                dokument.getOsoby().add(osoba);
-                osoba.getDokumenty().add(dokument);
-            }
+        for (Osoba osoba : dokument.getOsoby()) {
+            osoba.getDokumenty().remove(dokument);
+        }
+
+        dokument.getOsoby().clear();
+        for (ReferenceListElement osobaElement : daneDokumentu.getOsoby()) {
+            Osoba osoba = DatabaseLib.getOsoba(osobaElement.getId());
+            dokument.getOsoby().add(osoba);
+            osoba.getDokumenty().add(dokument);
         }
 
         DatabaseLib.save(dokument);
