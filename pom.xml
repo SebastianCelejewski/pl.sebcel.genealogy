@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>sebcel.genealogia</groupId>
 	<artifactId>genealogia</artifactId>
-	<version>1.2.5</version>
+	<version>1.2.6</version>
 
 	<build>
 		<plugins>
@@ -23,8 +23,8 @@
 					</descriptorRefs>
 					<archive>
 						<manifest>
-							<mainClass>sebcel.genealogia.main.MainProgram</mainClass>
-							<packageName>sebcel.genealogia.main</packageName>
+							<mainClass>pl.sebcel.genealogy.MainProgram</mainClass>
+							<packageName>pl.sebcel.genealogy</packageName>
 							<addClasspath>true</addClasspath>
 						</manifest>
 					</archive>

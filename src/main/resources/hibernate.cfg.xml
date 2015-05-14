@@ -31,12 +31,12 @@
         <!-- Drop and re-create the database schema on startup -->
         <property name="hbm2ddl.auto">none</property>
         
-        <mapping package="sebcel.genealogia.entity"/>
-        <mapping class="sebcel.genealogia.entity.Klan"/>
-        <mapping class="sebcel.genealogia.entity.Osoba"/>
-        <mapping class="sebcel.genealogia.entity.Zwiazek"/>
-        <mapping class="sebcel.genealogia.entity.Dokument"/>
-        <mapping class="sebcel.genealogia.entity.Notatka"/>
+        <mapping package="pl.sebcel.genealogy.entity"/>
+        <mapping class="pl.sebcel.genealogy.entity.Klan"/>
+        <mapping class="pl.sebcel.genealogy.entity.Osoba"/>
+        <mapping class="pl.sebcel.genealogy.entity.Zwiazek"/>
+        <mapping class="pl.sebcel.genealogy.entity.Dokument"/>
+        <mapping class="pl.sebcel.genealogy.entity.Notatka"/>
 
     </session-factory>
 
