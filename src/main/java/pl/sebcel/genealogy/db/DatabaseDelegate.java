@@ -34,14 +34,14 @@ public class DatabaseDelegate {
 
     public static List<ElementListyOsobStruct> getListaOsob() {
         System.out.println("[DatabaseDelegate][getListaOsob]");
-        Collection<Osoba> osoby = DatabaseLib.getOsoby();
+        Collection<Osoba> osoby = DatabaseLib.getPeople();
         List<ElementListyOsobStruct> listaOsob = new ArrayList<ElementListyOsobStruct>();
         if (osoby != null && osoby.size() > 0) {
             for (Osoba osoba : osoby) {
                 ElementListyOsobStruct elementListy = new ElementListyOsobStruct();
                 elementListy.id = osoba.getId();
                 elementListy.nazwa = osoba.toString();
-                elementListy.opis = DatabaseUtil.getUrInfo(osoba) + " " + DatabaseUtil.getSmInfo(osoba);
+                elementListy.opis = DatabaseUtil.getBirthInfo(osoba) + " " + DatabaseUtil.getDeathInfo(osoba);
                 listaOsob.add(elementListy);
             }
         }
@@ -53,7 +53,7 @@ public class DatabaseDelegate {
         StringBuffer xmlData = new StringBuffer();
         xmlData.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
         xmlData.append("<osoby>\n");
-        Collection<Osoba> osoby = DatabaseLib.getOsoby();
+        Collection<Osoba> osoby = DatabaseLib.getPeople();
         if (osoby != null && osoby.size() > 0) {
             for (Osoba osoba : osoby) {
                 xmlData.append(getXMLOsoba(osoba));
@@ -68,7 +68,7 @@ public class DatabaseDelegate {
         StringBuffer xmlData = new StringBuffer();
         xmlData.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
         xmlData.append("<dokumenty>\n");
-        Collection<Dokument> dokumenty = DatabaseLib.getDokumenty();
+        Collection<Dokument> dokumenty = DatabaseLib.getDocuments();
         if (dokumenty != null && dokumenty.size() > 0) {
             for (Dokument dokument : dokumenty) {
                 xmlData.append(getXMLDokument(dokument));
@@ -82,7 +82,7 @@ public class DatabaseDelegate {
         System.out.println("[DatabaseDelegate][getTXTListaDokumentow]");
         StringBuffer xmlData = new StringBuffer();
         xmlData.append("id;tytul;symbol;opis\n");
-        Collection<Dokument> dokumenty = DatabaseLib.getDokumenty();
+        Collection<Dokument> dokumenty = DatabaseLib.getDocuments();
         if (dokumenty != null && dokumenty.size() > 0) {
             for (Dokument dokument : dokumenty) {
                 xmlData.append(getTXTDokument(dokument));
@@ -95,7 +95,7 @@ public class DatabaseDelegate {
         System.out.println("[DatabaseDelegate][getTXTListaOsob]");
         StringBuffer xmlData = new StringBuffer();
         xmlData.append("id;imiona;nazwisko;data-urodzenia;miejsce-urodzenia;data-smierci;miejsce-smierci;data-pochowania;miejsce-pochowania;zamieszkanie;wyksztalcenie;zawody;rodzice;zwiazki\n");
-        Collection<Osoba> osoby = DatabaseLib.getOsoby();
+        Collection<Osoba> osoby = DatabaseLib.getPeople();
         if (osoby != null && osoby.size() > 0) {
             for (Osoba osoba : osoby) {
                 xmlData.append(getTXTOsoba(osoba) + "\n");
@@ -246,7 +246,7 @@ public class DatabaseDelegate {
 
     public static List<ElementListyZwiazkowStruct> getListaZwiazkow() {
         System.out.println("[DatabaseDelegate][getListaZwiazkow]");
-        Collection<Zwiazek> zwiazki = DatabaseLib.getZwiazki(null, null);
+        Collection<Zwiazek> zwiazki = DatabaseLib.getRelationships(null, null);
         List<ElementListyZwiazkowStruct> listaZwiazkow = new ArrayList<ElementListyZwiazkowStruct>();
         if (zwiazki != null && zwiazki.size() > 0) {
             for (Zwiazek zwiazek : zwiazki) {
@@ -254,7 +254,7 @@ public class DatabaseDelegate {
                 elementListy.id = zwiazek.getId();
                 elementListy.mezczyzna = zwiazek.getMezczyzna().toString();
                 elementListy.kobieta = zwiazek.getKobieta().toString();
-                elementListy.opis = DatabaseUtil.getSlInfo(zwiazek) + " " + DatabaseUtil.getRzwInfo(zwiazek);
+                elementListy.opis = DatabaseUtil.getMarriageInfo(zwiazek) + " " + DatabaseUtil.getDivorceInfo(zwiazek);
                 listaZwiazkow.add(elementListy);
             }
         }
@@ -263,7 +263,7 @@ public class DatabaseDelegate {
 
     public static List<ElementListyKlanowStruct> getListaKlanow() {
         System.out.println("[DatabaseDelegate][getListaKlanow]");
-        Collection<Klan> klany = DatabaseLib.getKlany();
+        Collection<Klan> klany = DatabaseLib.getClans();
         List<ElementListyKlanowStruct> listaKlanow = new ArrayList<ElementListyKlanowStruct>();
         if (klany != null && klany.size() > 0) {
             for (Klan klan : klany) {
@@ -280,7 +280,7 @@ public class DatabaseDelegate {
 
     public static List<ElementListyDokumentowStruct> getListaDokumentow() {
         System.out.println("[DatabaseDelegate][getListaDokumentow]");
-        Collection<Dokument> dokumenty = DatabaseLib.getDokumenty();
+        Collection<Dokument> dokumenty = DatabaseLib.getDocuments();
         List<ElementListyDokumentowStruct> listaDokumentow = new ArrayList<ElementListyDokumentowStruct>();
         if (dokumenty != null && dokumenty.size() > 0) {
             for (Dokument dokument : dokumenty) {
@@ -296,15 +296,15 @@ public class DatabaseDelegate {
 
     public static DrzewoOsobaStruct getDaneOsoby(Long idOsoby) {
         System.out.println("[DatabaseDelegate][getDaneOsoby]");
-        Osoba osoba = DatabaseLib.getOsoba(idOsoby);
+        Osoba osoba = DatabaseLib.getPerson(idOsoby);
         DrzewoOsobaStruct osobaStruct = new DrzewoOsobaStruct();
         osobaStruct.id = osoba.getId();
         osobaStruct.nazwa = osoba.getImiona() + " " + osoba.getNazwisko();
-        osobaStruct.daneUrodzenia = DatabaseUtil.getUrInfo(osoba);
-        osobaStruct.daneSmierci = DatabaseUtil.getSmInfo(osoba);
+        osobaStruct.daneUrodzenia = DatabaseUtil.getBirthInfo(osoba);
+        osobaStruct.daneSmierci = DatabaseUtil.getDeathInfo(osoba);
         osobaStruct.danePochowania = "";
-        osobaStruct.daneZamieszkania = DatabaseUtil.getZamInfo(osoba);
-        osobaStruct.daneZawodu = DatabaseUtil.getZawInfo(osoba);
+        osobaStruct.daneZamieszkania = DatabaseUtil.getResidenceInfo(osoba);
+        osobaStruct.daneZawodu = DatabaseUtil.getOccupationInfo(osoba);
 
         Collection<Zwiazek> zwiazki = null;
         if (osoba.getPlec().equalsIgnoreCase("mezczyzna")) {
@@ -323,10 +323,10 @@ public class DatabaseDelegate {
                 } else {
                     rodzina.idMalzonka = zwiazek.getMezczyzna().getId();
                 }
-                rodzina.daneSpotkania = DatabaseUtil.getPozInfo(zwiazek);
-                rodzina.daneSlubu = DatabaseUtil.getSlInfo(zwiazek);
-                rodzina.daneRozstania = DatabaseUtil.getRozInfo(zwiazek);
-                rodzina.daneRozwodu = DatabaseUtil.getRzwInfo(zwiazek);
+                rodzina.daneSpotkania = DatabaseUtil.getMeetInfo(zwiazek);
+                rodzina.daneSlubu = DatabaseUtil.getMarriageInfo(zwiazek);
+                rodzina.daneRozstania = DatabaseUtil.getSeparationInfo(zwiazek);
+                rodzina.daneRozwodu = DatabaseUtil.getDivorceInfo(zwiazek);
                 List<Osoba> dzieci = sortujPoDacieUrodzenia(zwiazek.getDzieci());
                 if (dzieci != null && dzieci.size() > 0) {
                     List<Long> idDzieci = new ArrayList<Long>();
@@ -382,7 +382,7 @@ public class DatabaseDelegate {
 
     public static DaneEdycjiOsoby getDaneDoEdycjiOsoby(Long idOsoby) {
         System.out.println("[DatabaseDelegate][getDaneDoEdycjiOsoby]");
-        Osoba osoba = DatabaseLib.getOsoba(idOsoby);
+        Osoba osoba = DatabaseLib.getPerson(idOsoby);
         DaneEdycjiOsoby daneOsoby = new DaneEdycjiOsoby();
 
         daneOsoby.setId(osoba.getId());
@@ -453,7 +453,7 @@ public class DatabaseDelegate {
 
     public static DaneEdycjiZwiazkuStruct getDaneDoEdycjiZwiazku(Long idZwiazku) {
         System.out.println("[DatabaseDelegate][getDaneDoEdycjiZwiazku]");
-        Zwiazek zwiazek = DatabaseLib.getZwiazek(idZwiazku);
+        Zwiazek zwiazek = DatabaseLib.getRelationship(idZwiazku);
 
         DaneEdycjiZwiazkuStruct daneZwiazku = new DaneEdycjiZwiazkuStruct();
         daneZwiazku.id = zwiazek.getId();
@@ -474,7 +474,7 @@ public class DatabaseDelegate {
 
     public static DaneEdycjiKlanuStruct getDaneDoEdycjiKlanu(Long idKlanu) {
         System.out.println("[DatabaseDelegate][getDaneDoEdycjiKlanu]");
-        Klan klan = DatabaseLib.getKlan(idKlanu);
+        Klan klan = DatabaseLib.getClan(idKlanu);
 
         DaneEdycjiKlanuStruct daneKlanu = new DaneEdycjiKlanuStruct();
         daneKlanu.id = klan.getId();
@@ -487,7 +487,7 @@ public class DatabaseDelegate {
 
     public static DaneEdycjiDokumentu getDaneDoEdycjiDokumentu(Long idDokumentu) {
         System.out.println("[DatabaseDelegate][getDaneDoEdycjiDokumentu]");
-        Dokument dokument = DatabaseLib.getDokument(idDokumentu);
+        Dokument dokument = DatabaseLib.getDocument(idDokumentu);
 
         DaneEdycjiDokumentu daneDokumentu = new DaneEdycjiDokumentu();
         daneDokumentu.setId(dokument.getId());
@@ -519,7 +519,7 @@ public class DatabaseDelegate {
 
     public static void zapiszDanePoEdycjiOsoby(DaneEdycjiOsoby daneOsoby) {
         System.out.println("[DatabaseDelegate][zapiszDanePoEdycjiOsoby]");
-        Osoba osoba = DatabaseLib.getOsoba(daneOsoby.getId());
+        Osoba osoba = DatabaseLib.getPerson(daneOsoby.getId());
 
         osoba.setPlec(daneOsoby.getPlec());
         osoba.setImiona(daneOsoby.getImiona());
@@ -537,7 +537,7 @@ public class DatabaseDelegate {
 
         if (daneOsoby.getRodzice() != null) {
             Long idZwiazkuRodzicow = daneOsoby.getRodzice().id;
-            Zwiazek zwiazekRodzicow = DatabaseLib.getZwiazek(idZwiazkuRodzicow);
+            Zwiazek zwiazekRodzicow = DatabaseLib.getRelationship(idZwiazkuRodzicow);
             osoba.setZwiazekRodzicow(zwiazekRodzicow);
         }
 
@@ -547,7 +547,7 @@ public class DatabaseDelegate {
 
         osoba.getDokumenty().clear();
         for (ReferenceListElement dokumentElement : daneOsoby.getDokumenty()) {
-            Dokument dokument = DatabaseLib.getDokument(dokumentElement.getId());
+            Dokument dokument = DatabaseLib.getDocument(dokumentElement.getId());
             osoba.getDokumenty().add(dokument);
             dokument.getOsoby().add(osoba);
         }
@@ -557,16 +557,16 @@ public class DatabaseDelegate {
 
     public static void zapiszDanePoEdycjiZwiazku(DaneEdycjiZwiazkuStruct daneZwiazku) {
         System.out.println("[DatabaseDelegate][zapiszDanePoEdycjiZwiazku]");
-        Zwiazek zwiazek = DatabaseLib.getZwiazek(daneZwiazku.id);
+        Zwiazek zwiazek = DatabaseLib.getRelationship(daneZwiazku.id);
 
         if (daneZwiazku.mezczyzna != null) {
             Long idMezczyzny = daneZwiazku.mezczyzna.getId();
-            Osoba mezczyzna = DatabaseLib.getOsoba(idMezczyzny);
+            Osoba mezczyzna = DatabaseLib.getPerson(idMezczyzny);
             zwiazek.setMezczyzna(mezczyzna);
         }
         if (daneZwiazku.kobieta != null) {
             Long idKobiety = daneZwiazku.kobieta.getId();
-            Osoba kobieta = DatabaseLib.getOsoba(idKobiety);
+            Osoba kobieta = DatabaseLib.getPerson(idKobiety);
             zwiazek.setKobieta(kobieta);
         }
 
@@ -585,14 +585,14 @@ public class DatabaseDelegate {
 
     public static void zapiszDanePoEdycjiKlanu(DaneEdycjiKlanuStruct daneKlanu) {
         System.out.println("[DatabaseDelegate][zapiszDanePoEdycjiKlanu]");
-        Klan klan = DatabaseLib.getKlan(daneKlanu.id);
+        Klan klan = DatabaseLib.getClan(daneKlanu.id);
 
         klan.setNazwa(daneKlanu.nazwa);
         klan.setOpis(daneKlanu.opis);
 
         if (daneKlanu.korzen != null) {
             Long idKorzenia = daneKlanu.korzen.getId();
-            Osoba osoba = DatabaseLib.getOsoba(idKorzenia);
+            Osoba osoba = DatabaseLib.getPerson(idKorzenia);
             klan.setKorzen(osoba);
         }
 
@@ -601,7 +601,7 @@ public class DatabaseDelegate {
 
     public static void zapiszDanePoEdycjiDokumentu(DaneEdycjiDokumentu daneDokumentu) {
         System.out.println("[DatabaseDelegate][zapiszDanePoEdycjiDokumentu]");
-        Dokument dokument = DatabaseLib.getDokument(daneDokumentu.getId());
+        Dokument dokument = DatabaseLib.getDocument(daneDokumentu.getId());
 
         dokument.setTytul(daneDokumentu.getTytul());
         dokument.setSymbol(daneDokumentu.getSymbol());
@@ -613,7 +613,7 @@ public class DatabaseDelegate {
 
         dokument.getOsoby().clear();
         for (ReferenceListElement osobaElement : daneDokumentu.getOsoby()) {
-            Osoba osoba = DatabaseLib.getOsoba(osobaElement.getId());
+            Osoba osoba = DatabaseLib.getPerson(osobaElement.getId());
             dokument.getOsoby().add(osoba);
             osoba.getDokumenty().add(dokument);
         }
@@ -639,14 +639,14 @@ public class DatabaseDelegate {
 
         if (daneOsoby.getRodzice() != null) {
             Long idZwiazkuRodzicow = daneOsoby.getRodzice().id;
-            Zwiazek zwiazekRodzicow = DatabaseLib.getZwiazek(idZwiazkuRodzicow);
+            Zwiazek zwiazekRodzicow = DatabaseLib.getRelationship(idZwiazkuRodzicow);
             osoba.setZwiazekRodzicow(zwiazekRodzicow);
         }
 
         if (daneOsoby.getDokumenty() != null) {
             Set<Dokument> dokumenty = new HashSet<Dokument>();
             for (ReferenceListElement dokumentElement : daneOsoby.getDokumenty()) {
-                Dokument dokument = DatabaseLib.getDokument(dokumentElement.getId());
+                Dokument dokument = DatabaseLib.getDocument(dokumentElement.getId());
                 dokumenty.add(dokument);
                 dokument.getOsoby().add(osoba);
             }
@@ -662,12 +662,12 @@ public class DatabaseDelegate {
 
         if (daneZwiazku.mezczyzna != null) {
             Long idMezczyzny = daneZwiazku.mezczyzna.getId();
-            Osoba mezczyzna = DatabaseLib.getOsoba(idMezczyzny);
+            Osoba mezczyzna = DatabaseLib.getPerson(idMezczyzny);
             zwiazek.setMezczyzna(mezczyzna);
         }
         if (daneZwiazku.kobieta != null) {
             Long idKobiety = daneZwiazku.kobieta.getId();
-            Osoba kobieta = DatabaseLib.getOsoba(idKobiety);
+            Osoba kobieta = DatabaseLib.getPerson(idKobiety);
             zwiazek.setKobieta(kobieta);
         }
 
@@ -693,7 +693,7 @@ public class DatabaseDelegate {
 
         if (daneKlanu.korzen != null) {
             Long idKorzenia = daneKlanu.korzen.getId();
-            Osoba osoba = DatabaseLib.getOsoba(idKorzenia);
+            Osoba osoba = DatabaseLib.getPerson(idKorzenia);
             klan.setKorzen(osoba);
         }
 
@@ -711,7 +711,7 @@ public class DatabaseDelegate {
         Set<Osoba> osoby = new HashSet<Osoba>();
         if (daneDokumentu.getOsoby() != null) {
             for (ReferenceListElement osobaElement : daneDokumentu.getOsoby()) {
-                Osoba osoba = DatabaseLib.getOsoba(osobaElement.getId());
+                Osoba osoba = DatabaseLib.getPerson(osobaElement.getId());
                 osoby.add(osoba);
                 osoba.getDokumenty().add(dokument);
             }
@@ -722,7 +722,7 @@ public class DatabaseDelegate {
 
     public static List<ZwiazekStruct> getZwiazki() {
         System.out.println("[DatabaseDelegate][getZwiazki]");
-        Collection<Zwiazek> zwiazki = DatabaseLib.getZwiazki(null, null);
+        Collection<Zwiazek> zwiazki = DatabaseLib.getRelationships(null, null);
         List<ZwiazekStruct> rezultat = new ArrayList<ZwiazekStruct>();
         if (zwiazki != null && zwiazki.size() > 0) {
             for (Zwiazek zwiazek : zwiazki) {
@@ -734,25 +734,25 @@ public class DatabaseDelegate {
 
     public static List<ReferenceListElement> getMezczyzni() {
         System.out.println("[DatabaseDelegate][getMezczyzni]");
-        Collection<Osoba> osoby = DatabaseLib.getMezczyzni();
+        Collection<Osoba> osoby = DatabaseLib.getMales();
         return toStruct(osoby);
     }
 
     public static List<ReferenceListElement> getKobiety() {
         System.out.println("[DatabaseDelegate][getKobiety]");
-        Collection<Osoba> osoby = DatabaseLib.getKobiety();
+        Collection<Osoba> osoby = DatabaseLib.getFemales();
         return toStruct(osoby);
     }
 
     public static List<ReferenceListElement> getOsoby() {
         System.out.println("[DatabaseDelegate][getOsoby]");
-        Collection<Osoba> osoby = DatabaseLib.getOsoby();
+        Collection<Osoba> osoby = DatabaseLib.getPeople();
         return toStruct(osoby);
     }
 
     public static List<ReferenceListElement> getDokumenty() {
         System.out.println("[DatabaseDelegate][getDokumenty]");
-        Collection<Dokument> dokumenty = DatabaseLib.getDokumenty();
+        Collection<Dokument> dokumenty = DatabaseLib.getDocuments();
         return dokumentsToReferencedListElements(dokumenty);
     }
 
@@ -792,22 +792,22 @@ public class DatabaseDelegate {
     }
 
     public static void usunOsobe(Long idOsoby) {
-        Osoba osoba = DatabaseLib.getOsoba(idOsoby);
+        Osoba osoba = DatabaseLib.getPerson(idOsoby);
         DatabaseLib.delete(osoba);
     }
 
     public static void usunZwiazek(Long idZwiazku) {
-        Zwiazek zwiazek = DatabaseLib.getZwiazek(idZwiazku);
+        Zwiazek zwiazek = DatabaseLib.getRelationship(idZwiazku);
         DatabaseLib.delete(zwiazek);
     }
 
     public static void usunKlan(Long idKlanu) {
-        Klan klan = DatabaseLib.getKlan(idKlanu);
+        Klan klan = DatabaseLib.getClan(idKlanu);
         DatabaseLib.delete(klan);
     }
 
     public static void usunDokument(Long idDokumentu) {
-        Dokument dokument = DatabaseLib.getDokument(idDokumentu);
+        Dokument dokument = DatabaseLib.getDocument(idDokumentu);
         DatabaseLib.delete(dokument);
     }
 }
