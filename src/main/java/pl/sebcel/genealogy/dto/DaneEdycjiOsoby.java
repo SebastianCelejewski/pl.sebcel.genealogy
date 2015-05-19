@@ -14,7 +14,7 @@ public class DaneEdycjiOsoby {
     private String miejsceSmierci;
     private String dataPochowania;
     private String miejscePochowania;
-    private ZwiazekStruct rodzice;
+    private ReferenceListElement rodzice;
     private List<RodzinaStruct> rodziny;
     private Set<ReferenceListElement> dokumenty;
     private String plec;
@@ -95,11 +95,11 @@ public class DaneEdycjiOsoby {
         this.miejscePochowania = miejscePochowania;
     }
 
-    public ZwiazekStruct getRodzice() {
+    public ReferenceListElement getRodzice() {
         return rodzice;
     }
 
-    public void setRodzice(ZwiazekStruct rodzice) {
+    public void setRodzice(ReferenceListElement rodzice) {
         this.rodzice = rodzice;
     }
 

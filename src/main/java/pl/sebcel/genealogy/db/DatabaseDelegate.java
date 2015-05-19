@@ -24,7 +24,6 @@ import pl.sebcel.genealogy.dto.ElementListyOsobStruct;
 import pl.sebcel.genealogy.dto.ElementListyZwiazkowStruct;
 import pl.sebcel.genealogy.dto.ReferenceListElement;
 import pl.sebcel.genealogy.dto.RodzinaStruct;
-import pl.sebcel.genealogy.dto.ZwiazekStruct;
 import pl.sebcel.genealogy.entity.Dokument;
 import pl.sebcel.genealogy.entity.Klan;
 import pl.sebcel.genealogy.entity.Osoba;
@@ -378,7 +377,7 @@ public class DatabaseDelegate {
         personEditData.setMiejsceZamieszkania(person.getMiejsceZamieszkania());
         Zwiazek parents = person.getZwiazekRodzicow();
         if (parents != null) {
-            personEditData.setRodzice(toStruct(parents));
+            personEditData.setRodzice(relationshipToReferenceListElement(parents));
         }
 
         personEditData.setRodziny(new Vector<RodzinaStruct>());
@@ -426,8 +425,8 @@ public class DatabaseDelegate {
 
         DaneEdycjiZwiazkuStruct relationshipEditData = new DaneEdycjiZwiazkuStruct();
         relationshipEditData.id = relationship.getId();
-        relationshipEditData.mezczyzna = toStruct(relationship.getMezczyzna());
-        relationshipEditData.kobieta = toStruct(relationship.getKobieta());
+        relationshipEditData.mezczyzna = personToReferenceListElement(relationship.getMezczyzna());
+        relationshipEditData.kobieta = personToReferenceListElement(relationship.getKobieta());
         relationshipEditData.dataPoznania = relationship.getDataPoznania();
         relationshipEditData.miejscePoznania = relationship.getMiejscePoznania();
         relationshipEditData.dataSlubu = relationship.getDataSlubu();
@@ -449,7 +448,7 @@ public class DatabaseDelegate {
         clanEditData.id = clan.getId();
         clanEditData.nazwa = clan.getNazwa();
         clanEditData.opis = clan.getOpis();
-        clanEditData.korzen = toStruct(clan.getKorzen());
+        clanEditData.korzen = personToReferenceListElement(clan.getKorzen());
 
         return clanEditData;
     }
@@ -488,7 +487,7 @@ public class DatabaseDelegate {
         person.setMiejsceZamieszkania(personData.getMiejsceZamieszkania());
 
         if (personData.getRodzice() != null) {
-            Long parentsRelationshipId = personData.getRodzice().id;
+            Long parentsRelationshipId = personData.getRodzice().getId();
             Zwiazek parentsRelationship = DatabaseLib.getRelationship(parentsRelationshipId);
             person.setZwiazekRodzicow(parentsRelationship);
         }
@@ -590,7 +589,7 @@ public class DatabaseDelegate {
         person.setZawodyWykonywane(personData.getZawodyWykonywane());
 
         if (personData.getRodzice() != null) {
-            Long parentsRelationshipId = personData.getRodzice().id;
+            Long parentsRelationshipId = personData.getRodzice().getId();
             Zwiazek parentsRelationship = DatabaseLib.getRelationship(parentsRelationshipId);
             person.setZwiazekRodzicow(parentsRelationship);
         }
@@ -672,13 +671,13 @@ public class DatabaseDelegate {
         DatabaseLib.save(document);
     }
 
-    public static List<ZwiazekStruct> getRelationships() {
+    public static List<ReferenceListElement> getRelationships() {
         System.out.println("[DatabaseDelegate][getRelationships]");
         Collection<Zwiazek> relationships = DatabaseLib.getRelationships(null, null);
-        List<ZwiazekStruct> result = new ArrayList<ZwiazekStruct>();
+        List<ReferenceListElement> result = new ArrayList<ReferenceListElement>();
         if (relationships != null && relationships.size() > 0) {
             for (Zwiazek relationship : relationships) {
-                result.add(toStruct(relationship));
+                result.add(relationshipToReferenceListElement(relationship));
             }
         }
         return result;
@@ -708,26 +707,18 @@ public class DatabaseDelegate {
         return dokumentsToReferencedListElements(documents);
     }
 
-    private static ZwiazekStruct toStruct(Zwiazek relationship) {
-        ZwiazekStruct struct = new ZwiazekStruct();
-        struct.id = relationship.getId();
-        struct.mezczyzna = relationship.getMezczyzna().toString();
-        struct.kobieta = relationship.getKobieta().toString();
-        return struct;
+    private static ReferenceListElement relationshipToReferenceListElement(Zwiazek relationship) {
+        ReferenceListElement result = new ReferenceListElement();
+        result.setId(relationship.getId());
+        result.setDescription(relationship.getMezczyzna().toString() + " " + relationship.getKobieta().toString());
+        return result;
     }
-
-    private static ReferenceListElement toStruct(Osoba person) {
-        ReferenceListElement struct = new ReferenceListElement();
-        struct.setId(person.getId());
-        struct.setDescription(person.getImiona() + " " + person.getNazwisko());
-        return struct;
-    }
-
+    
     private static List<ReferenceListElement> toStruct(Collection<Osoba> people) {
         List<ReferenceListElement> result = new ArrayList<ReferenceListElement>();
         if (people != null && people.size() > 0) {
             for (Osoba person : people) {
-                result.add(toStruct(person));
+                result.add(personToReferenceListElement(person));
             }
         }
         return result;

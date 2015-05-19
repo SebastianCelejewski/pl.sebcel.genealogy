@@ -15,7 +15,6 @@ import pl.sebcel.genealogy.dto.DaneEdycjiOsoby;
 import pl.sebcel.genealogy.dto.DiagramInfoStruct;
 import pl.sebcel.genealogy.dto.ReferenceListElement;
 import pl.sebcel.genealogy.dto.RodzinaStruct;
-import pl.sebcel.genealogy.dto.ZwiazekStruct;
 import pl.sebcel.genealogy.gui.control.Drzewo;
 import pl.sebcel.genealogy.gui.control.Etykieta;
 import pl.sebcel.genealogy.gui.control.MultiValueReferenceField;
@@ -167,11 +166,11 @@ public class EdycjaOsobyKomponent extends EdycjaKomponent {
     }
 
     private void odswiezListy() {
-        List<ZwiazekStruct> zwiazki = DatabaseDelegate.getRelationships();
+        List<ReferenceListElement> zwiazki = DatabaseDelegate.getRelationships();
         List<ReferenceListElement> wszystkieDokumenty = DatabaseDelegate.getDocuments();
         tRodzice.removeAllItems();
         tRodzice.addItem(new String("<Brak>"));
-        for (ZwiazekStruct zwiazek : zwiazki) {
+        for (ReferenceListElement zwiazek : zwiazki) {
             tRodzice.addItem(zwiazek);
         }
 
@@ -206,7 +205,7 @@ public class EdycjaOsobyKomponent extends EdycjaKomponent {
         if (tRodzice.getSelectedIndex() == 0) {
             daneOsoby.setRodzice(null);
         } else {
-            daneOsoby.setRodzice((ZwiazekStruct) tRodzice.getSelectedItem());
+            daneOsoby.setRodzice((ReferenceListElement) tRodzice.getSelectedItem());
         }
         daneOsoby.setDokumenty(new HashSet<ReferenceListElement>(tDokumenty.getSelectedItems()));
 
