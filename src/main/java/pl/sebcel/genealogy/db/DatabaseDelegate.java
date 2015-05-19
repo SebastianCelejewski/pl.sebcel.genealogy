@@ -32,126 +32,129 @@ import pl.sebcel.genealogy.entity.Zwiazek;
 
 public class DatabaseDelegate {
 
-    public static List<ElementListyOsobStruct> getListaOsob() {
-        System.out.println("[DatabaseDelegate][getListaOsob]");
-        Collection<Osoba> osoby = DatabaseLib.getPeople();
-        List<ElementListyOsobStruct> listaOsob = new ArrayList<ElementListyOsobStruct>();
-        if (osoby != null && osoby.size() > 0) {
-            for (Osoba osoba : osoby) {
-                ElementListyOsobStruct elementListy = new ElementListyOsobStruct();
-                elementListy.id = osoba.getId();
-                elementListy.nazwa = osoba.toString();
-                elementListy.opis = DatabaseUtil.getBirthInfo(osoba) + " " + DatabaseUtil.getDeathInfo(osoba);
-                listaOsob.add(elementListy);
+    private final static DateFormat inputDF = new SimpleDateFormat("dd-MM-yyyy");
+    private final static DateFormat outputDF = new SimpleDateFormat("yyyy-MM-dd");
+
+    public static List<ElementListyOsobStruct> getPeopleList() {
+        System.out.println("[DatabaseDelegate][getPeopleList]");
+        Collection<Osoba> people = DatabaseLib.getPeople();
+        List<ElementListyOsobStruct> peopleList = new ArrayList<ElementListyOsobStruct>();
+        if (people != null && people.size() > 0) {
+            for (Osoba person : people) {
+                ElementListyOsobStruct listElement = new ElementListyOsobStruct();
+                listElement.id = person.getId();
+                listElement.nazwa = person.toString();
+                listElement.opis = DatabaseUtil.getBirthInfo(person) + " " + DatabaseUtil.getDeathInfo(person);
+                peopleList.add(listElement);
             }
         }
-        return listaOsob;
+        return peopleList;
     }
 
-    public static String getXMLListaOsob() {
-        System.out.println("[DatabaseDelegate][getXMLListaOsob]");
+    public static String getPeopleListXML() {
+        System.out.println("[DatabaseDelegate][getPeopleListXML]");
         StringBuffer xmlData = new StringBuffer();
         xmlData.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-        xmlData.append("<osoby>\n");
-        Collection<Osoba> osoby = DatabaseLib.getPeople();
-        if (osoby != null && osoby.size() > 0) {
-            for (Osoba osoba : osoby) {
-                xmlData.append(getXMLOsoba(osoba));
+        xmlData.append("<people>\n");
+        Collection<Osoba> people = DatabaseLib.getPeople();
+        if (people != null && people.size() > 0) {
+            for (Osoba person : people) {
+                xmlData.append(getPersonXML(person));
             }
         }
-        xmlData.append("</osoby>\n");
+        xmlData.append("</people>\n");
         return xmlData.toString();
     }
 
-    public static String getXMLListaDokumentow() {
-        System.out.println("[DatabaseDelegate][getXMLListaDokumentow]");
+    public static String getDocumentListXML() {
+        System.out.println("[DatabaseDelegate][getDocumentListXML]");
         StringBuffer xmlData = new StringBuffer();
         xmlData.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-        xmlData.append("<dokumenty>\n");
-        Collection<Dokument> dokumenty = DatabaseLib.getDocuments();
-        if (dokumenty != null && dokumenty.size() > 0) {
-            for (Dokument dokument : dokumenty) {
-                xmlData.append(getXMLDokument(dokument));
+        xmlData.append("<documents>\n");
+        Collection<Dokument> documents = DatabaseLib.getDocuments();
+        if (documents != null && documents.size() > 0) {
+            for (Dokument document : documents) {
+                xmlData.append(getDocumentXML(document));
             }
         }
-        xmlData.append("</dokumenty>\n");
+        xmlData.append("</documents>\n");
         return xmlData.toString();
     }
 
-    public static String getTXTListaDokumentow() {
-        System.out.println("[DatabaseDelegate][getTXTListaDokumentow]");
+    public static String getDocumentListTXT() {
+        System.out.println("[DatabaseDelegate][getDocumentListTXT]");
         StringBuffer xmlData = new StringBuffer();
-        xmlData.append("id;tytul;symbol;opis\n");
-        Collection<Dokument> dokumenty = DatabaseLib.getDocuments();
-        if (dokumenty != null && dokumenty.size() > 0) {
-            for (Dokument dokument : dokumenty) {
-                xmlData.append(getTXTDokument(dokument));
-            }
-        }
-        return xmlData.toString();
-    }
-
-    public static String getTxtListaOsob() {
-        System.out.println("[DatabaseDelegate][getTXTListaOsob]");
-        StringBuffer xmlData = new StringBuffer();
-        xmlData.append("id;imiona;nazwisko;data-urodzenia;miejsce-urodzenia;data-smierci;miejsce-smierci;data-pochowania;miejsce-pochowania;zamieszkanie;wyksztalcenie;zawody;rodzice;zwiazki\n");
-        Collection<Osoba> osoby = DatabaseLib.getPeople();
-        if (osoby != null && osoby.size() > 0) {
-            for (Osoba osoba : osoby) {
-                xmlData.append(getTXTOsoba(osoba) + "\n");
+        xmlData.append("id;title;symbol;description\n");
+        Collection<Dokument> documents = DatabaseLib.getDocuments();
+        if (documents != null && documents.size() > 0) {
+            for (Dokument document : documents) {
+                xmlData.append(getDocumentTXT(document));
             }
         }
         return xmlData.toString();
     }
 
-    public static String getXMLDokument(Dokument dokument) {
-        System.out.println("[DatabaseDelegate][getXMLDokument]");
+    public static String getPeopleListTXT() {
+        System.out.println("[DatabaseDelegate][getPeopleListTXT]");
         StringBuffer xmlData = new StringBuffer();
-        xmlData.append("<dokument>\n");
-        xmlData.append("  " + getXMLField("id", dokument.getId()));
-        xmlData.append("  " + getXMLField("tytul", dokument.getTytul()));
-        xmlData.append("  " + getXMLField("symbol", dokument.getSymbol()));
-        xmlData.append("  " + getXMLField("opis", dokument.getOpis()));
-        xmlData.append("</dokument>\n");
+        xmlData.append("id;first-names;last-name;birth-date;birth-place;death-date;death-place;burial-date;burial-place;residence;occupation;professions;parents;relationships\n");
+        Collection<Osoba> people = DatabaseLib.getPeople();
+        if (people != null && people.size() > 0) {
+            for (Osoba person : people) {
+                xmlData.append(getPersonTXT(person) + "\n");
+            }
+        }
         return xmlData.toString();
     }
 
-    public static String getTXTDokument(Dokument dokument) {
-        System.out.println("[DatabaseDelegate][getTXTDokument]");
-        return dokument.getId() + ";" + dokument.getTytul() + ";" + dokument.getSymbol() + ";" + dokument.getOpis() + "\n";
+    public static String getDocumentXML(Dokument document) {
+        System.out.println("[DatabaseDelegate][getDocumentXML]");
+        StringBuffer xmlData = new StringBuffer();
+        xmlData.append("<document>\n");
+        xmlData.append("  " + getXMLField("id", document.getId()));
+        xmlData.append("  " + getXMLField("title", document.getTytul()));
+        xmlData.append("  " + getXMLField("symbol", document.getSymbol()));
+        xmlData.append("  " + getXMLField("description", document.getOpis()));
+        xmlData.append("</document>\n");
+        return xmlData.toString();
     }
 
-    public static String getXMLOsoba(Osoba osoba) {
-        System.out.println("[DatabaseDelegate][getXMLOsoba]");
+    public static String getDocumentTXT(Dokument document) {
+        System.out.println("[DatabaseDelegate][getDocumentTXT]");
+        return document.getId() + ";" + document.getTytul() + ";" + document.getSymbol() + ";" + document.getOpis() + "\n";
+    }
+
+    public static String getPersonXML(Osoba osoba) {
+        System.out.println("[DatabaseDelegate][getPersonXML]");
         StringBuffer xmlData = new StringBuffer();
-        xmlData.append("<osoba>\n");
+        xmlData.append("<person>\n");
         xmlData.append("  " + getXMLField("id", osoba.getId()));
-        xmlData.append("  " + getXMLField("imiona", osoba.getImiona()));
-        xmlData.append("  " + getXMLField("nazwisko", osoba.getNazwisko()));
+        xmlData.append("  " + getXMLField("first-names", osoba.getImiona()));
+        xmlData.append("  " + getXMLField("last-name", osoba.getNazwisko()));
         if (osoba.getZwiazekRodzicow() != null) {
-            xmlData.append("  " + getXMLField("rodzice", osoba.getZwiazekRodzicow().getId()));
+            xmlData.append("  " + getXMLField("parents", osoba.getZwiazekRodzicow().getId()));
         }
 
-        xmlData.append("  <dane-urodzenia>\n");
-        xmlData.append("    " + getXMLField("data", osoba.getDataUrodzenia()));
-        xmlData.append("    " + getXMLField("miejsce", osoba.getMiejsceUrodzenia()));
-        xmlData.append("  </dane-urodzenia>\n");
+        xmlData.append("  <birth>\n");
+        xmlData.append("    " + getXMLField("date", osoba.getDataUrodzenia()));
+        xmlData.append("    " + getXMLField("place", osoba.getMiejsceUrodzenia()));
+        xmlData.append("  </birth>\n");
 
-        xmlData.append("  <dane-smierci>\n");
-        xmlData.append("    " + getXMLField("data", osoba.getDataSmierci()));
-        xmlData.append("    " + getXMLField("miejsce", osoba.getMiejsceSmierci()));
-        xmlData.append("  </dane-smierci>\n");
+        xmlData.append("  <death>\n");
+        xmlData.append("    " + getXMLField("date", osoba.getDataSmierci()));
+        xmlData.append("    " + getXMLField("place", osoba.getMiejsceSmierci()));
+        xmlData.append("  </death>\n");
 
-        xmlData.append("  <dane-pochowania>\n");
-        xmlData.append("    " + getXMLField("data", osoba.getDataPochowania()));
-        xmlData.append("    " + getXMLField("miejsce", osoba.getMiejscePochowania()));
-        xmlData.append("  </dane-pochowania>\n");
+        xmlData.append("  <burial>\n");
+        xmlData.append("    " + getXMLField("date", osoba.getDataPochowania()));
+        xmlData.append("    " + getXMLField("place", osoba.getMiejscePochowania()));
+        xmlData.append("  </burial>\n");
 
-        xmlData.append("  " + getXMLField("zamieszkanie", osoba.getMiejsceZamieszkania()));
-        xmlData.append("  " + getXMLField("wyksztalcenie", osoba.getWyksztalcenie()));
-        xmlData.append("  " + getXMLField("zawody", osoba.getZawodyWykonywane()));
+        xmlData.append("  " + getXMLField("residence", osoba.getMiejsceZamieszkania()));
+        xmlData.append("  " + getXMLField("occupation", osoba.getWyksztalcenie()));
+        xmlData.append("  " + getXMLField("proffesions", osoba.getZawodyWykonywane()));
 
-        xmlData.append("  <zwiazki>\n");
+        xmlData.append("  <relationships>\n");
         Collection<Zwiazek> zwiazki = null;
         if (osoba.getPlec().equalsIgnoreCase("mezczyzna")) {
             zwiazki = osoba.getZwiazkiMezowskie();
@@ -165,13 +168,13 @@ public class DatabaseDelegate {
             }
         }
 
-        xmlData.append("  </zwiazki>\n");
-        xmlData.append("</osoba>\n");
+        xmlData.append("  </relationships>\n");
+        xmlData.append("</person>\n");
         return xmlData.toString();
     }
 
-    public static String getTXTOsoba(Osoba osoba) {
-        System.out.println("[DatabaseDelegate][getTXTOsoba]");
+    public static String getPersonTXT(Osoba osoba) {
+        System.out.println("[DatabaseDelegate][getPersonTXT]");
         StringBuffer xmlData = new StringBuffer();
         xmlData.append(getTXTField(osoba.getId()));
         xmlData.append(getTXTField(osoba.getImiona()));
@@ -228,129 +231,113 @@ public class DatabaseDelegate {
         return xmlData.toString();
     }
 
-    private static String getXMLField(String name, Object value) {
-        if (value != null) {
-            return "<" + name + ">" + value.toString() + "</" + name + ">\n";
+    public static List<ElementListyZwiazkowStruct> getRelationshipsList() {
+        System.out.println("[DatabaseDelegate][getRelationshipsList]");
+        Collection<Zwiazek> relationships = DatabaseLib.getRelationships(null, null);
+        List<ElementListyZwiazkowStruct> relationshipsList = new ArrayList<ElementListyZwiazkowStruct>();
+        if (relationships != null && relationships.size() > 0) {
+            for (Zwiazek relationship : relationships) {
+                ElementListyZwiazkowStruct listElement = new ElementListyZwiazkowStruct();
+                listElement.id = relationship.getId();
+                listElement.mezczyzna = relationship.getMezczyzna().toString();
+                listElement.kobieta = relationship.getKobieta().toString();
+                listElement.opis = DatabaseUtil.getMarriageInfo(relationship) + " " + DatabaseUtil.getDivorceInfo(relationship);
+                relationshipsList.add(listElement);
+            }
+        }
+        return relationshipsList;
+    }
+
+    public static List<ElementListyKlanowStruct> getClansList() {
+        System.out.println("[DatabaseDelegate][getClansList]");
+        Collection<Klan> clans = DatabaseLib.getClans();
+        List<ElementListyKlanowStruct> clansList = new ArrayList<ElementListyKlanowStruct>();
+        if (clans != null && clans.size() > 0) {
+            for (Klan clan : clans) {
+                ElementListyKlanowStruct listElement = new ElementListyKlanowStruct();
+                listElement.id = clan.getId();
+                listElement.nazwa = clan.getNazwa();
+                listElement.opis = clan.getOpis();
+                listElement.korzen = clan.getKorzen().toString();
+                clansList.add(listElement);
+            }
+        }
+        return clansList;
+    }
+
+    public static List<ElementListyDokumentowStruct> getDocumentsList() {
+        System.out.println("[DatabaseDelegate][getDocumentsList]");
+        Collection<Dokument> documents = DatabaseLib.getDocuments();
+        List<ElementListyDokumentowStruct> documentsList = new ArrayList<ElementListyDokumentowStruct>();
+        if (documents != null && documents.size() > 0) {
+            for (Dokument document : documents) {
+                ElementListyDokumentowStruct listElement = new ElementListyDokumentowStruct();
+                listElement.setId(document.getId());
+                listElement.setTytul(document.getTytul());
+                listElement.setSymbol(document.getSymbol());
+                documentsList.add(listElement);
+            }
+        }
+        return documentsList;
+    }
+
+    public static DrzewoOsobaStruct getPersonDataForPedigree(Long personId) {
+        System.out.println("[DatabaseDelegate][getPersonDataForPedigree]");
+        Osoba person = DatabaseLib.getPerson(personId);
+        DrzewoOsobaStruct result = new DrzewoOsobaStruct();
+        result.id = person.getId();
+        result.nazwa = person.getImiona() + " " + person.getNazwisko();
+        result.daneUrodzenia = DatabaseUtil.getBirthInfo(person);
+        result.daneSmierci = DatabaseUtil.getDeathInfo(person);
+        result.danePochowania = "";
+        result.daneZamieszkania = DatabaseUtil.getResidenceInfo(person);
+        result.daneZawodu = DatabaseUtil.getOccupationInfo(person);
+
+        Collection<Zwiazek> relationships = null;
+        if (person.getPlec().equalsIgnoreCase("mezczyzna")) {
+            relationships = person.getZwiazkiMezowskie();
         } else {
-            return "";
-        }
-    }
-
-    private static String getTXTField(Object value) {
-        if (value == null)
-            return ";";
-        if (value instanceof String)
-            return "\"" + value + "\";";
-        return value.toString() + ";";
-    }
-
-    public static List<ElementListyZwiazkowStruct> getListaZwiazkow() {
-        System.out.println("[DatabaseDelegate][getListaZwiazkow]");
-        Collection<Zwiazek> zwiazki = DatabaseLib.getRelationships(null, null);
-        List<ElementListyZwiazkowStruct> listaZwiazkow = new ArrayList<ElementListyZwiazkowStruct>();
-        if (zwiazki != null && zwiazki.size() > 0) {
-            for (Zwiazek zwiazek : zwiazki) {
-                ElementListyZwiazkowStruct elementListy = new ElementListyZwiazkowStruct();
-                elementListy.id = zwiazek.getId();
-                elementListy.mezczyzna = zwiazek.getMezczyzna().toString();
-                elementListy.kobieta = zwiazek.getKobieta().toString();
-                elementListy.opis = DatabaseUtil.getMarriageInfo(zwiazek) + " " + DatabaseUtil.getDivorceInfo(zwiazek);
-                listaZwiazkow.add(elementListy);
-            }
-        }
-        return listaZwiazkow;
-    }
-
-    public static List<ElementListyKlanowStruct> getListaKlanow() {
-        System.out.println("[DatabaseDelegate][getListaKlanow]");
-        Collection<Klan> klany = DatabaseLib.getClans();
-        List<ElementListyKlanowStruct> listaKlanow = new ArrayList<ElementListyKlanowStruct>();
-        if (klany != null && klany.size() > 0) {
-            for (Klan klan : klany) {
-                ElementListyKlanowStruct elementListy = new ElementListyKlanowStruct();
-                elementListy.id = klan.getId();
-                elementListy.nazwa = klan.getNazwa();
-                elementListy.opis = klan.getOpis();
-                elementListy.korzen = klan.getKorzen().toString();
-                listaKlanow.add(elementListy);
-            }
-        }
-        return listaKlanow;
-    }
-
-    public static List<ElementListyDokumentowStruct> getListaDokumentow() {
-        System.out.println("[DatabaseDelegate][getListaDokumentow]");
-        Collection<Dokument> dokumenty = DatabaseLib.getDocuments();
-        List<ElementListyDokumentowStruct> listaDokumentow = new ArrayList<ElementListyDokumentowStruct>();
-        if (dokumenty != null && dokumenty.size() > 0) {
-            for (Dokument dokument : dokumenty) {
-                ElementListyDokumentowStruct elementListy = new ElementListyDokumentowStruct();
-                elementListy.setId(dokument.getId());
-                elementListy.setTytul(dokument.getTytul());
-                elementListy.setSymbol(dokument.getSymbol());
-                listaDokumentow.add(elementListy);
-            }
-        }
-        return listaDokumentow;
-    }
-
-    public static DrzewoOsobaStruct getDaneOsoby(Long idOsoby) {
-        System.out.println("[DatabaseDelegate][getDaneOsoby]");
-        Osoba osoba = DatabaseLib.getPerson(idOsoby);
-        DrzewoOsobaStruct osobaStruct = new DrzewoOsobaStruct();
-        osobaStruct.id = osoba.getId();
-        osobaStruct.nazwa = osoba.getImiona() + " " + osoba.getNazwisko();
-        osobaStruct.daneUrodzenia = DatabaseUtil.getBirthInfo(osoba);
-        osobaStruct.daneSmierci = DatabaseUtil.getDeathInfo(osoba);
-        osobaStruct.danePochowania = "";
-        osobaStruct.daneZamieszkania = DatabaseUtil.getResidenceInfo(osoba);
-        osobaStruct.daneZawodu = DatabaseUtil.getOccupationInfo(osoba);
-
-        Collection<Zwiazek> zwiazki = null;
-        if (osoba.getPlec().equalsIgnoreCase("mezczyzna")) {
-            zwiazki = osoba.getZwiazkiMezowskie();
-        } else {
-            zwiazki = osoba.getZwiazkiZonowskie();
+            relationships = person.getZwiazkiZonowskie();
         }
 
-        if (zwiazki != null && zwiazki.size() > 0) {
-            List<DrzewoRodzinaStruct> idRodzin = new ArrayList<DrzewoRodzinaStruct>();
-            for (Zwiazek zwiazek : zwiazki) {
-                DrzewoRodzinaStruct rodzina = new DrzewoRodzinaStruct();
-                rodzina.idZwiazku = zwiazek.getId();
-                if (osoba.getPlec().equalsIgnoreCase("mezczyzna")) {
-                    rodzina.idMalzonka = zwiazek.getKobieta().getId();
+        if (relationships != null && relationships.size() > 0) {
+            List<DrzewoRodzinaStruct> familyIds = new ArrayList<DrzewoRodzinaStruct>();
+            for (Zwiazek relationship : relationships) {
+                DrzewoRodzinaStruct family = new DrzewoRodzinaStruct();
+                family.idZwiazku = relationship.getId();
+                if (person.getPlec().equalsIgnoreCase("mezczyzna")) {
+                    family.idMalzonka = relationship.getKobieta().getId();
                 } else {
-                    rodzina.idMalzonka = zwiazek.getMezczyzna().getId();
+                    family.idMalzonka = relationship.getMezczyzna().getId();
                 }
-                rodzina.daneSpotkania = DatabaseUtil.getMeetInfo(zwiazek);
-                rodzina.daneSlubu = DatabaseUtil.getMarriageInfo(zwiazek);
-                rodzina.daneRozstania = DatabaseUtil.getSeparationInfo(zwiazek);
-                rodzina.daneRozwodu = DatabaseUtil.getDivorceInfo(zwiazek);
-                List<Osoba> dzieci = sortujPoDacieUrodzenia(zwiazek.getDzieci());
-                if (dzieci != null && dzieci.size() > 0) {
-                    List<Long> idDzieci = new ArrayList<Long>();
-                    for (Osoba dziecko : dzieci) {
-                        idDzieci.add(dziecko.getId());
+                family.daneSpotkania = DatabaseUtil.getMeetInfo(relationship);
+                family.daneSlubu = DatabaseUtil.getMarriageInfo(relationship);
+                family.daneRozstania = DatabaseUtil.getSeparationInfo(relationship);
+                family.daneRozwodu = DatabaseUtil.getDivorceInfo(relationship);
+                List<Osoba> children = sortByBirthDate(relationship.getDzieci());
+                if (children != null && children.size() > 0) {
+                    List<Long> childrenIds = new ArrayList<Long>();
+                    for (Osoba child : children) {
+                        childrenIds.add(child.getId());
                     }
-                    rodzina.idDzieci = idDzieci;
+                    family.idDzieci = childrenIds;
                 }
-                idRodzin.add(rodzina);
-                zwiazek = null;
+                familyIds.add(family);
+                relationship = null;
             }
-            osobaStruct.rodziny = idRodzin;
+            result.rodziny = familyIds;
         }
-        return osobaStruct;
+        return result;
     }
 
-    private static List<Osoba> sortujPoDacieUrodzenia(Collection<Osoba> osoby) {
-        List<Osoba> rezultat = new ArrayList<Osoba>();
-        rezultat.addAll(osoby);
-        Collections.sort(rezultat, new Comparator<Osoba>() {
+    private static List<Osoba> sortByBirthDate(Collection<Osoba> people) {
+        List<Osoba> result = new ArrayList<Osoba>();
+        result.addAll(people);
+        Collections.sort(result, new Comparator<Osoba>() {
 
-            public int compare(Osoba o1, Osoba o2) {
-                String ds1 = o1.getDataUrodzenia();
-                String ds2 = o2.getDataUrodzenia();
+            public int compare(Osoba person1, Osoba person2) {
+                String ds1 = person1.getDataUrodzenia();
+                String ds2 = person2.getDataUrodzenia();
                 if (ds1 == null && ds2 == null) {
                     return 0;
                 }
@@ -361,18 +348,440 @@ public class DatabaseDelegate {
                     return -1;
                 }
 
-                String d1 = data(ds1);
-                String d2 = data(ds2);
+                String d1 = reformatDate(ds1);
+                String d2 = reformatDate(ds2);
                 return d1.compareTo(d2);
             }
         });
-        return rezultat;
+        return result;
     }
 
-    private final static DateFormat inputDF = new SimpleDateFormat("dd-MM-yyyy");
-    private final static DateFormat outputDF = new SimpleDateFormat("yyyy-MM-dd");
+    public static DaneEdycjiOsoby getPersonEditData(Long personId) {
+        System.out.println("[DatabaseDelegate][getPersonEditData]");
+        Osoba person = DatabaseLib.getPerson(personId);
+        DaneEdycjiOsoby personEditData = new DaneEdycjiOsoby();
 
-    private static String data(String input) {
+        personEditData.setId(person.getId());
+        personEditData.setImiona(person.getImiona());
+        personEditData.setNazwisko(person.getNazwisko());
+        personEditData.setDataUrodzenia(person.getDataUrodzenia());
+        personEditData.setMiejsceUrodzenia(person.getMiejsceUrodzenia());
+        personEditData.setDataSmierci(person.getDataSmierci());
+        personEditData.setMiejsceSmierci(person.getMiejsceSmierci());
+        personEditData.setDataPochowania(person.getDataPochowania());
+        personEditData.setMiejscePochowania(person.getMiejscePochowania());
+        personEditData.setPlec(person.getPlec());
+        personEditData.setWyksztalcenie(person.getWyksztalcenie());
+        personEditData.setZawodyWykonywane(person.getZawodyWykonywane());
+        personEditData.setOpis(person.getOpis());
+        personEditData.setRodzice(null);
+        personEditData.setMiejsceZamieszkania(person.getMiejsceZamieszkania());
+        Zwiazek parents = person.getZwiazekRodzicow();
+        if (parents != null) {
+            personEditData.setRodzice(toStruct(parents));
+        }
+
+        personEditData.setRodziny(new Vector<RodzinaStruct>());
+        Collection<Zwiazek> families = null;
+        if (personEditData.getPlec() != null && personEditData.getPlec().equalsIgnoreCase("Mezczyzna")) {
+            families = person.getZwiazkiMezowskie();
+        } else {
+            families = person.getZwiazkiZonowskie();
+        }
+        if (families != null) {
+            for (Zwiazek relationship : families) {
+                Osoba spouse = null;
+                if (personEditData.getPlec() != null && personEditData.getPlec().equalsIgnoreCase("Mezczyzna")) {
+                    spouse = relationship.getKobieta();
+                } else {
+                    spouse = relationship.getMezczyzna();
+                }
+                RodzinaStruct family = new RodzinaStruct();
+                if (spouse != null)
+                    family.malzonek = new ReferenceListElement(spouse.getId(), spouse.getImiona() + " " + spouse.getNazwisko());
+                family.idDzieci = new Vector<ReferenceListElement>();
+                if (relationship.getDzieci() != null && relationship.getDzieci().size() > 0) {
+                    for (Osoba child : relationship.getDzieci()) {
+                        family.idDzieci.add(new ReferenceListElement(child.getId(), child.getImiona() + " " + child.getNazwisko()));
+                    }
+                }
+                personEditData.getRodziny().add(family);
+            }
+        }
+
+        Set<ReferenceListElement> documents = new HashSet<ReferenceListElement>();
+        if (person.getDokumenty() != null && person.getDokumenty().size() > 0) {
+            for (Dokument document : person.getDokumenty()) {
+                documents.add(dokumentToReferencedListElement(document));
+            }
+        }
+
+        personEditData.setDokumenty(documents);
+        return personEditData;
+    }
+
+    public static DaneEdycjiZwiazkuStruct getRelationshipEditData(Long relationshipId) {
+        System.out.println("[DatabaseDelegate][getRelationshipEditData]");
+        Zwiazek relationship = DatabaseLib.getRelationship(relationshipId);
+
+        DaneEdycjiZwiazkuStruct relationshipEditData = new DaneEdycjiZwiazkuStruct();
+        relationshipEditData.id = relationship.getId();
+        relationshipEditData.mezczyzna = toStruct(relationship.getMezczyzna());
+        relationshipEditData.kobieta = toStruct(relationship.getKobieta());
+        relationshipEditData.dataPoznania = relationship.getDataPoznania();
+        relationshipEditData.miejscePoznania = relationship.getMiejscePoznania();
+        relationshipEditData.dataSlubu = relationship.getDataSlubu();
+        relationshipEditData.miejsceSlubu = relationship.getMiejsceSlubu();
+        relationshipEditData.dataRozstania = relationship.getDataRozstania();
+        relationshipEditData.miejsceRozstania = relationship.getMiejsceRozstania();
+        relationshipEditData.dataRozwodu = relationship.getDataRozwodu();
+        relationshipEditData.miejsceRozwodu = relationship.getMiejsceRozwodu();
+        relationshipEditData.opis = relationship.getOpis();
+
+        return relationshipEditData;
+    }
+
+    public static DaneEdycjiKlanuStruct getClanEditData(Long clanId) {
+        System.out.println("[DatabaseDelegate][getClanEditData]");
+        Klan clan = DatabaseLib.getClan(clanId);
+
+        DaneEdycjiKlanuStruct clanEditData = new DaneEdycjiKlanuStruct();
+        clanEditData.id = clan.getId();
+        clanEditData.nazwa = clan.getNazwa();
+        clanEditData.opis = clan.getOpis();
+        clanEditData.korzen = toStruct(clan.getKorzen());
+
+        return clanEditData;
+    }
+
+    public static DaneEdycjiDokumentu getDocumentEditData(Long documentId) {
+        System.out.println("[DatabaseDelegate][getDocumentEditData]");
+        Dokument document = DatabaseLib.getDocument(documentId);
+
+        DaneEdycjiDokumentu documentEditData = new DaneEdycjiDokumentu();
+        documentEditData.setId(document.getId());
+        documentEditData.setTytul(document.getTytul());
+        documentEditData.setSymbol(document.getSymbol());
+        documentEditData.setOpis(document.getOpis());
+
+        documentEditData.setOsoby(peopleToReferenceListElements(document.getOsoby()));
+
+        return documentEditData;
+    }
+
+    public static void saveEditedPerson(DaneEdycjiOsoby personData) {
+        System.out.println("[DatabaseDelegate][saveEditedPerson]");
+        Osoba person = DatabaseLib.getPerson(personData.getId());
+
+        person.setPlec(personData.getPlec());
+        person.setImiona(personData.getImiona());
+        person.setNazwisko(personData.getNazwisko());
+        person.setDataUrodzenia(personData.getDataUrodzenia());
+        person.setMiejsceUrodzenia(personData.getMiejsceUrodzenia());
+        person.setDataSmierci(personData.getDataSmierci());
+        person.setMiejsceSmierci(personData.getMiejsceSmierci());
+        person.setDataPochowania(personData.getDataPochowania());
+        person.setMiejscePochowania(personData.getMiejscePochowania());
+        person.setWyksztalcenie(personData.getWyksztalcenie());
+        person.setZawodyWykonywane(personData.getZawodyWykonywane());
+        person.setOpis(personData.getOpis());
+        person.setMiejsceZamieszkania(personData.getMiejsceZamieszkania());
+
+        if (personData.getRodzice() != null) {
+            Long parentsRelationshipId = personData.getRodzice().id;
+            Zwiazek parentsRelationship = DatabaseLib.getRelationship(parentsRelationshipId);
+            person.setZwiazekRodzicow(parentsRelationship);
+        }
+
+        for (Dokument document : person.getDokumenty()) {
+            document.getOsoby().remove(person);
+        }
+
+        person.getDokumenty().clear();
+        for (ReferenceListElement documentElement : personData.getDokumenty()) {
+            Dokument document = DatabaseLib.getDocument(documentElement.getId());
+            person.getDokumenty().add(document);
+            document.getOsoby().add(person);
+        }
+
+        DatabaseLib.save(person);
+    }
+
+    public static void saveEditedRelationship(DaneEdycjiZwiazkuStruct relationshipData) {
+        System.out.println("[DatabaseDelegate][saveEditedRelationship]");
+        Zwiazek relationship = DatabaseLib.getRelationship(relationshipData.id);
+
+        if (relationshipData.mezczyzna != null) {
+            Long maleId = relationshipData.mezczyzna.getId();
+            Osoba male = DatabaseLib.getPerson(maleId);
+            relationship.setMezczyzna(male);
+        }
+        if (relationshipData.kobieta != null) {
+            Long femaleId = relationshipData.kobieta.getId();
+            Osoba female = DatabaseLib.getPerson(femaleId);
+            relationship.setKobieta(female);
+        }
+
+        relationship.setDataPoznania(relationshipData.dataPoznania);
+        relationship.setMiejscePoznania(relationshipData.miejscePoznania);
+        relationship.setDataSlubu(relationshipData.dataSlubu);
+        relationship.setMiejsceSlubu(relationshipData.miejsceSlubu);
+        relationship.setDataRozstania(relationshipData.dataRozstania);
+        relationship.setMiejsceRozstania(relationshipData.miejsceRozstania);
+        relationship.setDataRozwodu(relationshipData.dataRozwodu);
+        relationship.setMiejsceRozwodu(relationshipData.miejsceRozwodu);
+        relationship.setOpis(relationshipData.opis);
+
+        DatabaseLib.save(relationship);
+    }
+
+    public static void saveEditedClan(DaneEdycjiKlanuStruct clanData) {
+        System.out.println("[DatabaseDelegate][saveClanData]");
+        Klan clan = DatabaseLib.getClan(clanData.id);
+
+        clan.setNazwa(clanData.nazwa);
+        clan.setOpis(clanData.opis);
+
+        if (clanData.korzen != null) {
+            Long clanRootId = clanData.korzen.getId();
+            Osoba person = DatabaseLib.getPerson(clanRootId);
+            clan.setKorzen(person);
+        }
+
+        DatabaseLib.save(clan);
+    }
+
+    public static void saveEditedDocument(DaneEdycjiDokumentu documentData) {
+        System.out.println("[DatabaseDelegate][saveEditedDocument]");
+        Dokument document = DatabaseLib.getDocument(documentData.getId());
+
+        document.setTytul(documentData.getTytul());
+        document.setSymbol(documentData.getSymbol());
+        document.setOpis(documentData.getOpis());
+
+        for (Osoba person : document.getOsoby()) {
+            person.getDokumenty().remove(document);
+        }
+
+        document.getOsoby().clear();
+        for (ReferenceListElement personElement : documentData.getOsoby()) {
+            Osoba person = DatabaseLib.getPerson(personElement.getId());
+            document.getOsoby().add(person);
+            person.getDokumenty().add(document);
+        }
+
+        DatabaseLib.save(document);
+    }
+
+    public static void saveNewPerson(DaneEdycjiOsoby personData) {
+        System.out.println("[DatabaseDelegate][saveNewPerson]");
+        Osoba person = new Osoba();
+
+        person.setPlec(personData.getPlec());
+        person.setImiona(personData.getImiona());
+        person.setNazwisko(personData.getNazwisko());
+        person.setDataUrodzenia(personData.getDataUrodzenia());
+        person.setMiejsceUrodzenia(personData.getMiejsceUrodzenia());
+        person.setDataSmierci(personData.getDataSmierci());
+        person.setMiejsceSmierci(personData.getMiejsceSmierci());
+        person.setDataPochowania(personData.getDataPochowania());
+        person.setMiejscePochowania(personData.getMiejscePochowania());
+        person.setWyksztalcenie(personData.getWyksztalcenie());
+        person.setZawodyWykonywane(personData.getZawodyWykonywane());
+
+        if (personData.getRodzice() != null) {
+            Long parentsRelationshipId = personData.getRodzice().id;
+            Zwiazek parentsRelationship = DatabaseLib.getRelationship(parentsRelationshipId);
+            person.setZwiazekRodzicow(parentsRelationship);
+        }
+
+        if (personData.getDokumenty() != null) {
+            Set<Dokument> documents = new HashSet<Dokument>();
+            for (ReferenceListElement dokumentElement : personData.getDokumenty()) {
+                Dokument document = DatabaseLib.getDocument(dokumentElement.getId());
+                documents.add(document);
+                document.getOsoby().add(person);
+            }
+            person.setDokumenty(documents);
+        }
+
+        DatabaseLib.save(person);
+    }
+
+    public static void saveNewRelationship(DaneEdycjiZwiazkuStruct relationshipData) {
+        System.out.println("[DatabaseDelegate][saveNewRelationship]");
+        Zwiazek relationship = new Zwiazek();
+
+        if (relationshipData.mezczyzna != null) {
+            Long maleId = relationshipData.mezczyzna.getId();
+            Osoba male = DatabaseLib.getPerson(maleId);
+            relationship.setMezczyzna(male);
+        }
+        if (relationshipData.kobieta != null) {
+            Long femaleId = relationshipData.kobieta.getId();
+            Osoba female = DatabaseLib.getPerson(femaleId);
+            relationship.setKobieta(female);
+        }
+
+        relationship.setDataPoznania(relationshipData.dataPoznania);
+        relationship.setMiejscePoznania(relationshipData.miejscePoznania);
+        relationship.setDataSlubu(relationshipData.dataSlubu);
+        relationship.setMiejsceSlubu(relationshipData.miejsceSlubu);
+        relationship.setDataRozstania(relationshipData.dataRozstania);
+        relationship.setMiejsceRozstania(relationshipData.miejsceRozstania);
+        relationship.setDataRozwodu(relationshipData.dataRozwodu);
+        relationship.setMiejsceRozwodu(relationshipData.miejsceRozwodu);
+        relationship.setOpis(relationshipData.opis);
+
+        DatabaseLib.save(relationship);
+    }
+
+    public static void saveNewClan(DaneEdycjiKlanuStruct clanData) {
+        System.out.println("[DatabaseDelegate][saveNewClan]");
+        Klan clan = new Klan();
+
+        clan.setNazwa(clanData.nazwa);
+        clan.setOpis(clanData.opis);
+
+        if (clanData.korzen != null) {
+            Long clanRootId = clanData.korzen.getId();
+            Osoba person = DatabaseLib.getPerson(clanRootId);
+            clan.setKorzen(person);
+        }
+
+        DatabaseLib.save(clan);
+    }
+
+    public static void saveNewDocument(DaneEdycjiDokumentu documentData) {
+        System.out.println("[DatabaseDelegate][saveNewDocument]");
+        Dokument document = new Dokument();
+
+        document.setTytul(documentData.getTytul());
+        document.setSymbol(documentData.getSymbol());
+        document.setOpis(documentData.getOpis());
+
+        Set<Osoba> people = new HashSet<Osoba>();
+        if (documentData.getOsoby() != null) {
+            for (ReferenceListElement personElement : documentData.getOsoby()) {
+                Osoba person = DatabaseLib.getPerson(personElement.getId());
+                people.add(person);
+                person.getDokumenty().add(document);
+            }
+        }
+        document.setOsoby(people);
+        DatabaseLib.save(document);
+    }
+
+    public static List<ZwiazekStruct> getRelationships() {
+        System.out.println("[DatabaseDelegate][getRelationships]");
+        Collection<Zwiazek> relationships = DatabaseLib.getRelationships(null, null);
+        List<ZwiazekStruct> result = new ArrayList<ZwiazekStruct>();
+        if (relationships != null && relationships.size() > 0) {
+            for (Zwiazek relationship : relationships) {
+                result.add(toStruct(relationship));
+            }
+        }
+        return result;
+    }
+
+    public static List<ReferenceListElement> getMales() {
+        System.out.println("[DatabaseDelegate][getMales]");
+        Collection<Osoba> males = DatabaseLib.getMales();
+        return toStruct(males);
+    }
+
+    public static List<ReferenceListElement> getFemales() {
+        System.out.println("[DatabaseDelegate][getFemales]");
+        Collection<Osoba> females = DatabaseLib.getFemales();
+        return toStruct(females);
+    }
+
+    public static List<ReferenceListElement> getPeople() {
+        System.out.println("[DatabaseDelegate][getPeople]");
+        Collection<Osoba> people = DatabaseLib.getPeople();
+        return toStruct(people);
+    }
+
+    public static List<ReferenceListElement> getDocuments() {
+        System.out.println("[DatabaseDelegate][getDocuments]");
+        Collection<Dokument> documents = DatabaseLib.getDocuments();
+        return dokumentsToReferencedListElements(documents);
+    }
+
+    private static ZwiazekStruct toStruct(Zwiazek relationship) {
+        ZwiazekStruct struct = new ZwiazekStruct();
+        struct.id = relationship.getId();
+        struct.mezczyzna = relationship.getMezczyzna().toString();
+        struct.kobieta = relationship.getKobieta().toString();
+        return struct;
+    }
+
+    private static ReferenceListElement toStruct(Osoba person) {
+        ReferenceListElement struct = new ReferenceListElement();
+        struct.setId(person.getId());
+        struct.setDescription(person.getImiona() + " " + person.getNazwisko());
+        return struct;
+    }
+
+    private static List<ReferenceListElement> toStruct(Collection<Osoba> people) {
+        List<ReferenceListElement> result = new ArrayList<ReferenceListElement>();
+        if (people != null && people.size() > 0) {
+            for (Osoba person : people) {
+                result.add(toStruct(person));
+            }
+        }
+        return result;
+    }
+
+    private static List<ReferenceListElement> dokumentsToReferencedListElements(Collection<Dokument> documents) {
+        List<ReferenceListElement> result = new ArrayList<ReferenceListElement>();
+        if (documents != null && documents.size() > 0) {
+            for (Dokument document : documents) {
+                result.add(dokumentToReferencedListElement(document));
+            }
+        }
+        return result;
+    }
+
+    public static void deletePersonOsobe(Long personId) {
+        Osoba person = DatabaseLib.getPerson(personId);
+        DatabaseLib.delete(person);
+    }
+
+    public static void deleteRelationship(Long relationshipId) {
+        Zwiazek relationship = DatabaseLib.getRelationship(relationshipId);
+        DatabaseLib.delete(relationship);
+    }
+
+    public static void deleteClan(Long clanId) {
+        Klan clan = DatabaseLib.getClan(clanId);
+        DatabaseLib.delete(clan);
+    }
+
+    public static void deleteDocument(Long documentId) {
+        Dokument document = DatabaseLib.getDocument(documentId);
+        DatabaseLib.delete(document);
+    }
+
+    private static String getXMLField(String name, Object value) {
+        if (value != null) {
+            return "<" + name + ">" + value.toString() + "</" + name + ">\n";
+        } else {
+            return "";
+        }
+    }
+
+    private static String getTXTField(Object value) {
+        if (value == null) {
+            return ";";
+        }
+        if (value instanceof String) {
+            return "\"" + value + "\";";
+        }
+        return value.toString() + ";";
+    }
+
+    private static String reformatDate(String input) {
         try {
             return outputDF.format(inputDF.parse(input));
         } catch (ParseException ex) {
@@ -380,434 +789,27 @@ public class DatabaseDelegate {
         }
     }
 
-    public static DaneEdycjiOsoby getDaneDoEdycjiOsoby(Long idOsoby) {
-        System.out.println("[DatabaseDelegate][getDaneDoEdycjiOsoby]");
-        Osoba osoba = DatabaseLib.getPerson(idOsoby);
-        DaneEdycjiOsoby daneOsoby = new DaneEdycjiOsoby();
-
-        daneOsoby.setId(osoba.getId());
-        daneOsoby.setImiona(osoba.getImiona());
-        daneOsoby.setNazwisko(osoba.getNazwisko());
-        daneOsoby.setDataUrodzenia(osoba.getDataUrodzenia());
-        daneOsoby.setMiejsceUrodzenia(osoba.getMiejsceUrodzenia());
-        daneOsoby.setDataSmierci(osoba.getDataSmierci());
-        daneOsoby.setMiejsceSmierci(osoba.getMiejsceSmierci());
-        daneOsoby.setDataPochowania(osoba.getDataPochowania());
-        daneOsoby.setMiejscePochowania(osoba.getMiejscePochowania());
-        daneOsoby.setPlec(osoba.getPlec());
-        daneOsoby.setWyksztalcenie(osoba.getWyksztalcenie());
-        daneOsoby.setZawodyWykonywane(osoba.getZawodyWykonywane());
-        daneOsoby.setOpis(osoba.getOpis());
-        daneOsoby.setRodzice(null);
-        daneOsoby.setMiejsceZamieszkania(osoba.getMiejsceZamieszkania());
-        Zwiazek rodzice = osoba.getZwiazekRodzicow();
-        if (rodzice != null) {
-            daneOsoby.setRodzice(toStruct(rodzice));
-        }
-
-        daneOsoby.setRodziny(new Vector<RodzinaStruct>());
-        Collection<Zwiazek> rodziny = null;
-        if (daneOsoby.getPlec() != null && daneOsoby.getPlec().equalsIgnoreCase("Mezczyzna")) {
-            rodziny = osoba.getZwiazkiMezowskie();
-        } else {
-            rodziny = osoba.getZwiazkiZonowskie();
-        }
-        if (rodziny != null) {
-            for (Zwiazek zwiazek : rodziny) {
-                Osoba malzonek = null;
-                if (daneOsoby.getPlec() != null && daneOsoby.getPlec().equalsIgnoreCase("Mezczyzna")) {
-                    malzonek = zwiazek.getKobieta();
-                } else {
-                    malzonek = zwiazek.getMezczyzna();
-                }
-                RodzinaStruct rodzina = new RodzinaStruct();
-                if (malzonek != null)
-                    rodzina.malzonek = new ReferenceListElement(malzonek.getId(), malzonek.getImiona() + " " + malzonek.getNazwisko());
-                rodzina.idDzieci = new Vector<ReferenceListElement>();
-                if (zwiazek.getDzieci() != null && zwiazek.getDzieci().size() > 0) {
-                    for (Osoba dziecko : zwiazek.getDzieci()) {
-                        rodzina.idDzieci.add(new ReferenceListElement(dziecko.getId(), dziecko.getImiona() + " " + dziecko.getNazwisko()));
-                    }
-                }
-                daneOsoby.getRodziny().add(rodzina);
-            }
-        }
-
-        Set<ReferenceListElement> wybraneDokumenty = new HashSet<ReferenceListElement>();
-        if (osoba.getDokumenty() != null && osoba.getDokumenty().size() > 0) {
-            for (Dokument dokument : osoba.getDokumenty()) {
-                wybraneDokumenty.add(dokumentToReferencedListElement(dokument));
-            }
-        }
-
-        daneOsoby.setDokumenty(wybraneDokumenty);
-        return daneOsoby;
-    }
-
-    private static ReferenceListElement dokumentToReferencedListElement(Dokument dokument) {
-        ReferenceListElement elementListy = new ReferenceListElement();
-        elementListy.setId(dokument.getId());
-        elementListy.setDescription(dokument.getTytul() + " (" + dokument.getSymbol() + ")");
-        return elementListy;
-    }
-
-    public static DaneEdycjiZwiazkuStruct getDaneDoEdycjiZwiazku(Long idZwiazku) {
-        System.out.println("[DatabaseDelegate][getDaneDoEdycjiZwiazku]");
-        Zwiazek zwiazek = DatabaseLib.getRelationship(idZwiazku);
-
-        DaneEdycjiZwiazkuStruct daneZwiazku = new DaneEdycjiZwiazkuStruct();
-        daneZwiazku.id = zwiazek.getId();
-        daneZwiazku.mezczyzna = toStruct(zwiazek.getMezczyzna());
-        daneZwiazku.kobieta = toStruct(zwiazek.getKobieta());
-        daneZwiazku.dataPoznania = zwiazek.getDataPoznania();
-        daneZwiazku.miejscePoznania = zwiazek.getMiejscePoznania();
-        daneZwiazku.dataSlubu = zwiazek.getDataSlubu();
-        daneZwiazku.miejsceSlubu = zwiazek.getMiejsceSlubu();
-        daneZwiazku.dataRozstania = zwiazek.getDataRozstania();
-        daneZwiazku.miejsceRozstania = zwiazek.getMiejsceRozstania();
-        daneZwiazku.dataRozwodu = zwiazek.getDataRozwodu();
-        daneZwiazku.miejsceRozwodu = zwiazek.getMiejsceRozwodu();
-        daneZwiazku.opis = zwiazek.getOpis();
-
-        return daneZwiazku;
-    }
-
-    public static DaneEdycjiKlanuStruct getDaneDoEdycjiKlanu(Long idKlanu) {
-        System.out.println("[DatabaseDelegate][getDaneDoEdycjiKlanu]");
-        Klan klan = DatabaseLib.getClan(idKlanu);
-
-        DaneEdycjiKlanuStruct daneKlanu = new DaneEdycjiKlanuStruct();
-        daneKlanu.id = klan.getId();
-        daneKlanu.nazwa = klan.getNazwa();
-        daneKlanu.opis = klan.getOpis();
-        daneKlanu.korzen = toStruct(klan.getKorzen());
-
-        return daneKlanu;
-    }
-
-    public static DaneEdycjiDokumentu getDaneDoEdycjiDokumentu(Long idDokumentu) {
-        System.out.println("[DatabaseDelegate][getDaneDoEdycjiDokumentu]");
-        Dokument dokument = DatabaseLib.getDocument(idDokumentu);
-
-        DaneEdycjiDokumentu daneDokumentu = new DaneEdycjiDokumentu();
-        daneDokumentu.setId(dokument.getId());
-        daneDokumentu.setTytul(dokument.getTytul());
-        daneDokumentu.setSymbol(dokument.getSymbol());
-        daneDokumentu.setOpis(dokument.getOpis());
-
-        daneDokumentu.setOsoby(osobyToReferenceListElements(dokument.getOsoby()));
-
-        return daneDokumentu;
-    }
-
-    private static Set<ReferenceListElement> osobyToReferenceListElements(Set<Osoba> osoby) {
+    private static Set<ReferenceListElement> peopleToReferenceListElements(Set<Osoba> people) {
         Set<ReferenceListElement> result = new HashSet<ReferenceListElement>();
-        for (Osoba osoba : osoby) {
-            result.add(osobaToReferenceListElement(osoba));
+        for (Osoba person : people) {
+            result.add(personToReferenceListElement(person));
         }
 
         return result;
     }
 
-    private static ReferenceListElement osobaToReferenceListElement(Osoba osoba) {
+    private static ReferenceListElement dokumentToReferencedListElement(Dokument document) {
         ReferenceListElement result = new ReferenceListElement();
-        result.setId(osoba.getId());
-        result.setDescription(osoba.getImiona() + " " + osoba.getNazwisko() + " (" + osoba.getId() + ")");
-
+        result.setId(document.getId());
+        result.setDescription(document.getTytul() + " (" + document.getSymbol() + ")");
         return result;
     }
 
-    public static void zapiszDanePoEdycjiOsoby(DaneEdycjiOsoby daneOsoby) {
-        System.out.println("[DatabaseDelegate][zapiszDanePoEdycjiOsoby]");
-        Osoba osoba = DatabaseLib.getPerson(daneOsoby.getId());
+    private static ReferenceListElement personToReferenceListElement(Osoba person) {
+        ReferenceListElement result = new ReferenceListElement();
+        result.setId(person.getId());
+        result.setDescription(person.getImiona() + " " + person.getNazwisko() + " (" + person.getId() + ")");
 
-        osoba.setPlec(daneOsoby.getPlec());
-        osoba.setImiona(daneOsoby.getImiona());
-        osoba.setNazwisko(daneOsoby.getNazwisko());
-        osoba.setDataUrodzenia(daneOsoby.getDataUrodzenia());
-        osoba.setMiejsceUrodzenia(daneOsoby.getMiejsceUrodzenia());
-        osoba.setDataSmierci(daneOsoby.getDataSmierci());
-        osoba.setMiejsceSmierci(daneOsoby.getMiejsceSmierci());
-        osoba.setDataPochowania(daneOsoby.getDataPochowania());
-        osoba.setMiejscePochowania(daneOsoby.getMiejscePochowania());
-        osoba.setWyksztalcenie(daneOsoby.getWyksztalcenie());
-        osoba.setZawodyWykonywane(daneOsoby.getZawodyWykonywane());
-        osoba.setOpis(daneOsoby.getOpis());
-        osoba.setMiejsceZamieszkania(daneOsoby.getMiejsceZamieszkania());
-
-        if (daneOsoby.getRodzice() != null) {
-            Long idZwiazkuRodzicow = daneOsoby.getRodzice().id;
-            Zwiazek zwiazekRodzicow = DatabaseLib.getRelationship(idZwiazkuRodzicow);
-            osoba.setZwiazekRodzicow(zwiazekRodzicow);
-        }
-
-        for (Dokument dokument : osoba.getDokumenty()) {
-            dokument.getOsoby().remove(osoba);
-        }
-
-        osoba.getDokumenty().clear();
-        for (ReferenceListElement dokumentElement : daneOsoby.getDokumenty()) {
-            Dokument dokument = DatabaseLib.getDocument(dokumentElement.getId());
-            osoba.getDokumenty().add(dokument);
-            dokument.getOsoby().add(osoba);
-        }
-
-        DatabaseLib.save(osoba);
-    }
-
-    public static void zapiszDanePoEdycjiZwiazku(DaneEdycjiZwiazkuStruct daneZwiazku) {
-        System.out.println("[DatabaseDelegate][zapiszDanePoEdycjiZwiazku]");
-        Zwiazek zwiazek = DatabaseLib.getRelationship(daneZwiazku.id);
-
-        if (daneZwiazku.mezczyzna != null) {
-            Long idMezczyzny = daneZwiazku.mezczyzna.getId();
-            Osoba mezczyzna = DatabaseLib.getPerson(idMezczyzny);
-            zwiazek.setMezczyzna(mezczyzna);
-        }
-        if (daneZwiazku.kobieta != null) {
-            Long idKobiety = daneZwiazku.kobieta.getId();
-            Osoba kobieta = DatabaseLib.getPerson(idKobiety);
-            zwiazek.setKobieta(kobieta);
-        }
-
-        zwiazek.setDataPoznania(daneZwiazku.dataPoznania);
-        zwiazek.setMiejscePoznania(daneZwiazku.miejscePoznania);
-        zwiazek.setDataSlubu(daneZwiazku.dataSlubu);
-        zwiazek.setMiejsceSlubu(daneZwiazku.miejsceSlubu);
-        zwiazek.setDataRozstania(daneZwiazku.dataRozstania);
-        zwiazek.setMiejsceRozstania(daneZwiazku.miejsceRozstania);
-        zwiazek.setDataRozwodu(daneZwiazku.dataRozwodu);
-        zwiazek.setMiejsceRozwodu(daneZwiazku.miejsceRozwodu);
-        zwiazek.setOpis(daneZwiazku.opis);
-
-        DatabaseLib.save(zwiazek);
-    }
-
-    public static void zapiszDanePoEdycjiKlanu(DaneEdycjiKlanuStruct daneKlanu) {
-        System.out.println("[DatabaseDelegate][zapiszDanePoEdycjiKlanu]");
-        Klan klan = DatabaseLib.getClan(daneKlanu.id);
-
-        klan.setNazwa(daneKlanu.nazwa);
-        klan.setOpis(daneKlanu.opis);
-
-        if (daneKlanu.korzen != null) {
-            Long idKorzenia = daneKlanu.korzen.getId();
-            Osoba osoba = DatabaseLib.getPerson(idKorzenia);
-            klan.setKorzen(osoba);
-        }
-
-        DatabaseLib.save(klan);
-    }
-
-    public static void zapiszDanePoEdycjiDokumentu(DaneEdycjiDokumentu daneDokumentu) {
-        System.out.println("[DatabaseDelegate][zapiszDanePoEdycjiDokumentu]");
-        Dokument dokument = DatabaseLib.getDocument(daneDokumentu.getId());
-
-        dokument.setTytul(daneDokumentu.getTytul());
-        dokument.setSymbol(daneDokumentu.getSymbol());
-        dokument.setOpis(daneDokumentu.getOpis());
-
-        for (Osoba osoba : dokument.getOsoby()) {
-            osoba.getDokumenty().remove(dokument);
-        }
-
-        dokument.getOsoby().clear();
-        for (ReferenceListElement osobaElement : daneDokumentu.getOsoby()) {
-            Osoba osoba = DatabaseLib.getPerson(osobaElement.getId());
-            dokument.getOsoby().add(osoba);
-            osoba.getDokumenty().add(dokument);
-        }
-
-        DatabaseLib.save(dokument);
-    }
-
-    public static void zapiszNowaOsobe(DaneEdycjiOsoby daneOsoby) {
-        System.out.println("[DatabaseDelegate][zapiszNowaOsobe]");
-        Osoba osoba = new Osoba();
-
-        osoba.setPlec(daneOsoby.getPlec());
-        osoba.setImiona(daneOsoby.getImiona());
-        osoba.setNazwisko(daneOsoby.getNazwisko());
-        osoba.setDataUrodzenia(daneOsoby.getDataUrodzenia());
-        osoba.setMiejsceUrodzenia(daneOsoby.getMiejsceUrodzenia());
-        osoba.setDataSmierci(daneOsoby.getDataSmierci());
-        osoba.setMiejsceSmierci(daneOsoby.getMiejsceSmierci());
-        osoba.setDataPochowania(daneOsoby.getDataPochowania());
-        osoba.setMiejscePochowania(daneOsoby.getMiejscePochowania());
-        osoba.setWyksztalcenie(daneOsoby.getWyksztalcenie());
-        osoba.setZawodyWykonywane(daneOsoby.getZawodyWykonywane());
-
-        if (daneOsoby.getRodzice() != null) {
-            Long idZwiazkuRodzicow = daneOsoby.getRodzice().id;
-            Zwiazek zwiazekRodzicow = DatabaseLib.getRelationship(idZwiazkuRodzicow);
-            osoba.setZwiazekRodzicow(zwiazekRodzicow);
-        }
-
-        if (daneOsoby.getDokumenty() != null) {
-            Set<Dokument> dokumenty = new HashSet<Dokument>();
-            for (ReferenceListElement dokumentElement : daneOsoby.getDokumenty()) {
-                Dokument dokument = DatabaseLib.getDocument(dokumentElement.getId());
-                dokumenty.add(dokument);
-                dokument.getOsoby().add(osoba);
-            }
-            osoba.setDokumenty(dokumenty);
-        }
-
-        DatabaseLib.save(osoba);
-    }
-
-    public static void zapiszNowyZwiazek(DaneEdycjiZwiazkuStruct daneZwiazku) {
-        System.out.println("[DatabaseDelegate][zapiszNowyZwiazek]");
-        Zwiazek zwiazek = new Zwiazek();
-
-        if (daneZwiazku.mezczyzna != null) {
-            Long idMezczyzny = daneZwiazku.mezczyzna.getId();
-            Osoba mezczyzna = DatabaseLib.getPerson(idMezczyzny);
-            zwiazek.setMezczyzna(mezczyzna);
-        }
-        if (daneZwiazku.kobieta != null) {
-            Long idKobiety = daneZwiazku.kobieta.getId();
-            Osoba kobieta = DatabaseLib.getPerson(idKobiety);
-            zwiazek.setKobieta(kobieta);
-        }
-
-        zwiazek.setDataPoznania(daneZwiazku.dataPoznania);
-        zwiazek.setMiejscePoznania(daneZwiazku.miejscePoznania);
-        zwiazek.setDataSlubu(daneZwiazku.dataSlubu);
-        zwiazek.setMiejsceSlubu(daneZwiazku.miejsceSlubu);
-        zwiazek.setDataRozstania(daneZwiazku.dataRozstania);
-        zwiazek.setMiejsceRozstania(daneZwiazku.miejsceRozstania);
-        zwiazek.setDataRozwodu(daneZwiazku.dataRozwodu);
-        zwiazek.setMiejsceRozwodu(daneZwiazku.miejsceRozwodu);
-        zwiazek.setOpis(daneZwiazku.opis);
-
-        DatabaseLib.save(zwiazek);
-    }
-
-    public static void zapiszNowyKlan(DaneEdycjiKlanuStruct daneKlanu) {
-        System.out.println("[DatabaseDelegate][zapiszNowyKlan]");
-        Klan klan = new Klan();
-
-        klan.setNazwa(daneKlanu.nazwa);
-        klan.setOpis(daneKlanu.opis);
-
-        if (daneKlanu.korzen != null) {
-            Long idKorzenia = daneKlanu.korzen.getId();
-            Osoba osoba = DatabaseLib.getPerson(idKorzenia);
-            klan.setKorzen(osoba);
-        }
-
-        DatabaseLib.save(klan);
-    }
-
-    public static void zapiszNowyDokument(DaneEdycjiDokumentu daneDokumentu) {
-        System.out.println("[DatabaseDelegate][zapiszNowyDokument]");
-        Dokument dokument = new Dokument();
-
-        dokument.setTytul(daneDokumentu.getTytul());
-        dokument.setSymbol(daneDokumentu.getSymbol());
-        dokument.setOpis(daneDokumentu.getOpis());
-
-        Set<Osoba> osoby = new HashSet<Osoba>();
-        if (daneDokumentu.getOsoby() != null) {
-            for (ReferenceListElement osobaElement : daneDokumentu.getOsoby()) {
-                Osoba osoba = DatabaseLib.getPerson(osobaElement.getId());
-                osoby.add(osoba);
-                osoba.getDokumenty().add(dokument);
-            }
-        }
-        dokument.setOsoby(osoby);
-        DatabaseLib.save(dokument);
-    }
-
-    public static List<ZwiazekStruct> getZwiazki() {
-        System.out.println("[DatabaseDelegate][getZwiazki]");
-        Collection<Zwiazek> zwiazki = DatabaseLib.getRelationships(null, null);
-        List<ZwiazekStruct> rezultat = new ArrayList<ZwiazekStruct>();
-        if (zwiazki != null && zwiazki.size() > 0) {
-            for (Zwiazek zwiazek : zwiazki) {
-                rezultat.add(toStruct(zwiazek));
-            }
-        }
-        return rezultat;
-    }
-
-    public static List<ReferenceListElement> getMezczyzni() {
-        System.out.println("[DatabaseDelegate][getMezczyzni]");
-        Collection<Osoba> osoby = DatabaseLib.getMales();
-        return toStruct(osoby);
-    }
-
-    public static List<ReferenceListElement> getKobiety() {
-        System.out.println("[DatabaseDelegate][getKobiety]");
-        Collection<Osoba> osoby = DatabaseLib.getFemales();
-        return toStruct(osoby);
-    }
-
-    public static List<ReferenceListElement> getOsoby() {
-        System.out.println("[DatabaseDelegate][getOsoby]");
-        Collection<Osoba> osoby = DatabaseLib.getPeople();
-        return toStruct(osoby);
-    }
-
-    public static List<ReferenceListElement> getDokumenty() {
-        System.out.println("[DatabaseDelegate][getDokumenty]");
-        Collection<Dokument> dokumenty = DatabaseLib.getDocuments();
-        return dokumentsToReferencedListElements(dokumenty);
-    }
-
-    private static ZwiazekStruct toStruct(Zwiazek zwiazek) {
-        ZwiazekStruct struct = new ZwiazekStruct();
-        struct.id = zwiazek.getId();
-        struct.mezczyzna = zwiazek.getMezczyzna().toString();
-        struct.kobieta = zwiazek.getKobieta().toString();
-        return struct;
-    }
-
-    private static ReferenceListElement toStruct(Osoba osoba) {
-        ReferenceListElement struct = new ReferenceListElement();
-        struct.setId(osoba.getId());
-        struct.setDescription(osoba.getImiona() + " " + osoba.getNazwisko());
-        return struct;
-    }
-
-    private static List<ReferenceListElement> toStruct(Collection<Osoba> osoby) {
-        List<ReferenceListElement> rezultat = new ArrayList<ReferenceListElement>();
-        if (osoby != null && osoby.size() > 0) {
-            for (Osoba osoba : osoby) {
-                rezultat.add(toStruct(osoba));
-            }
-        }
-        return rezultat;
-    }
-
-    private static List<ReferenceListElement> dokumentsToReferencedListElements(Collection<Dokument> dokumenty) {
-        List<ReferenceListElement> rezultat = new ArrayList<ReferenceListElement>();
-        if (dokumenty != null && dokumenty.size() > 0) {
-            for (Dokument dokument : dokumenty) {
-                rezultat.add(dokumentToReferencedListElement(dokument));
-            }
-        }
-        return rezultat;
-    }
-
-    public static void usunOsobe(Long idOsoby) {
-        Osoba osoba = DatabaseLib.getPerson(idOsoby);
-        DatabaseLib.delete(osoba);
-    }
-
-    public static void usunZwiazek(Long idZwiazku) {
-        Zwiazek zwiazek = DatabaseLib.getRelationship(idZwiazku);
-        DatabaseLib.delete(zwiazek);
-    }
-
-    public static void usunKlan(Long idKlanu) {
-        Klan klan = DatabaseLib.getClan(idKlanu);
-        DatabaseLib.delete(klan);
-    }
-
-    public static void usunDokument(Long idDokumentu) {
-        Dokument dokument = DatabaseLib.getDocument(idDokumentu);
-        DatabaseLib.delete(dokument);
+        return result;
     }
 }

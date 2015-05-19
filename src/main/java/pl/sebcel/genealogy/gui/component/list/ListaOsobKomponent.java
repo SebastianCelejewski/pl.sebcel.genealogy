@@ -16,7 +16,7 @@ public class ListaOsobKomponent extends ListaKomponent {
 	}
 	
 	public void refresh() {
-		List<ElementListyOsobStruct> ludzie = DatabaseDelegate.getListaOsob();
+		List<ElementListyOsobStruct> ludzie = DatabaseDelegate.getPeopleList();
 		tableColumnModel.wpiszDane(ludzie);
 		table.invalidate();
 	}
@@ -28,10 +28,10 @@ public class ListaOsobKomponent extends ListaKomponent {
 	
 	public DataExporter getExporter(String format) {
 		if (format.equals("xml")) {
-			return new DefaultExporter(DatabaseDelegate.getXMLListaOsob());
+			return new DefaultExporter(DatabaseDelegate.getPeopleListXML());
 		}
 		if (format.equals("txt")) {
-			return new DefaultExporter(DatabaseDelegate.getTxtListaOsob());
+			return new DefaultExporter(DatabaseDelegate.getPeopleListTXT());
 		}
 		throw new IllegalArgumentException("Illegal export format: "+format+".");
 	}

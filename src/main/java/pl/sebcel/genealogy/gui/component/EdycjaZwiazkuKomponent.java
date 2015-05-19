@@ -79,7 +79,7 @@ public class EdycjaZwiazkuKomponent extends EdycjaKomponent {
             wyczyscPola();
             return;
         }
-        daneZwiazku = DatabaseDelegate.getDaneDoEdycjiZwiazku(idZwiazku);
+        daneZwiazku = DatabaseDelegate.getRelationshipEditData(idZwiazku);
 
         tMezczyzna.setSelectedItem(daneZwiazku.mezczyzna);
         tKobieta.setSelectedItem(daneZwiazku.kobieta);
@@ -95,8 +95,8 @@ public class EdycjaZwiazkuKomponent extends EdycjaKomponent {
     }
 
     private void odswiezListy() {
-        List<ReferenceListElement> mezczyzni = DatabaseDelegate.getMezczyzni();
-        List<ReferenceListElement> kobiety = DatabaseDelegate.getKobiety();
+        List<ReferenceListElement> mezczyzni = DatabaseDelegate.getMales();
+        List<ReferenceListElement> kobiety = DatabaseDelegate.getFemales();
 
         tMezczyzna.removeAllItems();
         tKobieta.removeAllItems();
@@ -139,9 +139,9 @@ public class EdycjaZwiazkuKomponent extends EdycjaKomponent {
         daneZwiazku.opis = tOpis.getText().trim();
 
         if (trybPracy == TrybPracy.EDYCJA) {
-            DatabaseDelegate.zapiszDanePoEdycjiZwiazku(daneZwiazku);
+            DatabaseDelegate.saveEditedRelationship(daneZwiazku);
         } else {
-            DatabaseDelegate.zapiszNowyZwiazek(daneZwiazku);
+            DatabaseDelegate.saveNewRelationship(daneZwiazku);
         }
 
         return true;
@@ -165,7 +165,7 @@ public class EdycjaZwiazkuKomponent extends EdycjaKomponent {
     public void usunObiekt(Long id) {
         int result = JOptionPane.showConfirmDialog(this, "Czy na pewno chcesz usun¹æ ten zwi¹zek?", "Usuwanie zwi¹zku", JOptionPane.YES_NO_OPTION);
         if (result == JOptionPane.YES_OPTION) {
-            DatabaseDelegate.usunZwiazek(id);
+            DatabaseDelegate.deleteRelationship(id);
         }
     }
 
@@ -180,7 +180,7 @@ public class EdycjaZwiazkuKomponent extends EdycjaKomponent {
 
     @Override
     public DiagramInfoStruct getDiagramInfo(Long id) {
-        DaneEdycjiZwiazkuStruct daneZwiazku = DatabaseDelegate.getDaneDoEdycjiZwiazku(id);
+        DaneEdycjiZwiazkuStruct daneZwiazku = DatabaseDelegate.getRelationshipEditData(id);
         DiagramInfoStruct diagramInfo = new DiagramInfoStruct();
 
         diagramInfo.idKorzenia = daneZwiazku.mezczyzna.getId();

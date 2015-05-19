@@ -47,7 +47,7 @@ public class EdycjaKlanuKomponent extends EdycjaKomponent {
             wyczyscPola();
             return;
         }
-        daneKlanu = DatabaseDelegate.getDaneDoEdycjiKlanu(id);
+        daneKlanu = DatabaseDelegate.getClanEditData(id);
 
         tNazwa.setText(daneKlanu.nazwa);
         tOpis.setText(daneKlanu.opis);
@@ -56,7 +56,7 @@ public class EdycjaKlanuKomponent extends EdycjaKomponent {
     }
 
     private void odswiezListy() {
-        List<ReferenceListElement> osoby = DatabaseDelegate.getOsoby();
+        List<ReferenceListElement> osoby = DatabaseDelegate.getPeople();
         tKorzen.removeAllItems();
         tKorzen.addItem(new String("<Wybierz>"));
         for (ReferenceListElement osoba : osoby) {
@@ -78,9 +78,9 @@ public class EdycjaKlanuKomponent extends EdycjaKomponent {
         daneKlanu.korzen = (ReferenceListElement) tKorzen.getSelectedItem();
 
         if (trybPracy == TrybPracy.EDYCJA) {
-            DatabaseDelegate.zapiszDanePoEdycjiKlanu(daneKlanu);
+            DatabaseDelegate.saveEditedClan(daneKlanu);
         } else {
-            DatabaseDelegate.zapiszNowyKlan(daneKlanu);
+            DatabaseDelegate.saveNewClan(daneKlanu);
         }
 
         return true;
@@ -96,7 +96,7 @@ public class EdycjaKlanuKomponent extends EdycjaKomponent {
     public void usunObiekt(Long id) {
         int result = JOptionPane.showConfirmDialog(this, "Czy na pewno chcesz usun¹æ ten klan?", "Usuwanie klanu", JOptionPane.YES_NO_OPTION);
         if (result == JOptionPane.YES_OPTION) {
-            DatabaseDelegate.usunKlan(id);
+            DatabaseDelegate.deleteClan(id);
         }
     }
 
@@ -111,7 +111,7 @@ public class EdycjaKlanuKomponent extends EdycjaKomponent {
 
     @Override
     public DiagramInfoStruct getDiagramInfo(Long id) {
-        DaneEdycjiKlanuStruct daneKlanu = DatabaseDelegate.getDaneDoEdycjiKlanu(id);
+        DaneEdycjiKlanuStruct daneKlanu = DatabaseDelegate.getClanEditData(id);
         DiagramInfoStruct diagramInfo = new DiagramInfoStruct();
         diagramInfo.idKorzenia = daneKlanu.korzen.getId();
         diagramInfo.nazwa = daneKlanu.nazwa;

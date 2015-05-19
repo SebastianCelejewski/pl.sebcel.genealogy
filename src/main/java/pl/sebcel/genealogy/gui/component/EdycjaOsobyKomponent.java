@@ -115,7 +115,7 @@ public class EdycjaOsobyKomponent extends EdycjaKomponent {
             wyczyscPola();
             return;
         }
-        daneOsoby = DatabaseDelegate.getDaneDoEdycjiOsoby(idOsoby);
+        daneOsoby = DatabaseDelegate.getPersonEditData(idOsoby);
 
         if (daneOsoby.getPlec() == null) {
             tPlec.setSelectedIndex(0);
@@ -167,8 +167,8 @@ public class EdycjaOsobyKomponent extends EdycjaKomponent {
     }
 
     private void odswiezListy() {
-        List<ZwiazekStruct> zwiazki = DatabaseDelegate.getZwiazki();
-        List<ReferenceListElement> wszystkieDokumenty = DatabaseDelegate.getDokumenty();
+        List<ZwiazekStruct> zwiazki = DatabaseDelegate.getRelationships();
+        List<ReferenceListElement> wszystkieDokumenty = DatabaseDelegate.getDocuments();
         tRodzice.removeAllItems();
         tRodzice.addItem(new String("<Brak>"));
         for (ZwiazekStruct zwiazek : zwiazki) {
@@ -211,9 +211,9 @@ public class EdycjaOsobyKomponent extends EdycjaKomponent {
         daneOsoby.setDokumenty(new HashSet<ReferenceListElement>(tDokumenty.getSelectedItems()));
 
         if (trybPracy == TrybPracy.EDYCJA) {
-            DatabaseDelegate.zapiszDanePoEdycjiOsoby(daneOsoby);
+            DatabaseDelegate.saveEditedPerson(daneOsoby);
         } else {
-            DatabaseDelegate.zapiszNowaOsobe(daneOsoby);
+            DatabaseDelegate.saveNewPerson(daneOsoby);
         }
 
         return true;
@@ -240,7 +240,7 @@ public class EdycjaOsobyKomponent extends EdycjaKomponent {
     public void usunObiekt(Long id) {
         int result = JOptionPane.showConfirmDialog(this, "Czy na pewno chcesz usun¹æ tê osobê?", "Usuwanie osoby", JOptionPane.YES_NO_OPTION);
         if (result == JOptionPane.YES_OPTION) {
-            DatabaseDelegate.usunOsobe(id);
+            DatabaseDelegate.deletePersonOsobe(id);
         }
     }
 
@@ -255,7 +255,7 @@ public class EdycjaOsobyKomponent extends EdycjaKomponent {
 
     @Override
     public DiagramInfoStruct getDiagramInfo(Long id) {
-        DaneEdycjiOsoby daneOsoby = DatabaseDelegate.getDaneDoEdycjiOsoby(id);
+        DaneEdycjiOsoby daneOsoby = DatabaseDelegate.getPersonEditData(id);
         DiagramInfoStruct diagramInfo = new DiagramInfoStruct();
         diagramInfo.idKorzenia = daneOsoby.getId();
         diagramInfo.nazwa = daneOsoby.getImiona() + " " + daneOsoby.getNazwisko() + " (" + daneOsoby.getId() + ")";

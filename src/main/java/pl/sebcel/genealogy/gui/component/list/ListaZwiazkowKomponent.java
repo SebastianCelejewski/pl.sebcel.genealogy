@@ -17,7 +17,7 @@ public class ListaZwiazkowKomponent extends ListaKomponent {
 	
 	public void refresh() {
 		System.out.println("[ListaZwiazkowKomponent][refresh]");
-		List<ElementListyZwiazkowStruct> zwiazki = DatabaseDelegate.getListaZwiazkow();
+		List<ElementListyZwiazkowStruct> zwiazki = DatabaseDelegate.getRelationshipsList();
 		tableColumnModel.wpiszDane(zwiazki);
 		table.invalidate();
 		this.repaint();

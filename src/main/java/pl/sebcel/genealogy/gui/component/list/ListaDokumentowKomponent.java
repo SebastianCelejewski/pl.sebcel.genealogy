@@ -16,7 +16,7 @@ public class ListaDokumentowKomponent extends ListaKomponent {
     }
 
     public void refresh() {
-        List<ElementListyDokumentowStruct> dokumenty = DatabaseDelegate.getListaDokumentow();
+        List<ElementListyDokumentowStruct> dokumenty = DatabaseDelegate.getDocumentsList();
         tableColumnModel.wpiszDane(dokumenty);
         table.invalidate();
     }
@@ -28,10 +28,10 @@ public class ListaDokumentowKomponent extends ListaKomponent {
 
     public DataExporter getExporter(String format) {
         if (format.equals("xml")) {
-            return new DefaultExporter(DatabaseDelegate.getXMLListaDokumentow());
+            return new DefaultExporter(DatabaseDelegate.getDocumentListXML());
         }
         if (format.equals("txt")) {
-            return new DefaultExporter(DatabaseDelegate.getTXTListaDokumentow());
+            return new DefaultExporter(DatabaseDelegate.getDocumentListTXT());
         }
         throw new IllegalArgumentException("Illegal export format: " + format + ".");
     }

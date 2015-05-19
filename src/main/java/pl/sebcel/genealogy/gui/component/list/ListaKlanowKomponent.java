@@ -16,7 +16,7 @@ public class ListaKlanowKomponent extends ListaKomponent {
 	}
 	
 	public void refresh() {
-		List<ElementListyKlanowStruct> klany = DatabaseDelegate.getListaKlanow();
+		List<ElementListyKlanowStruct> klany = DatabaseDelegate.getClansList();
 		tableColumnModel.wpiszDane(klany);
 		table.invalidate();
 	}

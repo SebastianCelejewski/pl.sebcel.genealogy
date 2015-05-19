@@ -168,7 +168,7 @@ public class GuiRysownik extends JFrame implements ActionListener, IDrawOptionsL
         int szerokosc = szerokoscPokolenia * fontSize;
         int wysokosc = fontSize;
 
-        DrzewoOsobaStruct osoba = DatabaseDelegate.getDaneOsoby(idOsoby);
+        DrzewoOsobaStruct osoba = DatabaseDelegate.getPersonDataForPedigree(idOsoby);
         String nazwa = osoba.nazwa;
         if (opcjeRysowania.isPokazId()) {
             nazwa += " (" + osoba.id + ")";
@@ -228,7 +228,7 @@ public class GuiRysownik extends JFrame implements ActionListener, IDrawOptionsL
             int licznik = 0;
             for (DrzewoRodzinaStruct zwiazek : zwiazki) {
                 Long idMalzonka = zwiazek.idMalzonka;
-                DrzewoOsobaStruct malzonek = DatabaseDelegate.getDaneOsoby(idMalzonka);
+                DrzewoOsobaStruct malzonek = DatabaseDelegate.getPersonDataForPedigree(idMalzonka);
 
                 int x0 = x;
                 int y0 = y + wysokosc;

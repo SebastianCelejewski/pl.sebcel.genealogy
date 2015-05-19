@@ -53,7 +53,7 @@ public class EdycjaDokumentuKomponent extends EdycjaKomponent {
             wyczyscPola();
             return;
         }
-        daneDokumentu = DatabaseDelegate.getDaneDoEdycjiDokumentu(id);
+        daneDokumentu = DatabaseDelegate.getDocumentEditData(id);
 
         tTytul.setText(daneDokumentu.getTytul());
         tSymbol.setText(daneDokumentu.getSymbol());
@@ -62,7 +62,7 @@ public class EdycjaDokumentuKomponent extends EdycjaKomponent {
     }
 
     private void odswiezListy() {
-        List<ReferenceListElement> allPeople = DatabaseDelegate.getOsoby();
+        List<ReferenceListElement> allPeople = DatabaseDelegate.getPeople();
         tOsoby.setAllItems(allPeople);
     }
 
@@ -77,9 +77,9 @@ public class EdycjaDokumentuKomponent extends EdycjaKomponent {
         daneDokumentu.setOsoby(new HashSet<ReferenceListElement>(tOsoby.getSelectedItems()));
 
         if (trybPracy == TrybPracy.EDYCJA) {
-            DatabaseDelegate.zapiszDanePoEdycjiDokumentu(daneDokumentu);
+            DatabaseDelegate.saveEditedDocument(daneDokumentu);
         } else {
-            DatabaseDelegate.zapiszNowyDokument(daneDokumentu);
+            DatabaseDelegate.saveNewDocument(daneDokumentu);
         }
 
         return true;
@@ -96,7 +96,7 @@ public class EdycjaDokumentuKomponent extends EdycjaKomponent {
     public void usunObiekt(Long id) {
         int result = JOptionPane.showConfirmDialog(this, "Czy na pewno chcesz usun¹æ ten dokument?", "Usuwanie dokumentu", JOptionPane.YES_NO_OPTION);
         if (result == JOptionPane.YES_OPTION) {
-            DatabaseDelegate.usunDokument(id);
+            DatabaseDelegate.deleteDocument(id);
         }
     }
 
