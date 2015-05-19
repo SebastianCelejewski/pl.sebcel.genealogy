@@ -12,8 +12,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 
-import pl.sebcel.genealogy.dto.DaneEdycjiDokumentu;
-import pl.sebcel.genealogy.dto.DaneEdycjiKlanuStruct;
+import pl.sebcel.genealogy.dto.DocumentEditData;
+import pl.sebcel.genealogy.dto.ClanEditData;
 import pl.sebcel.genealogy.dto.DaneEdycjiOsoby;
 import pl.sebcel.genealogy.dto.DaneEdycjiZwiazkuStruct;
 import pl.sebcel.genealogy.dto.DrzewoOsobaStruct;
@@ -440,30 +440,30 @@ public class DatabaseDelegate {
         return relationshipEditData;
     }
 
-    public static DaneEdycjiKlanuStruct getClanEditData(Long clanId) {
+    public static ClanEditData getClanEditData(Long clanId) {
         System.out.println("[DatabaseDelegate][getClanEditData]");
         Klan clan = DatabaseLib.getClan(clanId);
 
-        DaneEdycjiKlanuStruct clanEditData = new DaneEdycjiKlanuStruct();
-        clanEditData.id = clan.getId();
-        clanEditData.nazwa = clan.getNazwa();
-        clanEditData.opis = clan.getOpis();
-        clanEditData.korzen = personToReferenceListElement(clan.getKorzen());
+        ClanEditData clanEditData = new ClanEditData();
+        clanEditData.setId(clan.getId());
+        clanEditData.setName(clan.getNazwa());
+        clanEditData.setDescription(clan.getOpis());
+        clanEditData.setRoot(personToReferenceListElement(clan.getKorzen()));
 
         return clanEditData;
     }
 
-    public static DaneEdycjiDokumentu getDocumentEditData(Long documentId) {
+    public static DocumentEditData getDocumentEditData(Long documentId) {
         System.out.println("[DatabaseDelegate][getDocumentEditData]");
         Dokument document = DatabaseLib.getDocument(documentId);
 
-        DaneEdycjiDokumentu documentEditData = new DaneEdycjiDokumentu();
+        DocumentEditData documentEditData = new DocumentEditData();
         documentEditData.setId(document.getId());
-        documentEditData.setTytul(document.getTytul());
+        documentEditData.setTitle(document.getTytul());
         documentEditData.setSymbol(document.getSymbol());
-        documentEditData.setOpis(document.getOpis());
+        documentEditData.setDescription(document.getOpis());
 
-        documentEditData.setOsoby(peopleToReferenceListElements(document.getOsoby()));
+        documentEditData.setRelatedPeople(peopleToReferenceListElements(document.getOsoby()));
 
         return documentEditData;
     }
@@ -534,15 +534,15 @@ public class DatabaseDelegate {
         DatabaseLib.save(relationship);
     }
 
-    public static void saveEditedClan(DaneEdycjiKlanuStruct clanData) {
+    public static void saveEditedClan(ClanEditData clanData) {
         System.out.println("[DatabaseDelegate][saveClanData]");
-        Klan clan = DatabaseLib.getClan(clanData.id);
+        Klan clan = DatabaseLib.getClan(clanData.getId());
 
-        clan.setNazwa(clanData.nazwa);
-        clan.setOpis(clanData.opis);
+        clan.setNazwa(clanData.getName());
+        clan.setOpis(clanData.getDescription());
 
-        if (clanData.korzen != null) {
-            Long clanRootId = clanData.korzen.getId();
+        if (clanData.getRoot() != null) {
+            Long clanRootId = clanData.getRoot().getId();
             Osoba person = DatabaseLib.getPerson(clanRootId);
             clan.setKorzen(person);
         }
@@ -550,20 +550,20 @@ public class DatabaseDelegate {
         DatabaseLib.save(clan);
     }
 
-    public static void saveEditedDocument(DaneEdycjiDokumentu documentData) {
+    public static void saveEditedDocument(DocumentEditData documentData) {
         System.out.println("[DatabaseDelegate][saveEditedDocument]");
         Dokument document = DatabaseLib.getDocument(documentData.getId());
 
-        document.setTytul(documentData.getTytul());
+        document.setTytul(documentData.getTitle());
         document.setSymbol(documentData.getSymbol());
-        document.setOpis(documentData.getOpis());
+        document.setOpis(documentData.getDescription());
 
         for (Osoba person : document.getOsoby()) {
             person.getDokumenty().remove(document);
         }
 
         document.getOsoby().clear();
-        for (ReferenceListElement personElement : documentData.getOsoby()) {
+        for (ReferenceListElement personElement : documentData.getRelatedPeople()) {
             Osoba person = DatabaseLib.getPerson(personElement.getId());
             document.getOsoby().add(person);
             person.getDokumenty().add(document);
@@ -635,15 +635,15 @@ public class DatabaseDelegate {
         DatabaseLib.save(relationship);
     }
 
-    public static void saveNewClan(DaneEdycjiKlanuStruct clanData) {
+    public static void saveNewClan(ClanEditData clanData) {
         System.out.println("[DatabaseDelegate][saveNewClan]");
         Klan clan = new Klan();
 
-        clan.setNazwa(clanData.nazwa);
-        clan.setOpis(clanData.opis);
+        clan.setNazwa(clanData.getName());
+        clan.setOpis(clanData.getDescription());
 
-        if (clanData.korzen != null) {
-            Long clanRootId = clanData.korzen.getId();
+        if (clanData.getRoot() != null) {
+            Long clanRootId = clanData.getRoot().getId();
             Osoba person = DatabaseLib.getPerson(clanRootId);
             clan.setKorzen(person);
         }
@@ -651,17 +651,17 @@ public class DatabaseDelegate {
         DatabaseLib.save(clan);
     }
 
-    public static void saveNewDocument(DaneEdycjiDokumentu documentData) {
+    public static void saveNewDocument(DocumentEditData documentData) {
         System.out.println("[DatabaseDelegate][saveNewDocument]");
         Dokument document = new Dokument();
 
-        document.setTytul(documentData.getTytul());
+        document.setTytul(documentData.getTitle());
         document.setSymbol(documentData.getSymbol());
-        document.setOpis(documentData.getOpis());
+        document.setOpis(documentData.getDescription());
 
         Set<Osoba> people = new HashSet<Osoba>();
-        if (documentData.getOsoby() != null) {
-            for (ReferenceListElement personElement : documentData.getOsoby()) {
+        if (documentData.getRelatedPeople() != null) {
+            for (ReferenceListElement personElement : documentData.getRelatedPeople()) {
                 Osoba person = DatabaseLib.getPerson(personElement.getId());
                 people.add(person);
                 person.getDokumenty().add(document);

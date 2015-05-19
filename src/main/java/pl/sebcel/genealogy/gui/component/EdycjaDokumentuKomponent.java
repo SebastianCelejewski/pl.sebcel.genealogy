@@ -7,7 +7,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 
 import pl.sebcel.genealogy.db.DatabaseDelegate;
-import pl.sebcel.genealogy.dto.DaneEdycjiDokumentu;
+import pl.sebcel.genealogy.dto.DocumentEditData;
 import pl.sebcel.genealogy.dto.DiagramInfoStruct;
 import pl.sebcel.genealogy.dto.ReferenceListElement;
 import pl.sebcel.genealogy.gui.control.Etykieta;
@@ -19,7 +19,7 @@ public class EdycjaDokumentuKomponent extends EdycjaKomponent {
 
     public final static long serialVersionUID = 0l;
 
-    private DaneEdycjiDokumentu daneDokumentu;
+    private DocumentEditData daneDokumentu;
 
     private Etykieta lTytul = new Etykieta("Tytu³:");
     private Etykieta lSymbol = new Etykieta("Symbol:");
@@ -55,10 +55,10 @@ public class EdycjaDokumentuKomponent extends EdycjaKomponent {
         }
         daneDokumentu = DatabaseDelegate.getDocumentEditData(id);
 
-        tTytul.setText(daneDokumentu.getTytul());
+        tTytul.setText(daneDokumentu.getTitle());
         tSymbol.setText(daneDokumentu.getSymbol());
-        tOpis.setText(daneDokumentu.getOpis());
-        tOsoby.setSelectedItems(new ArrayList<ReferenceListElement>(daneDokumentu.getOsoby()));
+        tOpis.setText(daneDokumentu.getDescription());
+        tOsoby.setSelectedItems(new ArrayList<ReferenceListElement>(daneDokumentu.getRelatedPeople()));
     }
 
     private void odswiezListy() {
@@ -68,13 +68,13 @@ public class EdycjaDokumentuKomponent extends EdycjaKomponent {
 
     public boolean zapiszDane() {
         if (trybPracy == TrybPracy.DODAWANIE) {
-            daneDokumentu = new DaneEdycjiDokumentu();
+            daneDokumentu = new DocumentEditData();
         }
 
-        daneDokumentu.setTytul(tTytul.getText().trim());
+        daneDokumentu.setTitle(tTytul.getText().trim());
         daneDokumentu.setSymbol(tSymbol.getText().trim());
-        daneDokumentu.setOpis(tOpis.getText().trim());
-        daneDokumentu.setOsoby(new HashSet<ReferenceListElement>(tOsoby.getSelectedItems()));
+        daneDokumentu.setDescription(tOpis.getText().trim());
+        daneDokumentu.setRelatedPeople(new HashSet<ReferenceListElement>(tOsoby.getSelectedItems()));
 
         if (trybPracy == TrybPracy.EDYCJA) {
             DatabaseDelegate.saveEditedDocument(daneDokumentu);

@@ -5,7 +5,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 
 import pl.sebcel.genealogy.db.DatabaseDelegate;
-import pl.sebcel.genealogy.dto.DaneEdycjiKlanuStruct;
+import pl.sebcel.genealogy.dto.ClanEditData;
 import pl.sebcel.genealogy.dto.DiagramInfoStruct;
 import pl.sebcel.genealogy.dto.ReferenceListElement;
 import pl.sebcel.genealogy.gui.control.Etykieta;
@@ -16,7 +16,7 @@ public class EdycjaKlanuKomponent extends EdycjaKomponent {
 
     public final static long serialVersionUID = 0l;
 
-    private DaneEdycjiKlanuStruct daneKlanu;
+    private ClanEditData daneKlanu;
 
     private Etykieta lNazwa = new Etykieta("Nazwa:");
     private Etykieta lOpis = new Etykieta("Opis:");
@@ -49,9 +49,9 @@ public class EdycjaKlanuKomponent extends EdycjaKomponent {
         }
         daneKlanu = DatabaseDelegate.getClanEditData(id);
 
-        tNazwa.setText(daneKlanu.nazwa);
-        tOpis.setText(daneKlanu.opis);
-        tKorzen.setSelectedItem(daneKlanu.korzen);
+        tNazwa.setText(daneKlanu.getName());
+        tOpis.setText(daneKlanu.getDescription());
+        tKorzen.setSelectedItem(daneKlanu.getRoot());
 
     }
 
@@ -66,16 +66,16 @@ public class EdycjaKlanuKomponent extends EdycjaKomponent {
 
     public boolean zapiszDane() {
         if (trybPracy == TrybPracy.DODAWANIE)
-            daneKlanu = new DaneEdycjiKlanuStruct();
+            daneKlanu = new ClanEditData();
 
         if (tKorzen.getSelectedIndex() == 0) {
             JOptionPane.showMessageDialog(this, "Wska¿ protoplastê klanu", "B³¹d", JOptionPane.ERROR_MESSAGE);
             return false;
         }
 
-        daneKlanu.nazwa = tNazwa.getText().trim();
-        daneKlanu.opis = tOpis.getText().trim();
-        daneKlanu.korzen = (ReferenceListElement) tKorzen.getSelectedItem();
+        daneKlanu.setName(tNazwa.getText().trim());
+        daneKlanu.setDescription(tOpis.getText().trim());
+        daneKlanu.setRoot((ReferenceListElement) tKorzen.getSelectedItem());
 
         if (trybPracy == TrybPracy.EDYCJA) {
             DatabaseDelegate.saveEditedClan(daneKlanu);
@@ -111,11 +111,11 @@ public class EdycjaKlanuKomponent extends EdycjaKomponent {
 
     @Override
     public DiagramInfoStruct getDiagramInfo(Long id) {
-        DaneEdycjiKlanuStruct daneKlanu = DatabaseDelegate.getClanEditData(id);
+        ClanEditData daneKlanu = DatabaseDelegate.getClanEditData(id);
         DiagramInfoStruct diagramInfo = new DiagramInfoStruct();
-        diagramInfo.idKorzenia = daneKlanu.korzen.getId();
-        diagramInfo.nazwa = daneKlanu.nazwa;
-        diagramInfo.opis = "Diagram klanu '" + daneKlanu.nazwa + "'";
+        diagramInfo.idKorzenia = daneKlanu.getRoot().getId();
+        diagramInfo.nazwa = daneKlanu.getName();
+        diagramInfo.opis = "Diagram klanu '" + daneKlanu.getName() + "'";
         return diagramInfo;
     }
 }
