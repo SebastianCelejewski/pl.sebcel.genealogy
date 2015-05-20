@@ -3,7 +3,7 @@ package pl.sebcel.genealogy.gui.component.list;
 import java.util.List;
 
 import pl.sebcel.genealogy.db.DatabaseDelegate;
-import pl.sebcel.genealogy.dto.ElementListyKlanowStruct;
+import pl.sebcel.genealogy.dto.ClanListElement;
 
 public class ListaKlanowKomponent extends ListaKomponent {
 	
@@ -16,7 +16,7 @@ public class ListaKlanowKomponent extends ListaKomponent {
 	}
 	
 	public void refresh() {
-		List<ElementListyKlanowStruct> klany = DatabaseDelegate.getClansList();
+		List<ClanListElement> klany = DatabaseDelegate.getClansList();
 		tableColumnModel.wpiszDane(klany);
 		table.invalidate();
 	}

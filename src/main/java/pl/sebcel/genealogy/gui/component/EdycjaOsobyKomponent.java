@@ -14,7 +14,7 @@ import pl.sebcel.genealogy.db.DatabaseDelegate;
 import pl.sebcel.genealogy.dto.PersonEditData;
 import pl.sebcel.genealogy.dto.DiagramInfoStruct;
 import pl.sebcel.genealogy.dto.ReferenceListElement;
-import pl.sebcel.genealogy.dto.RodzinaStruct;
+import pl.sebcel.genealogy.dto.FamilyElementForPersonEditData;
 import pl.sebcel.genealogy.gui.control.Drzewo;
 import pl.sebcel.genealogy.gui.control.Etykieta;
 import pl.sebcel.genealogy.gui.control.MultiValueReferenceField;
@@ -143,13 +143,13 @@ public class EdycjaOsobyKomponent extends EdycjaKomponent {
             tParents.setSelectedIndex(0);
         }
 
-        List<RodzinaStruct> rodziny = daneOsoby.getFamilies();
+        List<FamilyElementForPersonEditData> rodziny = daneOsoby.getFamilies();
         DefaultMutableTreeNode root = new DefaultMutableTreeNode();
         if (rodziny != null && rodziny.size() > 0) {
-            for (RodzinaStruct rodzina : rodziny) {
-                DefaultMutableTreeNode nodeRodzina = new DefaultMutableTreeNode(rodzina.malzonek);
+            for (FamilyElementForPersonEditData rodzina : rodziny) {
+                DefaultMutableTreeNode nodeRodzina = new DefaultMutableTreeNode(rodzina.getSpouse());
                 root.add(nodeRodzina);
-                List<ReferenceListElement> dzieci = rodzina.idDzieci;
+                List<ReferenceListElement> dzieci = rodzina.getChildren();
                 if (dzieci != null && dzieci.size() > 0) {
                     for (ReferenceListElement dziecko : dzieci) {
                         DefaultMutableTreeNode nodeDziecko = new DefaultMutableTreeNode(dziecko);

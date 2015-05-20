@@ -15,7 +15,7 @@ public class PersonEditData {
     private String burialDate;
     private String burialPlace;
     private ReferenceListElement parents;
-    private List<RodzinaStruct> families;
+    private List<FamilyElementForPersonEditData> families;
     private Set<ReferenceListElement> relatedDocuments;
     private String sex;
     private String education;
@@ -103,11 +103,11 @@ public class PersonEditData {
         this.parents = parents;
     }
 
-    public List<RodzinaStruct> getFamilies() {
+    public List<FamilyElementForPersonEditData> getFamilies() {
         return families;
     }
 
-    public void setFamilies(List<RodzinaStruct> families) {
+    public void setFamilies(List<FamilyElementForPersonEditData> families) {
         this.families = families;
     }
 

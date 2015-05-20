@@ -7,13 +7,13 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.TableColumn;
 
-import pl.sebcel.genealogy.dto.ElementListyDokumentowStruct;
+import pl.sebcel.genealogy.dto.DocumentListElement;
 
 class ListaDokumentowTableColumnModel extends DefaultTableColumnModel implements ComplexTableModel {
 
     public static final long serialVersionUID = 0L;
 
-    private List<ElementListyDokumentowStruct> dane = new ArrayList<ElementListyDokumentowStruct>();
+    private List<DocumentListElement> dane = new ArrayList<DocumentListElement>();
     private String[] kolumny = new String[] { "Id", "Tytu³", "Symbol" };
 
     public ListaDokumentowTableColumnModel() {
@@ -54,7 +54,7 @@ class ListaDokumentowTableColumnModel extends DefaultTableColumnModel implements
         if (columnIndex == 0)
             return dane.get(rowIndex).getId();
         if (columnIndex == 1)
-            return dane.get(rowIndex).getTytul();
+            return dane.get(rowIndex).getTitle();
         if (columnIndex == 2)
             return dane.get(rowIndex).getSymbol();
         return "";
@@ -70,7 +70,7 @@ class ListaDokumentowTableColumnModel extends DefaultTableColumnModel implements
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
     }
 
-    public void wpiszDane(List<ElementListyDokumentowStruct> listaDokumentow) {
+    public void wpiszDane(List<DocumentListElement> listaDokumentow) {
         this.dane = listaDokumentow;
     }
 }

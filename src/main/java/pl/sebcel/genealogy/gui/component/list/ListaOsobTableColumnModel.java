@@ -7,13 +7,13 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.TableColumn;
 
-import pl.sebcel.genealogy.dto.ElementListyOsobStruct;
+import pl.sebcel.genealogy.dto.PeopleListElement;
 
 class ListaOsobTableColumnModel extends DefaultTableColumnModel implements ComplexTableModel {
 	
 	public static final long serialVersionUID = 0L;
 	
-	private List<ElementListyOsobStruct> dane = new ArrayList<ElementListyOsobStruct>();
+	private List<PeopleListElement> dane = new ArrayList<PeopleListElement>();
 	private String[] kolumny = new String[] {"Id","Names i surname","Description"};
 
 	public ListaOsobTableColumnModel() {
@@ -51,9 +51,9 @@ class ListaOsobTableColumnModel extends DefaultTableColumnModel implements Compl
 	}
 
 	public Object getValueAt(int rowIndex, int columnIndex) {
-		if (columnIndex==0) return dane.get(rowIndex).id;
-		if (columnIndex==1) return dane.get(rowIndex).nazwa;
-		if (columnIndex==2) return dane.get(rowIndex).description;
+		if (columnIndex==0) return dane.get(rowIndex).getId();
+		if (columnIndex==1) return dane.get(rowIndex).getName();
+		if (columnIndex==2) return dane.get(rowIndex).getDescription();
 		return "";
 	}
 
@@ -67,7 +67,7 @@ class ListaOsobTableColumnModel extends DefaultTableColumnModel implements Compl
 	public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
 	}
 	
-	public void wpiszDane(List<ElementListyOsobStruct> listaOsob) {
+	public void wpiszDane(List<PeopleListElement> listaOsob) {
 		this.dane = listaOsob;
 	}
 }

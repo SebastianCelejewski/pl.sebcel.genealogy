@@ -3,7 +3,7 @@ package pl.sebcel.genealogy.gui.component.list;
 import java.util.List;
 
 import pl.sebcel.genealogy.db.DatabaseDelegate;
-import pl.sebcel.genealogy.dto.ElementListyDokumentowStruct;
+import pl.sebcel.genealogy.dto.DocumentListElement;
 
 public class ListaDokumentowKomponent extends ListaKomponent {
 
@@ -16,7 +16,7 @@ public class ListaDokumentowKomponent extends ListaKomponent {
     }
 
     public void refresh() {
-        List<ElementListyDokumentowStruct> dokumenty = DatabaseDelegate.getDocumentsList();
+        List<DocumentListElement> dokumenty = DatabaseDelegate.getDocumentsList();
         tableColumnModel.wpiszDane(dokumenty);
         table.invalidate();
     }

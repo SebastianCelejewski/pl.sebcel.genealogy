@@ -3,7 +3,7 @@ package pl.sebcel.genealogy.gui.component.list;
 import java.util.List;
 
 import pl.sebcel.genealogy.db.DatabaseDelegate;
-import pl.sebcel.genealogy.dto.ElementListyZwiazkowStruct;
+import pl.sebcel.genealogy.dto.RelationshipsListElement;
 
 public class ListaZwiazkowKomponent extends ListaKomponent {
 	
@@ -17,7 +17,7 @@ public class ListaZwiazkowKomponent extends ListaKomponent {
 	
 	public void refresh() {
 		System.out.println("[ListaZwiazkowKomponent][refresh]");
-		List<ElementListyZwiazkowStruct> zwiazki = DatabaseDelegate.getRelationshipsList();
+		List<RelationshipsListElement> zwiazki = DatabaseDelegate.getRelationshipsList();
 		tableColumnModel.wpiszDane(zwiazki);
 		table.invalidate();
 		this.repaint();

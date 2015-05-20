@@ -3,7 +3,7 @@ package pl.sebcel.genealogy.gui.component.list;
 import java.util.List;
 
 import pl.sebcel.genealogy.db.DatabaseDelegate;
-import pl.sebcel.genealogy.dto.ElementListyOsobStruct;
+import pl.sebcel.genealogy.dto.PeopleListElement;
 
 public class ListaOsobKomponent extends ListaKomponent {
 	
@@ -16,7 +16,7 @@ public class ListaOsobKomponent extends ListaKomponent {
 	}
 	
 	public void refresh() {
-		List<ElementListyOsobStruct> ludzie = DatabaseDelegate.getPeopleList();
+		List<PeopleListElement> ludzie = DatabaseDelegate.getPeopleList();
 		tableColumnModel.wpiszDane(ludzie);
 		table.invalidate();
 	}

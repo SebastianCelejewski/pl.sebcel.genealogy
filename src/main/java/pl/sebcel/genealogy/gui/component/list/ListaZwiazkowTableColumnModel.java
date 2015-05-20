@@ -7,13 +7,13 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.TableColumn;
 
-import pl.sebcel.genealogy.dto.ElementListyZwiazkowStruct;
+import pl.sebcel.genealogy.dto.RelationshipsListElement;
 
 class ListaZwiazkowTableColumnModel extends DefaultTableColumnModel implements ComplexTableModel {
 	
 	public static final long serialVersionUID = 0L;
 	
-	private List<ElementListyZwiazkowStruct> dane = new ArrayList<ElementListyZwiazkowStruct>();
+	private List<RelationshipsListElement> dane = new ArrayList<RelationshipsListElement>();
 	private String[] kolumny = new String[] {"Id","Mê¿czyzna","Female","Description"};
 
 	public ListaZwiazkowTableColumnModel() {
@@ -54,10 +54,10 @@ class ListaZwiazkowTableColumnModel extends DefaultTableColumnModel implements C
 	}
 
 	public Object getValueAt(int rowIndex, int columnIndex) {
-		if (columnIndex==0) return dane.get(rowIndex).id;
-		if (columnIndex==1) return dane.get(rowIndex).male;
-		if (columnIndex==2) return dane.get(rowIndex).female;
-		if (columnIndex==3) return dane.get(rowIndex).description;
+		if (columnIndex==0) return dane.get(rowIndex).getId();
+		if (columnIndex==1) return dane.get(rowIndex).getMale();
+		if (columnIndex==2) return dane.get(rowIndex).getFemale();
+		if (columnIndex==3) return dane.get(rowIndex).getDescription();
 		return "";
 	}
 
@@ -71,7 +71,7 @@ class ListaZwiazkowTableColumnModel extends DefaultTableColumnModel implements C
 	public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
 	}
 	
-	public void wpiszDane(List<ElementListyZwiazkowStruct> listaZwiazkow) {
+	public void wpiszDane(List<RelationshipsListElement> listaZwiazkow) {
 		this.dane = listaZwiazkow;
 	}
 }

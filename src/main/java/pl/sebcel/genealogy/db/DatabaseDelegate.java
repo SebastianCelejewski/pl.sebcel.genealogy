@@ -16,14 +16,14 @@ import pl.sebcel.genealogy.dto.DocumentEditData;
 import pl.sebcel.genealogy.dto.ClanEditData;
 import pl.sebcel.genealogy.dto.PersonEditData;
 import pl.sebcel.genealogy.dto.RelationshipEditData;
-import pl.sebcel.genealogy.dto.DrzewoOsobaStruct;
-import pl.sebcel.genealogy.dto.DrzewoRodzinaStruct;
-import pl.sebcel.genealogy.dto.ElementListyDokumentowStruct;
-import pl.sebcel.genealogy.dto.ElementListyKlanowStruct;
-import pl.sebcel.genealogy.dto.ElementListyOsobStruct;
-import pl.sebcel.genealogy.dto.ElementListyZwiazkowStruct;
+import pl.sebcel.genealogy.dto.DocumentListElement;
+import pl.sebcel.genealogy.dto.ClanListElement;
+import pl.sebcel.genealogy.dto.PeopleListElement;
+import pl.sebcel.genealogy.dto.RelationshipsListElement;
 import pl.sebcel.genealogy.dto.ReferenceListElement;
-import pl.sebcel.genealogy.dto.RodzinaStruct;
+import pl.sebcel.genealogy.dto.FamilyElementForPersonEditData;
+import pl.sebcel.genealogy.dto.chart.FamilyTreeElement;
+import pl.sebcel.genealogy.dto.chart.PersonTreeElement;
 import pl.sebcel.genealogy.entity.Document;
 import pl.sebcel.genealogy.entity.Clan;
 import pl.sebcel.genealogy.entity.Person;
@@ -34,16 +34,16 @@ public class DatabaseDelegate {
     private final static DateFormat inputDF = new SimpleDateFormat("dd-MM-yyyy");
     private final static DateFormat outputDF = new SimpleDateFormat("yyyy-MM-dd");
 
-    public static List<ElementListyOsobStruct> getPeopleList() {
+    public static List<PeopleListElement> getPeopleList() {
         System.out.println("[DatabaseDelegate][getPeopleList]");
         Collection<Person> people = DatabaseLib.getPeople();
-        List<ElementListyOsobStruct> peopleList = new ArrayList<ElementListyOsobStruct>();
+        List<PeopleListElement> peopleList = new ArrayList<PeopleListElement>();
         if (people != null && people.size() > 0) {
             for (Person person : people) {
-                ElementListyOsobStruct listElement = new ElementListyOsobStruct();
-                listElement.id = person.getId();
-                listElement.nazwa = person.toString();
-                listElement.description = DatabaseUtil.getBirthInfo(person) + " " + DatabaseUtil.getDeathInfo(person);
+                PeopleListElement listElement = new PeopleListElement();
+                listElement.setId(person.getId());
+                listElement.setName(person.toString());
+                listElement.setDescription(DatabaseUtil.getBirthInfo(person) + " " + DatabaseUtil.getDeathInfo(person));
                 peopleList.add(listElement);
             }
         }
@@ -156,9 +156,9 @@ public class DatabaseDelegate {
         xmlData.append("  <relationships>\n");
         Collection<Relationship> zwiazki = null;
         if (osoba.getSex().equalsIgnoreCase("male")) {
-            zwiazki = osoba.getZwiazkiMezowskie();
+            zwiazki = osoba.getRelationshipsAsMale();
         } else {
-            zwiazki = osoba.getZwiazkiZonowskie();
+            zwiazki = osoba.getRelationshipsAsFemale();
         }
 
         if (zwiazki != null && zwiazki.size() > 0) {
@@ -191,9 +191,9 @@ public class DatabaseDelegate {
         Collection<Relationship> zwiazki = null;
         StringBuffer zwiazkiStr = new StringBuffer();
         if (osoba.getSex().equalsIgnoreCase("male")) {
-            zwiazki = osoba.getZwiazkiMezowskie();
+            zwiazki = osoba.getRelationshipsAsMale();
         } else {
-            zwiazki = osoba.getZwiazkiZonowskie();
+            zwiazki = osoba.getRelationshipsAsFemale();
         }
 
         if (zwiazki != null && zwiazki.size() > 0) {
@@ -230,49 +230,49 @@ public class DatabaseDelegate {
         return xmlData.toString();
     }
 
-    public static List<ElementListyZwiazkowStruct> getRelationshipsList() {
+    public static List<RelationshipsListElement> getRelationshipsList() {
         System.out.println("[DatabaseDelegate][getRelationshipsList]");
         Collection<Relationship> relationships = DatabaseLib.getRelationships(null, null);
-        List<ElementListyZwiazkowStruct> relationshipsList = new ArrayList<ElementListyZwiazkowStruct>();
+        List<RelationshipsListElement> relationshipsList = new ArrayList<RelationshipsListElement>();
         if (relationships != null && relationships.size() > 0) {
             for (Relationship relationship : relationships) {
-                ElementListyZwiazkowStruct listElement = new ElementListyZwiazkowStruct();
-                listElement.id = relationship.getId();
-                listElement.male = relationship.getMale().toString();
-                listElement.female = relationship.getFemale().toString();
-                listElement.description = DatabaseUtil.getMarriageInfo(relationship) + " " + DatabaseUtil.getDivorceInfo(relationship);
+                RelationshipsListElement listElement = new RelationshipsListElement();
+                listElement.setId(relationship.getId());
+                listElement.setMale(relationship.getMale().toString());
+                listElement.setFemale(relationship.getFemale().toString());
+                listElement.setDescription(DatabaseUtil.getMarriageInfo(relationship) + " " + DatabaseUtil.getDivorceInfo(relationship));
                 relationshipsList.add(listElement);
             }
         }
         return relationshipsList;
     }
 
-    public static List<ElementListyKlanowStruct> getClansList() {
+    public static List<ClanListElement> getClansList() {
         System.out.println("[DatabaseDelegate][getClansList]");
         Collection<Clan> clans = DatabaseLib.getClans();
-        List<ElementListyKlanowStruct> clansList = new ArrayList<ElementListyKlanowStruct>();
+        List<ClanListElement> clansList = new ArrayList<ClanListElement>();
         if (clans != null && clans.size() > 0) {
             for (Clan clan : clans) {
-                ElementListyKlanowStruct listElement = new ElementListyKlanowStruct();
-                listElement.id = clan.getId();
-                listElement.nazwa = clan.getName();
-                listElement.description = clan.getDescription();
-                listElement.korzen = clan.getRoot().toString();
+                ClanListElement listElement = new ClanListElement();
+                listElement.setId(clan.getId());
+                listElement.setName(clan.getName());
+                listElement.setDescription(clan.getDescription());
+                listElement.setRoot(clan.getRoot().toString());
                 clansList.add(listElement);
             }
         }
         return clansList;
     }
 
-    public static List<ElementListyDokumentowStruct> getDocumentsList() {
+    public static List<DocumentListElement> getDocumentsList() {
         System.out.println("[DatabaseDelegate][getDocumentsList]");
         Collection<Document> documents = DatabaseLib.getDocuments();
-        List<ElementListyDokumentowStruct> documentsList = new ArrayList<ElementListyDokumentowStruct>();
+        List<DocumentListElement> documentsList = new ArrayList<DocumentListElement>();
         if (documents != null && documents.size() > 0) {
             for (Document document : documents) {
-                ElementListyDokumentowStruct listElement = new ElementListyDokumentowStruct();
+                DocumentListElement listElement = new DocumentListElement();
                 listElement.setId(document.getId());
-                listElement.setTytul(document.getTitle());
+                listElement.setTitle(document.getTitle());
                 listElement.setSymbol(document.getSymbol());
                 documentsList.add(listElement);
             }
@@ -280,51 +280,51 @@ public class DatabaseDelegate {
         return documentsList;
     }
 
-    public static DrzewoOsobaStruct getPersonDataForPedigree(Long personId) {
+    public static PersonTreeElement getPersonDataForPedigree(Long personId) {
         System.out.println("[DatabaseDelegate][getPersonDataForPedigree]");
         Person person = DatabaseLib.getPerson(personId);
-        DrzewoOsobaStruct result = new DrzewoOsobaStruct();
-        result.id = person.getId();
-        result.nazwa = person.getNames() + " " + person.getSurname();
-        result.daneUrodzenia = DatabaseUtil.getBirthInfo(person);
-        result.daneSmierci = DatabaseUtil.getDeathInfo(person);
-        result.danePochowania = "";
-        result.daneZamieszkania = DatabaseUtil.getResidenceInfo(person);
-        result.daneZawodu = DatabaseUtil.getOccupationInfo(person);
+        PersonTreeElement result = new PersonTreeElement();
+        result.setId(person.getId());
+        result.setDescription(person.getNames() + " " + person.getSurname());
+        result.setBirthData(DatabaseUtil.getBirthInfo(person));
+        result.setDeathData(DatabaseUtil.getDeathInfo(person));
+        result.setBurialData("");
+        result.setResidenceData(DatabaseUtil.getResidenceInfo(person));
+        result.setOccupationData(DatabaseUtil.getOccupationInfo(person));
 
         Collection<Relationship> relationships = null;
         if (person.getSex().equalsIgnoreCase("male")) {
-            relationships = person.getZwiazkiMezowskie();
+            relationships = person.getRelationshipsAsMale();
         } else {
-            relationships = person.getZwiazkiZonowskie();
+            relationships = person.getRelationshipsAsFemale();
         }
 
         if (relationships != null && relationships.size() > 0) {
-            List<DrzewoRodzinaStruct> familyIds = new ArrayList<DrzewoRodzinaStruct>();
+            List<FamilyTreeElement> familyIds = new ArrayList<FamilyTreeElement>();
             for (Relationship relationship : relationships) {
-                DrzewoRodzinaStruct family = new DrzewoRodzinaStruct();
-                family.idZwiazku = relationship.getId();
+                FamilyTreeElement family = new FamilyTreeElement();
+                family.setRelationshipId(relationship.getId());
                 if (person.getSex().equalsIgnoreCase("male")) {
-                    family.idMalzonka = relationship.getFemale().getId();
+                    family.setSpouseId(relationship.getFemale().getId());
                 } else {
-                    family.idMalzonka = relationship.getMale().getId();
+                    family.setSpouseId(relationship.getMale().getId());
                 }
-                family.daneSpotkania = DatabaseUtil.getMeetInfo(relationship);
-                family.daneSlubu = DatabaseUtil.getMarriageInfo(relationship);
-                family.daneRozstania = DatabaseUtil.getSeparationInfo(relationship);
-                family.daneRozwodu = DatabaseUtil.getDivorceInfo(relationship);
+                family.setFirstMetData(DatabaseUtil.getMeetInfo(relationship));
+                family.setMarriageData(DatabaseUtil.getMarriageInfo(relationship));
+                family.setSeparationData(DatabaseUtil.getSeparationInfo(relationship));
+                family.setDivorceData(DatabaseUtil.getDivorceInfo(relationship));
                 List<Person> children = sortByBirthDate(relationship.getChildren());
                 if (children != null && children.size() > 0) {
                     List<Long> childrenIds = new ArrayList<Long>();
                     for (Person child : children) {
                         childrenIds.add(child.getId());
                     }
-                    family.idDzieci = childrenIds;
+                    family.setChildrenIds(childrenIds);
                 }
                 familyIds.add(family);
                 relationship = null;
             }
-            result.rodziny = familyIds;
+            result.setFamilies(familyIds);
         }
         return result;
     }
@@ -380,12 +380,12 @@ public class DatabaseDelegate {
             personEditData.setParents(relationshipToReferenceListElement(parents));
         }
 
-        personEditData.setFamilies(new Vector<RodzinaStruct>());
+        personEditData.setFamilies(new Vector<FamilyElementForPersonEditData>());
         Collection<Relationship> families = null;
         if (personEditData.getSex() != null && personEditData.getSex().equalsIgnoreCase("Male")) {
-            families = person.getZwiazkiMezowskie();
+            families = person.getRelationshipsAsMale();
         } else {
-            families = person.getZwiazkiZonowskie();
+            families = person.getRelationshipsAsFemale();
         }
         if (families != null) {
             for (Relationship relationship : families) {
@@ -395,13 +395,13 @@ public class DatabaseDelegate {
                 } else {
                     spouse = relationship.getMale();
                 }
-                RodzinaStruct family = new RodzinaStruct();
+                FamilyElementForPersonEditData family = new FamilyElementForPersonEditData();
                 if (spouse != null)
-                    family.malzonek = new ReferenceListElement(spouse.getId(), spouse.getNames() + " " + spouse.getSurname());
-                family.idDzieci = new Vector<ReferenceListElement>();
+                    family.setSpouse(new ReferenceListElement(spouse.getId(), spouse.getNames() + " " + spouse.getSurname()));
+                family.setChildren(new Vector<ReferenceListElement>());
                 if (relationship.getChildren() != null && relationship.getChildren().size() > 0) {
                     for (Person child : relationship.getChildren()) {
-                        family.idDzieci.add(new ReferenceListElement(child.getId(), child.getNames() + " " + child.getSurname()));
+                        family.getChildren().add(new ReferenceListElement(child.getId(), child.getNames() + " " + child.getSurname()));
                     }
                 }
                 personEditData.getFamilies().add(family);

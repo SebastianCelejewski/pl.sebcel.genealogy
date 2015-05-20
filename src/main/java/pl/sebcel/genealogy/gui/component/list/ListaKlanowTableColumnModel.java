@@ -7,13 +7,13 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.TableColumn;
 
-import pl.sebcel.genealogy.dto.ElementListyKlanowStruct;
+import pl.sebcel.genealogy.dto.ClanListElement;
 
 class ListaKlanowTableColumnModel extends DefaultTableColumnModel implements ComplexTableModel {
 	
 	public static final long serialVersionUID = 0L;
 	
-	private List<ElementListyKlanowStruct> dane = new ArrayList<ElementListyKlanowStruct>();
+	private List<ClanListElement> dane = new ArrayList<ClanListElement>();
 	private String[] kolumny = new String[] {"Id","Nazwa","Protoplasta"};
 
 	public ListaKlanowTableColumnModel() {
@@ -51,9 +51,9 @@ class ListaKlanowTableColumnModel extends DefaultTableColumnModel implements Com
 	}
 
 	public Object getValueAt(int rowIndex, int columnIndex) {
-		if (columnIndex==0) return dane.get(rowIndex).id;
-		if (columnIndex==1) return dane.get(rowIndex).nazwa;
-		if (columnIndex==2) return dane.get(rowIndex).korzen;
+		if (columnIndex==0) return dane.get(rowIndex).getId();
+		if (columnIndex==1) return dane.get(rowIndex).getName();
+		if (columnIndex==2) return dane.get(rowIndex).getRoot();
 		return "";
 	}
 
@@ -67,7 +67,7 @@ class ListaKlanowTableColumnModel extends DefaultTableColumnModel implements Com
 	public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
 	}
 	
-	public void wpiszDane(List<ElementListyKlanowStruct> listaKlanow) {
+	public void wpiszDane(List<ClanListElement> listaKlanow) {
 		this.dane = listaKlanow;
 	}
 }

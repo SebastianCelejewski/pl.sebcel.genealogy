@@ -31,8 +31,8 @@ public class Person {
     private String burialPlace;
 
     private Relationship parents;
-    private Collection<Relationship> zwiazkiMezowskie;
-    private Collection<Relationship> zwiazkiZonowskie;
+    private Collection<Relationship> relationshipsAsMale;
+    private Collection<Relationship> relationshipsAsFemale;
 
     private String residence;
 
@@ -144,21 +144,21 @@ public class Person {
     }
 
     @OneToMany(mappedBy = "male")
-    public Collection<Relationship> getZwiazkiMezowskie() {
-        return zwiazkiMezowskie;
+    public Collection<Relationship> getRelationshipsAsMale() {
+        return relationshipsAsMale;
     }
 
-    public void setZwiazkiMezowskie(Collection<Relationship> zwiazkiMezowskie) {
-        this.zwiazkiMezowskie = zwiazkiMezowskie;
+    public void setRelationshipsAsMale(Collection<Relationship> relationshipsAsMale) {
+        this.relationshipsAsMale = relationshipsAsMale;
     }
 
     @OneToMany(mappedBy = "female")
-    public Collection<Relationship> getZwiazkiZonowskie() {
-        return zwiazkiZonowskie;
+    public Collection<Relationship> getRelationshipsAsFemale() {
+        return relationshipsAsFemale;
     }
 
-    public void setZwiazkiZonowskie(Collection<Relationship> zwiazkiZonowskie) {
-        this.zwiazkiZonowskie = zwiazkiZonowskie;
+    public void setRelationshipsAsFemale(Collection<Relationship> relationshipsAsFemale) {
+        this.relationshipsAsFemale = relationshipsAsFemale;
     }
 
     @Column(name = "zawody_wykonywane", nullable = true, length = 255)

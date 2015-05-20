@@ -26,8 +26,8 @@ import javax.swing.filechooser.FileFilter;
 
 import pl.sebcel.genealogy.db.DatabaseDelegate;
 import pl.sebcel.genealogy.dto.DiagramInfoStruct;
-import pl.sebcel.genealogy.dto.DrzewoOsobaStruct;
-import pl.sebcel.genealogy.dto.DrzewoRodzinaStruct;
+import pl.sebcel.genealogy.dto.chart.FamilyTreeElement;
+import pl.sebcel.genealogy.dto.chart.PersonTreeElement;
 
 import com.sun.jimi.core.Jimi;
 
@@ -168,10 +168,10 @@ public class GuiRysownik extends JFrame implements ActionListener, IDrawOptionsL
         int szerokosc = szerokoscPokolenia * fontSize;
         int wysokosc = fontSize;
 
-        DrzewoOsobaStruct osoba = DatabaseDelegate.getPersonDataForPedigree(idOsoby);
-        String nazwa = osoba.nazwa;
+        PersonTreeElement osoba = DatabaseDelegate.getPersonDataForPedigree(idOsoby);
+        String nazwa = osoba.getDescription();
         if (opcjeRysowania.isPokazId()) {
-            nazwa += " (" + osoba.id + ")";
+            nazwa += " (" + osoba.getId() + ")";
         }
 
         g.setColor(kolorOsoby);
@@ -180,22 +180,22 @@ public class GuiRysownik extends JFrame implements ActionListener, IDrawOptionsL
         g.setFont(new Font(g.getFont().getName(), Font.PLAIN, fontSize));
 
         g.setColor(kolorInfo);
-        String urInfo = osoba.daneUrodzenia;
+        String urInfo = osoba.getBirthData();
         if (urInfo.length() > 0 && opcjeRysowania.isPokazDaneUrodzenia()) {
             wysokosc += fontSize;
             g.drawString(urInfo, x, y + wysokosc);
         }
-        String smInfo = osoba.daneSmierci;
+        String smInfo = osoba.getDeathData();
         if (smInfo.length() > 0 && opcjeRysowania.isPokazDaneSmierci()) {
             wysokosc += fontSize;
             g.drawString(smInfo, x, y + wysokosc);
         }
-        String zamInfo = osoba.daneZamieszkania;
+        String zamInfo = osoba.getResidenceData();
         if (zamInfo.length() > 0 && opcjeRysowania.isPokazDaneZamieszkania()) {
             wysokosc += fontSize;
             g.drawString(zamInfo, x, y + wysokosc);
         }
-        String zawInfo = osoba.daneZawodu;
+        String zawInfo = osoba.getOccupationData();
         if (zawInfo.length() > 0 && opcjeRysowania.isPokazEducation()) {
             wysokosc += fontSize;
             g.drawString(zawInfo, x, y + wysokosc);
@@ -214,21 +214,21 @@ public class GuiRysownik extends JFrame implements ActionListener, IDrawOptionsL
         return new Dimension(szerokosc, wysokosc);
     }
 
-    private Dimension rysujFamilies(DrzewoOsobaStruct osoba, Graphics g, int x, int y, int szerMalzonka, int wysMalzonka, int szerokoscPokolenia, OpcjeRysowania opcjeRysowania) {
+    private Dimension rysujFamilies(PersonTreeElement osoba, Graphics g, int x, int y, int szerMalzonka, int wysMalzonka, int szerokoscPokolenia, OpcjeRysowania opcjeRysowania) {
         int fontSize = g.getFont().getSize();
         int wysokosc = 0;
         int szerokosc = szerokoscPokolenia * fontSize;
 
-        List<DrzewoRodzinaStruct> zwiazki = osoba.rodziny;
+        List<FamilyTreeElement> zwiazki = osoba.getFamilies();
 
         int wysokoscRodzin = 0;
         if (zwiazki != null && zwiazki.size() > 0) {
             int x1 = 0;
             int y1 = 0;
             int licznik = 0;
-            for (DrzewoRodzinaStruct zwiazek : zwiazki) {
-                Long idMalzonka = zwiazek.idMalzonka;
-                DrzewoOsobaStruct malzonek = DatabaseDelegate.getPersonDataForPedigree(idMalzonka);
+            for (FamilyTreeElement zwiazek : zwiazki) {
+                Long idMalzonka = zwiazek.getSpouseId();
+                PersonTreeElement malzonek = DatabaseDelegate.getPersonDataForPedigree(idMalzonka);
 
                 int x0 = x;
                 int y0 = y + wysokosc;
@@ -253,7 +253,7 @@ public class GuiRysownik extends JFrame implements ActionListener, IDrawOptionsL
         return new Dimension(szerokosc, wysokosc);
     }
 
-    private Dimension rysujRodzine(DrzewoRodzinaStruct zwiazek, DrzewoOsobaStruct malzonek, Graphics g, int x, int y, boolean obnizenie, int szerMalzonka, int wysMalzonka, int szerokoscPokolenia, OpcjeRysowania opcjeRysowania) {
+    private Dimension rysujRodzine(FamilyTreeElement zwiazek, PersonTreeElement malzonek, Graphics g, int x, int y, boolean obnizenie, int szerMalzonka, int wysMalzonka, int szerokoscPokolenia, OpcjeRysowania opcjeRysowania) {
 
         int fontSize = g.getFont().getSize();
         int rozmiar = fontSize * szerokoscPokolenia;
@@ -267,22 +267,22 @@ public class GuiRysownik extends JFrame implements ActionListener, IDrawOptionsL
         Dimension wymiaryMalzonka = rysujMalzonka(zwiazek, malzonek, g, x, y, szerokoscPokolenia, opcjeRysowania);
         wysokosc += wymiaryMalzonka.height;
 
-        String nazwaMalzonka = malzonek.nazwa;
+        String nazwaMalzonka = malzonek.getDescription();
         if (opcjeRysowania.isPokazId()) {
-            nazwaMalzonka += " (" + malzonek.id + ")";
+            nazwaMalzonka += " (" + malzonek.getId() + ")";
         }
 
         int szer = (int) g.getFont().getStringBounds("+ " + nazwaMalzonka, new FontRenderContext(new AffineTransform(), false, false)).getWidth();
         int mar = 5;
 
-        if (zwiazek.idDzieci != null && zwiazek.idDzieci.size() > 0) {
+        if (zwiazek.getChildrenIds() != null && zwiazek.getChildrenIds().size() > 0) {
             int yy = y;
             int xx = x + szer + mar;
             if (obnizenie) {
                 yy -= wysMalzonka;
                 xx = x + szerMalzonka + mar;
             }
-            Dimension wymiaryDzieci = rysujDzieci(zwiazek.idDzieci, g, x + rozmiar, yy, szerokoscPokolenia, opcjeRysowania);
+            Dimension wymiaryDzieci = rysujDzieci(zwiazek.getChildrenIds(), g, x + rozmiar, yy, szerokoscPokolenia, opcjeRysowania);
             wysokoscDzieci += wymiaryDzieci.height;
 
             if (wymiaryDzieci.width > szerokoscDzieci) {
@@ -300,13 +300,13 @@ public class GuiRysownik extends JFrame implements ActionListener, IDrawOptionsL
         return new Dimension(szerokosc + szerokoscDzieci, wysokoscFamilies);
     }
 
-    private Dimension rysujMalzonka(DrzewoRodzinaStruct zwiazek, DrzewoOsobaStruct malzonek, Graphics g, int x, int y, int szerokoscPokolenia, OpcjeRysowania opcjeRysowania) {
+    private Dimension rysujMalzonka(FamilyTreeElement zwiazek, PersonTreeElement malzonek, Graphics g, int x, int y, int szerokoscPokolenia, OpcjeRysowania opcjeRysowania) {
         int fontSize = g.getFont().getSize();
         int wysokosc = fontSize;
 
-        String nazwa = malzonek.nazwa;
+        String nazwa = malzonek.getDescription();
         if (opcjeRysowania.isPokazId()) {
-            nazwa += " (" + malzonek.id + ")";
+            nazwa += " (" + malzonek.getId() + ")";
         }
 
         g.setColor(kolorMalzonka);
@@ -316,24 +316,24 @@ public class GuiRysownik extends JFrame implements ActionListener, IDrawOptionsL
         g.setFont(new Font(g.getFont().getName(), Font.PLAIN, fontSize));
 
         g.setColor(kolorInfo);
-        String urInfo = malzonek.daneUrodzenia;
+        String urInfo = malzonek.getBirthData();
         if (urInfo.length() > 0 && opcjeRysowania.isPokazDaneUrodzenia()) {
             g.setColor(kolorInfo);
             wysokosc += fontSize;
             g.drawString(urInfo, x, y + wysokosc);
         }
-        String smInfo = malzonek.daneSmierci;
+        String smInfo = malzonek.getDeathData();
         if (smInfo.length() > 0 && opcjeRysowania.isPokazDaneSmierci()) {
             g.setColor(kolorInfo);
             wysokosc += fontSize;
             g.drawString(smInfo, x, y + wysokosc);
         }
-        String zamInfo = malzonek.daneZamieszkania;
+        String zamInfo = malzonek.getResidenceData();
         if (zamInfo.length() > 0 && opcjeRysowania.isPokazDaneZamieszkania()) {
             wysokosc += fontSize;
             g.drawString(zamInfo, x, y + wysokosc);
         }
-        String zawInfo = malzonek.daneZawodu;
+        String zawInfo = malzonek.getOccupationData();
         if (zawInfo.length() > 0 && opcjeRysowania.isPokazEducation()) {
             wysokosc += fontSize;
             g.drawString(zawInfo, x, y + wysokosc);
@@ -343,30 +343,30 @@ public class GuiRysownik extends JFrame implements ActionListener, IDrawOptionsL
 
         if (opcjeRysowania.isPokazId()) {
             g.setColor(kolorSlubu);
-            String zwiazekInfo = "Id zwi¹zku: " + zwiazek.idZwiazku;
+            String zwiazekInfo = "Id zwi¹zku: " + zwiazek.getRelationshipId();
             wysokosc += fontSize;
             g.drawString(zwiazekInfo, x, y + wysokosc);
         }
 
-        String pozInfo = zwiazek.daneSpotkania;
+        String pozInfo = zwiazek.getFirstMetData();
         if (pozInfo.length() > 0 && opcjeRysowania.isPokazDanePoznaniaSie()) {
             g.setColor(kolorSlubu);
             wysokosc += fontSize;
             g.drawString(pozInfo, x, y + wysokosc);
         }
-        String slInfo = zwiazek.daneSlubu;
+        String slInfo = zwiazek.getMarriageData();
         if (slInfo.length() > 0 && opcjeRysowania.isPokazDaneSlubu()) {
             g.setColor(kolorSlubu);
             wysokosc += fontSize;
             g.drawString(slInfo, x, y + wysokosc);
         }
-        String rozInfo = zwiazek.daneRozstania;
+        String rozInfo = zwiazek.getSeparationData();
         if (rozInfo.length() > 0 && opcjeRysowania.isPokazDaneRozstaniaSie()) {
             g.setColor(kolorSlubu);
             wysokosc += fontSize;
             g.drawString(rozInfo, x, y + wysokosc);
         }
-        String rzwInfo = zwiazek.daneRozwodu;
+        String rzwInfo = zwiazek.getDivorceData();
         if (rzwInfo.length() > 0 && opcjeRysowania.isPokazDaneRozwodu()) {
             g.setColor(kolorSlubu);
             wysokosc += fontSize;

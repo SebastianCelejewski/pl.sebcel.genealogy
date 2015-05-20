@@ -1,9 +1,9 @@
 package pl.sebcel.genealogy.dto;
 
-public class ElementListyDokumentowStruct {
+public class DocumentListElement {
 
     private Long id;
-    private String tytul;
+    private String title;
     private String symbol;
 
     public Long getId() {
@@ -14,12 +14,12 @@ public class ElementListyDokumentowStruct {
         this.id = id;
     }
 
-    public String getTytul() {
-        return tytul;
+    public String getTitle() {
+        return title;
     }
 
-    public void setTytul(String tytul) {
-        this.tytul = tytul;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getSymbol() {
@@ -29,5 +29,4 @@ public class ElementListyDokumentowStruct {
     public void setSymbol(String symbol) {
         this.symbol = symbol;
     }
-
 }
