@@ -14,21 +14,21 @@ class ListaOsobTableColumnModel extends DefaultTableColumnModel implements Compl
 	public static final long serialVersionUID = 0L;
 	
 	private List<ElementListyOsobStruct> dane = new ArrayList<ElementListyOsobStruct>();
-	private String[] kolumny = new String[] {"Id","Imiona i nazwisko","Opis"};
+	private String[] kolumny = new String[] {"Id","Names i surname","Description"};
 
 	public ListaOsobTableColumnModel() {
 		super();
 		TableColumn columnId = new TableColumn(0,20);
 		TableColumn columnNazwa = new TableColumn(1,280); 
-		TableColumn columnOpis = new TableColumn(2,400);
+		TableColumn columnDescription = new TableColumn(2,400);
 		
 		columnId.setHeaderValue(kolumny[0]);
 		columnNazwa.setHeaderValue(kolumny[1]);
-		columnOpis.setHeaderValue(kolumny[2]);
+		columnDescription.setHeaderValue(kolumny[2]);
 		
 		addColumn(columnId);
 		addColumn(columnNazwa);
-		addColumn(columnOpis);
+		addColumn(columnDescription);
 	}
 	
 	public void addTableModelListener(TableModelListener l) {
@@ -53,7 +53,7 @@ class ListaOsobTableColumnModel extends DefaultTableColumnModel implements Compl
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		if (columnIndex==0) return dane.get(rowIndex).id;
 		if (columnIndex==1) return dane.get(rowIndex).nazwa;
-		if (columnIndex==2) return dane.get(rowIndex).opis;
+		if (columnIndex==2) return dane.get(rowIndex).description;
 		return "";
 	}
 

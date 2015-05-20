@@ -5,7 +5,7 @@ public class OpcjeRysowania {
     private boolean pokazId;
     private boolean pokazDaneUrodzenia;
     private boolean pokazDaneSmierci;
-    private boolean pokazWyksztalcenie;
+    private boolean pokazEducation;
     private boolean pokazDaneZamieszkania;
     private boolean pokazDanePoznaniaSie;
     private boolean pokazDaneSlubu;
@@ -37,12 +37,12 @@ public class OpcjeRysowania {
         this.pokazDaneSmierci = pokazDaneSmierci;
     }
 
-    public boolean isPokazWyksztalcenie() {
-        return pokazWyksztalcenie;
+    public boolean isPokazEducation() {
+        return pokazEducation;
     }
 
-    public void setPokazWyksztalcenie(boolean pokazWyksztalcenie) {
-        this.pokazWyksztalcenie = pokazWyksztalcenie;
+    public void setPokazEducation(boolean pokazEducation) {
+        this.pokazEducation = pokazEducation;
     }
 
     public boolean isPokazDaneZamieszkania() {

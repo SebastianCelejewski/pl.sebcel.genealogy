@@ -6,34 +6,34 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Expression;
 
-import pl.sebcel.genealogy.entity.Dokument;
-import pl.sebcel.genealogy.entity.Klan;
-import pl.sebcel.genealogy.entity.Osoba;
-import pl.sebcel.genealogy.entity.Zwiazek;
+import pl.sebcel.genealogy.entity.Document;
+import pl.sebcel.genealogy.entity.Clan;
+import pl.sebcel.genealogy.entity.Person;
+import pl.sebcel.genealogy.entity.Relationship;
 
 public class DatabaseLib {
 
     // Sekcja GET
 
-    public static Osoba getPerson(Long personId) {
+    public static Person getPerson(Long personId) {
         System.out.println("[DatabaseLib][getPerson]");
-        return (Osoba) HibernateUtil.getSession().get(Osoba.class, personId);
+        return (Person) HibernateUtil.getSession().get(Person.class, personId);
     }
 
-    public static Zwiazek getRelationship(Long relationshipId) {
+    public static Relationship getRelationship(Long relationshipId) {
         System.out.println("[DatabaseLib][getRelationship"
                 + "]");
-        return (Zwiazek) HibernateUtil.getSession().get(Zwiazek.class, relationshipId);
+        return (Relationship) HibernateUtil.getSession().get(Relationship.class, relationshipId);
     }
 
-    public static Klan getClan(Long clanId) {
+    public static Clan getClan(Long clanId) {
         System.out.println("[DatabaseLib][getClan]");
-        return (Klan) HibernateUtil.getSession().get(Klan.class, clanId);
+        return (Clan) HibernateUtil.getSession().get(Clan.class, clanId);
     }
 
-    public static Dokument getDocument(Long documentId) {
+    public static Document getDocument(Long documentId) {
         System.out.println("[DatabaseLib][getDocument]");
-        return (Dokument) HibernateUtil.getSession().get(Dokument.class, documentId);
+        return (Document) HibernateUtil.getSession().get(Document.class, documentId);
     }
 
     // Sekcja SAVE
@@ -58,64 +58,64 @@ public class DatabaseLib {
 
     // Sekcja LIST
     @SuppressWarnings("unchecked")
-    public static List<Osoba> getPeople() {
+    public static List<Person> getPeople() {
         System.out.println("[DatabaseLib][getPeople]");
         Session session = HibernateUtil.getSession();
-        Criteria criteria = session.createCriteria(Osoba.class);
-        List<Osoba> result = criteria.list();
+        Criteria criteria = session.createCriteria(Person.class);
+        List<Person> result = criteria.list();
         return result;
     }
 
     @SuppressWarnings("unchecked")
-    public static List<Osoba> getMales() {
+    public static List<Person> getMales() {
         System.out.println("[DatabaseLib][getMales]");
         Session session = HibernateUtil.getSession();
-        Criteria criteria = session.createCriteria(Osoba.class);
-        criteria.add(Expression.eq("plec", "mezczyzna"));
-        List<Osoba> result = criteria.list();
+        Criteria criteria = session.createCriteria(Person.class);
+        criteria.add(Expression.eq("plec", "male"));
+        List<Person> result = criteria.list();
         return result;
     }
 
     @SuppressWarnings("unchecked")
-    public static List<Osoba> getFemales() {
+    public static List<Person> getFemales() {
         System.out.println("[DatabaseLib][getFemales]");
         Session session = HibernateUtil.getSession();
-        Criteria criteria = session.createCriteria(Osoba.class);
-        criteria.add(Expression.eq("plec", "kobieta"));
-        List<Osoba> result = criteria.list();
+        Criteria criteria = session.createCriteria(Person.class);
+        criteria.add(Expression.eq("plec", "female"));
+        List<Person> result = criteria.list();
         return result;
     }
 
     @SuppressWarnings("unchecked")
-    public static List<Zwiazek> getRelationships(Osoba male, Osoba female) {
+    public static List<Relationship> getRelationships(Person male, Person female) {
         System.out.println("[DatabaseLib][getRelationships]");
         Session session = HibernateUtil.getSession();
-        Criteria criteria = session.createCriteria(Zwiazek.class);
+        Criteria criteria = session.createCriteria(Relationship.class);
         if (male != null) {
-            criteria.add(Expression.eq("mezczyzna", male));
+            criteria.add(Expression.eq("male", male));
         }
         if (female != null) {
-            criteria.add(Expression.eq("kobieta", female));
+            criteria.add(Expression.eq("female", female));
         }
-        List<Zwiazek> result = criteria.list();
+        List<Relationship> result = criteria.list();
         return result;
     }
 
     @SuppressWarnings("unchecked")
-    public static List<Klan> getClans() {
+    public static List<Clan> getClans() {
         System.out.println("[DatabaseLib][getClans]");
         Session session = HibernateUtil.getSession();
-        Criteria criteria = session.createCriteria(Klan.class);
-        List<Klan> result = criteria.list();
+        Criteria criteria = session.createCriteria(Clan.class);
+        List<Clan> result = criteria.list();
         return result;
     }
 
     @SuppressWarnings("unchecked")
-    public static List<Dokument> getDocuments() {
+    public static List<Document> getDocuments() {
         System.out.println("[DatabaseLib][getDocuments]");
         Session session = HibernateUtil.getSession();
-        Criteria criteria = session.createCriteria(Dokument.class);
-        List<Dokument> result = criteria.list();
+        Criteria criteria = session.createCriteria(Document.class);
+        List<Document> result = criteria.list();
         return result;
     }
 }

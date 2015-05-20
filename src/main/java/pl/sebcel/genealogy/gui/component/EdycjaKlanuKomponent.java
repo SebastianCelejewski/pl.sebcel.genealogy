@@ -19,23 +19,23 @@ public class EdycjaKlanuKomponent extends EdycjaKomponent {
     private ClanEditData daneKlanu;
 
     private Etykieta lNazwa = new Etykieta("Nazwa:");
-    private Etykieta lOpis = new Etykieta("Opis:");
+    private Etykieta lDescription = new Etykieta("Description:");
     private Etykieta lKorzen = new Etykieta("Protoplasta:");
 
     private PoleTekstowe tNazwa = new PoleTekstowe();
-    private PoleTekstowe tOpis = new PoleTekstowe();
+    private PoleTekstowe tDescription = new PoleTekstowe();
     private SingleValueReferenceField tKorzen = new SingleValueReferenceField();
 
     public EdycjaKlanuKomponent() {
 
         int y = 0;
         this.add(lNazwa, lNazwa.getConstraints(0, y++));
-        this.add(lOpis, lOpis.getConstraints(0, y++));
+        this.add(lDescription, lDescription.getConstraints(0, y++));
         this.add(lKorzen, lKorzen.getConstraints(0, y++));
 
         y = 0;
         this.add(tNazwa, tNazwa.getConstraints(1, y++));
-        this.add(tOpis, tOpis.getConstraints(1, y++));
+        this.add(tDescription, tDescription.getConstraints(1, y++));
         this.add(tKorzen, tKorzen.getConstraints(1, y++));
 
     }
@@ -50,7 +50,7 @@ public class EdycjaKlanuKomponent extends EdycjaKomponent {
         daneKlanu = DatabaseDelegate.getClanEditData(id);
 
         tNazwa.setText(daneKlanu.getName());
-        tOpis.setText(daneKlanu.getDescription());
+        tDescription.setText(daneKlanu.getDescription());
         tKorzen.setSelectedItem(daneKlanu.getRoot());
 
     }
@@ -74,7 +74,7 @@ public class EdycjaKlanuKomponent extends EdycjaKomponent {
         }
 
         daneKlanu.setName(tNazwa.getText().trim());
-        daneKlanu.setDescription(tOpis.getText().trim());
+        daneKlanu.setDescription(tDescription.getText().trim());
         daneKlanu.setRoot((ReferenceListElement) tKorzen.getSelectedItem());
 
         if (trybPracy == TrybPracy.EDYCJA) {
@@ -88,7 +88,7 @@ public class EdycjaKlanuKomponent extends EdycjaKomponent {
 
     private void wyczyscPola() {
         tNazwa.setText("");
-        tOpis.setText("");
+        tDescription.setText("");
         tKorzen.setSelectedItem(0);
     }
 
@@ -115,7 +115,7 @@ public class EdycjaKlanuKomponent extends EdycjaKomponent {
         DiagramInfoStruct diagramInfo = new DiagramInfoStruct();
         diagramInfo.idKorzenia = daneKlanu.getRoot().getId();
         diagramInfo.nazwa = daneKlanu.getName();
-        diagramInfo.opis = "Diagram klanu '" + daneKlanu.getName() + "'";
+        diagramInfo.description = "Diagram klanu '" + daneKlanu.getName() + "'";
         return diagramInfo;
     }
 }

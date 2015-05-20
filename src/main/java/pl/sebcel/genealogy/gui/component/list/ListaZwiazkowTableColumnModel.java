@@ -14,24 +14,24 @@ class ListaZwiazkowTableColumnModel extends DefaultTableColumnModel implements C
 	public static final long serialVersionUID = 0L;
 	
 	private List<ElementListyZwiazkowStruct> dane = new ArrayList<ElementListyZwiazkowStruct>();
-	private String[] kolumny = new String[] {"Id","Mê¿czyzna","Kobieta","Opis"};
+	private String[] kolumny = new String[] {"Id","Mê¿czyzna","Female","Description"};
 
 	public ListaZwiazkowTableColumnModel() {
 		super();
 		TableColumn columnId = new TableColumn(0,20);
-		TableColumn columnMezczyzna = new TableColumn(1,200); 
-		TableColumn columnKobieta = new TableColumn(2,200); 
-		TableColumn columnOpis = new TableColumn(3,220);
+		TableColumn columnMale = new TableColumn(1,200); 
+		TableColumn columnFemale = new TableColumn(2,200); 
+		TableColumn columnDescription = new TableColumn(3,220);
 		
 		columnId.setHeaderValue(kolumny[0]);
-		columnMezczyzna.setHeaderValue(kolumny[1]);
-		columnKobieta.setHeaderValue(kolumny[2]);
-		columnOpis.setHeaderValue(kolumny[3]);
+		columnMale.setHeaderValue(kolumny[1]);
+		columnFemale.setHeaderValue(kolumny[2]);
+		columnDescription.setHeaderValue(kolumny[3]);
 		
 		addColumn(columnId);
-		addColumn(columnMezczyzna);
-		addColumn(columnKobieta);
-		addColumn(columnOpis);
+		addColumn(columnMale);
+		addColumn(columnFemale);
+		addColumn(columnDescription);
 	}
 	
 	public void addTableModelListener(TableModelListener l) {
@@ -55,9 +55,9 @@ class ListaZwiazkowTableColumnModel extends DefaultTableColumnModel implements C
 
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		if (columnIndex==0) return dane.get(rowIndex).id;
-		if (columnIndex==1) return dane.get(rowIndex).mezczyzna;
-		if (columnIndex==2) return dane.get(rowIndex).kobieta;
-		if (columnIndex==3) return dane.get(rowIndex).opis;
+		if (columnIndex==1) return dane.get(rowIndex).male;
+		if (columnIndex==2) return dane.get(rowIndex).female;
+		if (columnIndex==3) return dane.get(rowIndex).description;
 		return "";
 	}
 

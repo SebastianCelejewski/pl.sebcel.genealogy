@@ -11,7 +11,7 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
 
 import pl.sebcel.genealogy.db.DatabaseDelegate;
-import pl.sebcel.genealogy.dto.DaneEdycjiOsoby;
+import pl.sebcel.genealogy.dto.PersonEditData;
 import pl.sebcel.genealogy.dto.DiagramInfoStruct;
 import pl.sebcel.genealogy.dto.ReferenceListElement;
 import pl.sebcel.genealogy.dto.RodzinaStruct;
@@ -26,39 +26,39 @@ public class EdycjaOsobyKomponent extends EdycjaKomponent {
 
     public final static long serialVersionUID = 0l;
 
-    private DaneEdycjiOsoby daneOsoby;
+    private PersonEditData daneOsoby;
 
-    private Etykieta lPlec = new Etykieta("P³eæ:");
-    private Etykieta lImiona = new Etykieta("Imiona:");
-    private Etykieta lNazwisko = new Etykieta("Nazwisko:");
-    private Etykieta lDataUrodzenia = new Etykieta("Data urodzenia:");
-    private Etykieta lMiejsceUrodzenia = new Etykieta("Miejsce urodzenia:");
-    private Etykieta lDataSmierci = new Etykieta("Data œmierci:");
-    private Etykieta lMiejsceSmierci = new Etykieta("Miejsce œmierci:");
-    private Etykieta lDataPochowania = new Etykieta("Data pochowania:");
-    private Etykieta lMiejscePochowania = new Etykieta("Miejsce pochowania:");
+    private Etykieta lSex = new Etykieta("P³eæ:");
+    private Etykieta lNames = new Etykieta("Names:");
+    private Etykieta lSurname = new Etykieta("Surname:");
+    private Etykieta lBirthDate = new Etykieta("Data urodzenia:");
+    private Etykieta lBirthPlace = new Etykieta("Miejsce urodzenia:");
+    private Etykieta lDeathDate = new Etykieta("Data œmierci:");
+    private Etykieta lDeathPlace = new Etykieta("Miejsce œmierci:");
+    private Etykieta lBurialDate = new Etykieta("Data pochowania:");
+    private Etykieta lBurialPlace = new Etykieta("Miejsce pochowania:");
     private Etykieta lMiejsceZamiekszania = new Etykieta("Miejsce zamieszkania:");
-    private Etykieta lWyksztalcenie = new Etykieta("Wykszta³cenie");
-    private Etykieta lZawodyWykonywane = new Etykieta("Zawody wykonywane");
-    private Etykieta lRodzice = new Etykieta("Rodzice");
-    private Etykieta lOpis = new Etykieta("Opis");
+    private Etykieta lEducation = new Etykieta("Wykszta³cenie");
+    private Etykieta lOccupation = new Etykieta("Zawody wykonywane");
+    private Etykieta lParents = new Etykieta("Parents");
+    private Etykieta lDescription = new Etykieta("Description");
     private Etykieta lRodzina = new Etykieta("Rodzina");
     private Etykieta lDokumenty = new Etykieta("Dokumenty");
 
-    private SingleValueReferenceField tPlec = new SingleValueReferenceField();
-    private PoleTekstowe tImiona = new PoleTekstowe();
-    private PoleTekstowe tNazwisko = new PoleTekstowe();
-    private PoleTekstowe tDataUrodzenia = new PoleTekstowe();
-    private PoleTekstowe tMiejsceUrodzenia = new PoleTekstowe();
-    private PoleTekstowe tDataSmierci = new PoleTekstowe();
-    private PoleTekstowe tMiejsceSmierci = new PoleTekstowe();
-    private PoleTekstowe tDataPochowania = new PoleTekstowe();
-    private PoleTekstowe tMiejscePochowania = new PoleTekstowe();
-    private PoleTekstowe tMiejsceZamieszkania = new PoleTekstowe();
-    private PoleTekstowe tWyksztalcenie = new PoleTekstowe();
-    private PoleTekstowe tZawodyWykonywane = new PoleTekstowe();
-    private ObszarTekstowy tOpis = new ObszarTekstowy();
-    private SingleValueReferenceField tRodzice = new SingleValueReferenceField();
+    private SingleValueReferenceField tSex = new SingleValueReferenceField();
+    private PoleTekstowe tNames = new PoleTekstowe();
+    private PoleTekstowe tSurname = new PoleTekstowe();
+    private PoleTekstowe tBirthDate = new PoleTekstowe();
+    private PoleTekstowe tBirthPlace = new PoleTekstowe();
+    private PoleTekstowe tDeathDate = new PoleTekstowe();
+    private PoleTekstowe tDeathPlace = new PoleTekstowe();
+    private PoleTekstowe tBurialDate = new PoleTekstowe();
+    private PoleTekstowe tBurialPlace = new PoleTekstowe();
+    private PoleTekstowe tResidence = new PoleTekstowe();
+    private PoleTekstowe tEducation = new PoleTekstowe();
+    private PoleTekstowe tOccupation = new PoleTekstowe();
+    private ObszarTekstowy tDescription = new ObszarTekstowy();
+    private SingleValueReferenceField tParents = new SingleValueReferenceField();
     private Drzewo tRodzina = new Drzewo();
     private MultiValueReferenceField tDokumenty = new MultiValueReferenceField();
 
@@ -66,45 +66,45 @@ public class EdycjaOsobyKomponent extends EdycjaKomponent {
         this.setLayout(new GridBagLayout());
 
         int y = 0;
-        this.add(lPlec, lPlec.getConstraints(0, y++));
-        this.add(lImiona, lImiona.getConstraints(0, y++));
-        this.add(lNazwisko, lNazwisko.getConstraints(0, y++));
-        this.add(lDataUrodzenia, lDataUrodzenia.getConstraints(0, y++));
-        this.add(lMiejsceUrodzenia, lMiejsceUrodzenia.getConstraints(0, y++));
-        this.add(lDataSmierci, lDataUrodzenia.getConstraints(0, y++));
-        this.add(lMiejsceSmierci, lMiejsceSmierci.getConstraints(0, y++));
-        this.add(lDataPochowania, lDataUrodzenia.getConstraints(0, y++));
-        this.add(lMiejscePochowania, lMiejscePochowania.getConstraints(0, y++));
+        this.add(lSex, lSex.getConstraints(0, y++));
+        this.add(lNames, lNames.getConstraints(0, y++));
+        this.add(lSurname, lSurname.getConstraints(0, y++));
+        this.add(lBirthDate, lBirthDate.getConstraints(0, y++));
+        this.add(lBirthPlace, lBirthPlace.getConstraints(0, y++));
+        this.add(lDeathDate, lBirthDate.getConstraints(0, y++));
+        this.add(lDeathPlace, lDeathPlace.getConstraints(0, y++));
+        this.add(lBurialDate, lBirthDate.getConstraints(0, y++));
+        this.add(lBurialPlace, lBurialPlace.getConstraints(0, y++));
         this.add(lMiejsceZamiekszania, lMiejsceZamiekszania.getConstraints(0, y++));
-        this.add(lWyksztalcenie, lWyksztalcenie.getConstraints(0, y++));
-        this.add(lZawodyWykonywane, lZawodyWykonywane.getConstraints(0, y++));
-        this.add(lRodzice, lRodzice.getConstraints(0, y++));
-        this.add(lOpis, lOpis.getConstraints(0, y++));
+        this.add(lEducation, lEducation.getConstraints(0, y++));
+        this.add(lOccupation, lOccupation.getConstraints(0, y++));
+        this.add(lParents, lParents.getConstraints(0, y++));
+        this.add(lDescription, lDescription.getConstraints(0, y++));
         this.add(lRodzina, lRodzina.getConstraints(0, y++));
         this.add(lDokumenty, lDokumenty.getConstraints(0, y++));
 
         y = 0;
-        this.add(tPlec, tPlec.getConstraints(1, y++));
-        this.add(tImiona, tImiona.getConstraints(1, y++));
-        this.add(tNazwisko, tNazwisko.getConstraints(1, y++));
-        this.add(tDataUrodzenia, tDataUrodzenia.getConstraints(1, y++));
-        this.add(tMiejsceUrodzenia, tMiejsceUrodzenia.getConstraints(1, y++));
-        this.add(tDataSmierci, tDataSmierci.getConstraints(1, y++));
-        this.add(tMiejsceSmierci, tMiejsceSmierci.getConstraints(1, y++));
-        this.add(tDataPochowania, tDataPochowania.getConstraints(1, y++));
-        this.add(tMiejscePochowania, tMiejscePochowania.getConstraints(1, y++));
-        this.add(tMiejsceZamieszkania, tMiejsceZamieszkania.getConstraints(1, y++));
-        this.add(tWyksztalcenie, tWyksztalcenie.getConstraints(1, y++));
-        this.add(tZawodyWykonywane, tZawodyWykonywane.getConstraints(1, y++));
-        this.add(tRodzice, tRodzice.getConstraints(1, y++));
-        this.add(tOpis, tOpis.getConstraints(1, y++));
+        this.add(tSex, tSex.getConstraints(1, y++));
+        this.add(tNames, tNames.getConstraints(1, y++));
+        this.add(tSurname, tSurname.getConstraints(1, y++));
+        this.add(tBirthDate, tBirthDate.getConstraints(1, y++));
+        this.add(tBirthPlace, tBirthPlace.getConstraints(1, y++));
+        this.add(tDeathDate, tDeathDate.getConstraints(1, y++));
+        this.add(tDeathPlace, tDeathPlace.getConstraints(1, y++));
+        this.add(tBurialDate, tBurialDate.getConstraints(1, y++));
+        this.add(tBurialPlace, tBurialPlace.getConstraints(1, y++));
+        this.add(tResidence, tResidence.getConstraints(1, y++));
+        this.add(tEducation, tEducation.getConstraints(1, y++));
+        this.add(tOccupation, tOccupation.getConstraints(1, y++));
+        this.add(tParents, tParents.getConstraints(1, y++));
+        this.add(tDescription, tDescription.getConstraints(1, y++));
         this.add(tRodzina, tRodzina.getConstraints(1, y++));
         this.add(tDokumenty, tDokumenty.getConstraints(1, y++));
 
-        tPlec.removeAllItems();
-        tPlec.addItem("<Wybierz>");
-        tPlec.addItem("Mê¿czyzna");
-        tPlec.addItem("Kobieta");
+        tSex.removeAllItems();
+        tSex.addItem("<Wybierz>");
+        tSex.addItem("Mê¿czyzna");
+        tSex.addItem("Female");
     }
 
     public void wczytajDane(Long idOsoby) {
@@ -116,34 +116,34 @@ public class EdycjaOsobyKomponent extends EdycjaKomponent {
         }
         daneOsoby = DatabaseDelegate.getPersonEditData(idOsoby);
 
-        if (daneOsoby.getPlec() == null) {
-            tPlec.setSelectedIndex(0);
-        } else if (daneOsoby.getPlec().equalsIgnoreCase("mezczyzna")) {
-            tPlec.setSelectedIndex(1);
-        } else if (daneOsoby.getPlec().equalsIgnoreCase("kobieta")) {
-            tPlec.setSelectedIndex(2);
+        if (daneOsoby.getSex() == null) {
+            tSex.setSelectedIndex(0);
+        } else if (daneOsoby.getSex().equalsIgnoreCase("male")) {
+            tSex.setSelectedIndex(1);
+        } else if (daneOsoby.getSex().equalsIgnoreCase("female")) {
+            tSex.setSelectedIndex(2);
         } else {
-            tPlec.setSelectedIndex(0);
+            tSex.setSelectedIndex(0);
         }
-        tImiona.setText(daneOsoby.getImiona());
-        tNazwisko.setText(daneOsoby.getNazwisko());
-        tDataUrodzenia.setText(daneOsoby.getDataUrodzenia());
-        tMiejsceUrodzenia.setText(daneOsoby.getMiejsceUrodzenia());
-        tDataSmierci.setText(daneOsoby.getDataSmierci());
-        tMiejsceSmierci.setText(daneOsoby.getMiejsceSmierci());
-        tDataPochowania.setText(daneOsoby.getDataPochowania());
-        tMiejscePochowania.setText(daneOsoby.getMiejscePochowania());
-        tWyksztalcenie.setText(daneOsoby.getWyksztalcenie());
-        tZawodyWykonywane.setText(daneOsoby.getZawodyWykonywane());
-        tMiejsceZamieszkania.setText(daneOsoby.getMiejsceZamieszkania());
-        tOpis.setText(daneOsoby.getOpis());
-        if (daneOsoby.getRodzice() != null) {
-            tRodzice.setSelectedItem(daneOsoby.getRodzice());
+        tNames.setText(daneOsoby.getNames());
+        tSurname.setText(daneOsoby.getSurname());
+        tBirthDate.setText(daneOsoby.getBirthDate());
+        tBirthPlace.setText(daneOsoby.getBirthPlace());
+        tDeathDate.setText(daneOsoby.getDeathDate());
+        tDeathPlace.setText(daneOsoby.getDeathPlace());
+        tBurialDate.setText(daneOsoby.getBurialDate());
+        tBurialPlace.setText(daneOsoby.getBurialPlace());
+        tEducation.setText(daneOsoby.getEducation());
+        tOccupation.setText(daneOsoby.getOccupation());
+        tResidence.setText(daneOsoby.getResidence());
+        tDescription.setText(daneOsoby.getDescription());
+        if (daneOsoby.getParents() != null) {
+            tParents.setSelectedItem(daneOsoby.getParents());
         } else {
-            tRodzice.setSelectedIndex(0);
+            tParents.setSelectedIndex(0);
         }
 
-        List<RodzinaStruct> rodziny = daneOsoby.getRodziny();
+        List<RodzinaStruct> rodziny = daneOsoby.getFamilies();
         DefaultMutableTreeNode root = new DefaultMutableTreeNode();
         if (rodziny != null && rodziny.size() > 0) {
             for (RodzinaStruct rodzina : rodziny) {
@@ -168,10 +168,10 @@ public class EdycjaOsobyKomponent extends EdycjaKomponent {
     private void odswiezListy() {
         List<ReferenceListElement> zwiazki = DatabaseDelegate.getRelationships();
         List<ReferenceListElement> wszystkieDokumenty = DatabaseDelegate.getDocuments();
-        tRodzice.removeAllItems();
-        tRodzice.addItem(new String("<Brak>"));
+        tParents.removeAllItems();
+        tParents.addItem(new String("<Brak>"));
         for (ReferenceListElement zwiazek : zwiazki) {
-            tRodzice.addItem(zwiazek);
+            tParents.addItem(zwiazek);
         }
 
         tDokumenty.setAllItems(wszystkieDokumenty);
@@ -179,33 +179,33 @@ public class EdycjaOsobyKomponent extends EdycjaKomponent {
 
     public boolean zapiszDane() {
         if (trybPracy == TrybPracy.DODAWANIE)
-            daneOsoby = new DaneEdycjiOsoby();
+            daneOsoby = new PersonEditData();
 
-        if (tPlec.getSelectedIndex() == 0) {
+        if (tSex.getSelectedIndex() == 0) {
             JOptionPane.showMessageDialog(this, "Wybierz p³eæ", "B³¹d", JOptionPane.ERROR_MESSAGE);
             return false;
         }
-        if (tPlec.getSelectedIndex() == 1) {
-            daneOsoby.setPlec("mezczyzna");
+        if (tSex.getSelectedIndex() == 1) {
+            daneOsoby.setSex("male");
         } else {
-            daneOsoby.setPlec("kobieta");
+            daneOsoby.setSex("female");
         }
-        daneOsoby.setImiona(tImiona.getText().trim());
-        daneOsoby.setNazwisko(tNazwisko.getText().trim());
-        daneOsoby.setDataUrodzenia(tDataUrodzenia.getText().trim());
-        daneOsoby.setMiejsceUrodzenia(tMiejsceUrodzenia.getText().trim());
-        daneOsoby.setDataSmierci(tDataSmierci.getText().trim());
-        daneOsoby.setMiejsceSmierci(tMiejsceSmierci.getText().trim());
-        daneOsoby.setDataPochowania(tDataPochowania.getText().trim());
-        daneOsoby.setMiejscePochowania(tMiejscePochowania.getText().trim());
-        daneOsoby.setWyksztalcenie(tWyksztalcenie.getText().trim());
-        daneOsoby.setZawodyWykonywane(tZawodyWykonywane.getText().trim());
-        daneOsoby.setMiejsceZamieszkania(tMiejsceZamieszkania.getText().trim());
-        daneOsoby.setOpis(tOpis.getText().trim());
-        if (tRodzice.getSelectedIndex() == 0) {
-            daneOsoby.setRodzice(null);
+        daneOsoby.setNames(tNames.getText().trim());
+        daneOsoby.setSurname(tSurname.getText().trim());
+        daneOsoby.setBirthDate(tBirthDate.getText().trim());
+        daneOsoby.setBirthPlace(tBirthPlace.getText().trim());
+        daneOsoby.setDeathDate(tDeathDate.getText().trim());
+        daneOsoby.setDeathPlace(tDeathPlace.getText().trim());
+        daneOsoby.setBurialDate(tBurialDate.getText().trim());
+        daneOsoby.setBurialPlace(tBurialPlace.getText().trim());
+        daneOsoby.setEducation(tEducation.getText().trim());
+        daneOsoby.setOccupation(tOccupation.getText().trim());
+        daneOsoby.setResidence(tResidence.getText().trim());
+        daneOsoby.setDescription(tDescription.getText().trim());
+        if (tParents.getSelectedIndex() == 0) {
+            daneOsoby.setParents(null);
         } else {
-            daneOsoby.setRodzice((ReferenceListElement) tRodzice.getSelectedItem());
+            daneOsoby.setParents((ReferenceListElement) tParents.getSelectedItem());
         }
         daneOsoby.setDokumenty(new HashSet<ReferenceListElement>(tDokumenty.getSelectedItems()));
 
@@ -219,19 +219,19 @@ public class EdycjaOsobyKomponent extends EdycjaKomponent {
     }
 
     private void wyczyscPola() {
-        tImiona.setText("");
-        tNazwisko.setText("");
-        tDataUrodzenia.setText("");
-        tMiejsceUrodzenia.setText("");
-        tDataSmierci.setText("");
-        tMiejsceSmierci.setText("");
-        tDataPochowania.setText("");
-        tMiejscePochowania.setText("");
-        tMiejsceZamieszkania.setText("");
-        tWyksztalcenie.setText("");
-        tZawodyWykonywane.setText("");
-        tOpis.setText("");
-        tRodzice.setSelectedIndex(0);
+        tNames.setText("");
+        tSurname.setText("");
+        tBirthDate.setText("");
+        tBirthPlace.setText("");
+        tDeathDate.setText("");
+        tDeathPlace.setText("");
+        tBurialDate.setText("");
+        tBurialPlace.setText("");
+        tResidence.setText("");
+        tEducation.setText("");
+        tOccupation.setText("");
+        tDescription.setText("");
+        tParents.setSelectedIndex(0);
         tRodzina.setModel(new DefaultTreeModel(new DefaultMutableTreeNode()));
     }
 
@@ -254,11 +254,11 @@ public class EdycjaOsobyKomponent extends EdycjaKomponent {
 
     @Override
     public DiagramInfoStruct getDiagramInfo(Long id) {
-        DaneEdycjiOsoby daneOsoby = DatabaseDelegate.getPersonEditData(id);
+        PersonEditData daneOsoby = DatabaseDelegate.getPersonEditData(id);
         DiagramInfoStruct diagramInfo = new DiagramInfoStruct();
         diagramInfo.idKorzenia = daneOsoby.getId();
-        diagramInfo.nazwa = daneOsoby.getImiona() + " " + daneOsoby.getNazwisko() + " (" + daneOsoby.getId() + ")";
-        diagramInfo.opis = "Diagram osoby '" + daneOsoby.getImiona() + " " + daneOsoby.getNazwisko() + "'";
+        diagramInfo.nazwa = daneOsoby.getNames() + " " + daneOsoby.getSurname() + " (" + daneOsoby.getId() + ")";
+        diagramInfo.description = "Diagram osoby '" + daneOsoby.getNames() + " " + daneOsoby.getSurname() + "'";
         return diagramInfo;
     }
 }

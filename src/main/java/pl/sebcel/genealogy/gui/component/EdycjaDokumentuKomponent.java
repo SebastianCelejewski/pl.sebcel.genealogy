@@ -23,12 +23,12 @@ public class EdycjaDokumentuKomponent extends EdycjaKomponent {
 
     private Etykieta lTytul = new Etykieta("Tytu³:");
     private Etykieta lSymbol = new Etykieta("Symbol:");
-    private Etykieta lOpis = new Etykieta("Opis:");
+    private Etykieta lDescription = new Etykieta("Description:");
     private Etykieta lOsoby = new Etykieta("Osoby: ");
 
     private PoleTekstowe tTytul = new PoleTekstowe();
     private PoleTekstowe tSymbol = new PoleTekstowe();
-    private ObszarTekstowy tOpis = new ObszarTekstowy();
+    private ObszarTekstowy tDescription = new ObszarTekstowy();
     private MultiValueReferenceField tOsoby = new MultiValueReferenceField();
 
     public EdycjaDokumentuKomponent() {
@@ -36,13 +36,13 @@ public class EdycjaDokumentuKomponent extends EdycjaKomponent {
         int y = 0;
         this.add(lTytul, lTytul.getConstraints(0, y++));
         this.add(lSymbol, lSymbol.getConstraints(0, y++));
-        this.add(lOpis, lOpis.getConstraints(0, y++));
+        this.add(lDescription, lDescription.getConstraints(0, y++));
         this.add(lOsoby, lOsoby.getConstraints(0, y++));
 
         y = 0;
         this.add(tTytul, tTytul.getConstraints(1, y++));
         this.add(tSymbol, tSymbol.getConstraints(1, y++));
-        this.add(tOpis, tOpis.getConstraints(1, y++));
+        this.add(tDescription, tDescription.getConstraints(1, y++));
         this.add(tOsoby, tOsoby.getConstraints(1, y++));
     }
 
@@ -57,7 +57,7 @@ public class EdycjaDokumentuKomponent extends EdycjaKomponent {
 
         tTytul.setText(daneDokumentu.getTitle());
         tSymbol.setText(daneDokumentu.getSymbol());
-        tOpis.setText(daneDokumentu.getDescription());
+        tDescription.setText(daneDokumentu.getDescription());
         tOsoby.setSelectedItems(new ArrayList<ReferenceListElement>(daneDokumentu.getRelatedPeople()));
     }
 
@@ -73,7 +73,7 @@ public class EdycjaDokumentuKomponent extends EdycjaKomponent {
 
         daneDokumentu.setTitle(tTytul.getText().trim());
         daneDokumentu.setSymbol(tSymbol.getText().trim());
-        daneDokumentu.setDescription(tOpis.getText().trim());
+        daneDokumentu.setDescription(tDescription.getText().trim());
         daneDokumentu.setRelatedPeople(new HashSet<ReferenceListElement>(tOsoby.getSelectedItems()));
 
         if (trybPracy == TrybPracy.EDYCJA) {
@@ -88,7 +88,7 @@ public class EdycjaDokumentuKomponent extends EdycjaKomponent {
     private void wyczyscPola() {
         tTytul.setText("");
         tSymbol.setText("");
-        tOpis.setText("");
+        tDescription.setText("");
         tOsoby.setSelectedItems(new ArrayList<ReferenceListElement>());
     }
 

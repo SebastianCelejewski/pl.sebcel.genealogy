@@ -10,12 +10,12 @@ import javax.persistence.Table;
 
 @Entity
 @Table (name="klany")
-public class Klan {
+public class Clan {
 
 	private Long id;
-	private String nazwa;
-	private String opis;
-	private Osoba korzen;
+	private String name;
+	private String description;
+	private Person root;
 	
 	@Id
 	@Column (name="id")
@@ -28,28 +28,27 @@ public class Klan {
 	}
 
 	@Column (name="nazwa", nullable=true, length=64)
-	public String getNazwa() {
-		return nazwa;
+	public String getName() {
+		return name;
 	}
-	public void setNazwa(String nazwa) {
-		this.nazwa = nazwa;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	@Column (name="opis", nullable=true, length=512)
-	public String getOpis() {
-		return opis;
+	public String getDescription() {
+		return description;
 	}
-	public void setOpis(String opis) {
-		this.opis = opis;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 	
 	@ManyToOne 
 	@JoinColumn (name="korzen_id")
-	public Osoba getKorzen() {
-		return korzen;
+	public Person getRoot() {
+		return root;
 	}
-	public void setKorzen(Osoba korzen) {
-		this.korzen = korzen;
+	public void setRoot(Person root) {
+		this.root = root;
 	}
-	
 }

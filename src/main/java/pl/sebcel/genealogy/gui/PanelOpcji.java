@@ -112,7 +112,7 @@ public class PanelOpcji extends JFrame implements ActionListener {
         opcjeRysowania.setPokazDaneUrodzenia(checkBoxShowBirthData.isSelected());
         opcjeRysowania.setPokazDaneSmierci(checkBoxShowDeathData.isSelected());
         opcjeRysowania.setPokazDaneZamieszkania(checkBoxShowLocation.isSelected());
-        opcjeRysowania.setPokazWyksztalcenie(checkBoxShowOccupation.isSelected());
+        opcjeRysowania.setPokazEducation(checkBoxShowOccupation.isSelected());
         opcjeRysowania.setPokazDanePoznaniaSie(checkBoxShowMeetingInfo.isSelected());
         opcjeRysowania.setPokazDaneSlubu(checkBoxShowMarriageInfo.isSelected());
         opcjeRysowania.setPokazDaneRozstaniaSie(checkBoxShowSeparationInfo.isSelected());

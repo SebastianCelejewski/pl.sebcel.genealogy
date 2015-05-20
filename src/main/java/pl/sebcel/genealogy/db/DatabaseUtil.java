@@ -1,19 +1,19 @@
 package pl.sebcel.genealogy.db;
 
-import pl.sebcel.genealogy.entity.Osoba;
-import pl.sebcel.genealogy.entity.Zwiazek;
+import pl.sebcel.genealogy.entity.Person;
+import pl.sebcel.genealogy.entity.Relationship;
 
 public class DatabaseUtil {
 
-    public static String getBirthInfo(Osoba osoba) {
+    public static String getBirthInfo(Person osoba) {
         String info = "";
-        if (osoba.getDataUrodzenia() != null && osoba.getDataUrodzenia().length() > 0) {
-            info += osoba.getDataUrodzenia();
+        if (osoba.getBirthDate() != null && osoba.getBirthDate().length() > 0) {
+            info += osoba.getBirthDate();
         }
-        if (osoba.getMiejsceUrodzenia() != null && osoba.getMiejsceUrodzenia().length() > 0) {
+        if (osoba.getBirthPlace() != null && osoba.getBirthPlace().length() > 0) {
             if (info.length() > 0)
                 info += ", ";
-            info += osoba.getMiejsceUrodzenia();
+            info += osoba.getBirthPlace();
         }
         if (info.length() > 0)
             return "ur. " + info;
@@ -21,15 +21,15 @@ public class DatabaseUtil {
             return "";
     }
 
-    public static String getDeathInfo(Osoba osoba) {
+    public static String getDeathInfo(Person osoba) {
         String info = "";
-        if (osoba.getDataSmierci() != null && osoba.getDataSmierci().length() > 0) {
-            info += osoba.getDataSmierci();
+        if (osoba.getDeathDate() != null && osoba.getDeathDate().length() > 0) {
+            info += osoba.getDeathDate();
         }
-        if (osoba.getMiejsceSmierci() != null && osoba.getMiejsceSmierci().length() > 0) {
+        if (osoba.getDeathPlace() != null && osoba.getDeathPlace().length() > 0) {
             if (info.length() > 0)
                 info += ", ";
-            info += osoba.getMiejsceSmierci();
+            info += osoba.getDeathPlace();
         }
         if (info.length() > 0)
             return "zm. " + info;
@@ -37,15 +37,15 @@ public class DatabaseUtil {
             return "";
     }
 
-    public static String getMeetInfo(Zwiazek zwiazek) {
+    public static String getMeetInfo(Relationship zwiazek) {
         String info = "";
-        if (zwiazek.getDataPoznania() != null && zwiazek.getDataPoznania().length() > 0) {
-            info += zwiazek.getDataPoznania();
+        if (zwiazek.getFirstMetDate() != null && zwiazek.getFirstMetDate().length() > 0) {
+            info += zwiazek.getFirstMetDate();
         }
-        if (zwiazek.getMiejscePoznania() != null && zwiazek.getMiejscePoznania().length() > 0) {
+        if (zwiazek.getFirstMetPlace() != null && zwiazek.getFirstMetPlace().length() > 0) {
             if (info.length() > 0)
                 info += ", ";
-            info += zwiazek.getMiejscePoznania();
+            info += zwiazek.getFirstMetPlace();
         }
         if (info.length() > 0)
             return "spotkanie: " + info + "";
@@ -53,15 +53,15 @@ public class DatabaseUtil {
             return "";
     }
 
-    public static String getMarriageInfo(Zwiazek zwiazek) {
+    public static String getMarriageInfo(Relationship zwiazek) {
         String info = "";
-        if (zwiazek.getDataSlubu() != null && zwiazek.getDataSlubu().length() > 0) {
-            info += zwiazek.getDataSlubu();
+        if (zwiazek.getMarriageDate() != null && zwiazek.getMarriageDate().length() > 0) {
+            info += zwiazek.getMarriageDate();
         }
-        if (zwiazek.getMiejsceSlubu() != null && zwiazek.getMiejsceSlubu().length() > 0) {
+        if (zwiazek.getMarriagePlace() != null && zwiazek.getMarriagePlace().length() > 0) {
             if (info.length() > 0)
                 info += ", ";
-            info += zwiazek.getMiejsceSlubu();
+            info += zwiazek.getMarriagePlace();
         }
         if (info.length() > 0)
             return "œlub: " + info;
@@ -69,15 +69,15 @@ public class DatabaseUtil {
             return "";
     }
 
-    public static String getSeparationInfo(Zwiazek zwiazek) {
+    public static String getSeparationInfo(Relationship zwiazek) {
         String info = "";
-        if (zwiazek.getDataRozstania() != null && zwiazek.getDataRozstania().length() > 0) {
-            info += zwiazek.getDataRozstania();
+        if (zwiazek.getSeparationDate() != null && zwiazek.getSeparationDate().length() > 0) {
+            info += zwiazek.getSeparationDate();
         }
-        if (zwiazek.getMiejsceRozstania() != null && zwiazek.getMiejsceRozstania().length() > 0) {
+        if (zwiazek.getSeparationPlace() != null && zwiazek.getSeparationPlace().length() > 0) {
             if (info.length() > 0)
                 info += ", ";
-            info += zwiazek.getMiejsceRozstania();
+            info += zwiazek.getSeparationPlace();
         }
         if (info.length() > 0)
             return "rozstanie: " + info;
@@ -85,15 +85,15 @@ public class DatabaseUtil {
             return "";
     }
 
-    public static String getDivorceInfo(Zwiazek zwiazek) {
+    public static String getDivorceInfo(Relationship zwiazek) {
         String info = "";
-        if (zwiazek.getDataRozwodu() != null && zwiazek.getDataRozwodu().length() > 0) {
-            info += zwiazek.getDataRozwodu();
+        if (zwiazek.getDivorceDate() != null && zwiazek.getDivorceDate().length() > 0) {
+            info += zwiazek.getDivorceDate();
         }
-        if (zwiazek.getMiejsceRozwodu() != null && zwiazek.getMiejsceRozwodu().length() > 0) {
+        if (zwiazek.getDivorcePlace() != null && zwiazek.getDivorcePlace().length() > 0) {
             if (info.length() > 0)
                 info += ", ";
-            info += zwiazek.getMiejsceRozwodu();
+            info += zwiazek.getDivorcePlace();
         }
         if (info.length() > 0)
             return "rozwód: " + info;
@@ -101,23 +101,23 @@ public class DatabaseUtil {
             return "";
     }
 
-    public static String getOccupationInfo(Osoba osoba) {
+    public static String getOccupationInfo(Person osoba) {
         String info = "";
-        if (osoba.getWyksztalcenie() != null && osoba.getWyksztalcenie().length() > 0) {
-            info += osoba.getWyksztalcenie();
+        if (osoba.getEducation() != null && osoba.getEducation().length() > 0) {
+            info += osoba.getEducation();
         }
-        if (osoba.getZawodyWykonywane() != null && osoba.getZawodyWykonywane().length() > 0) {
+        if (osoba.getOccupation() != null && osoba.getOccupation().length() > 0) {
             if (info.length() > 0)
                 info += " / ";
-            info += osoba.getZawodyWykonywane();
+            info += osoba.getOccupation();
         }
         return info.trim();
     }
 
-    public static String getResidenceInfo(Osoba osoba) {
+    public static String getResidenceInfo(Person osoba) {
         String info = "";
-        if (osoba.getMiejsceZamieszkania() != null && osoba.getMiejsceZamieszkania().length() > 0) {
-            info += osoba.getMiejsceZamieszkania();
+        if (osoba.getResidence() != null && osoba.getResidence().length() > 0) {
+            info += osoba.getResidence();
         }
         if (info.length() > 0)
             return "zam. " + info;

@@ -32,11 +32,10 @@
         <property name="hbm2ddl.auto">none</property>
         
         <mapping package="pl.sebcel.genealogy.entity"/>
-        <mapping class="pl.sebcel.genealogy.entity.Klan"/>
-        <mapping class="pl.sebcel.genealogy.entity.Osoba"/>
-        <mapping class="pl.sebcel.genealogy.entity.Zwiazek"/>
-        <mapping class="pl.sebcel.genealogy.entity.Dokument"/>
-        <mapping class="pl.sebcel.genealogy.entity.Notatka"/>
+        <mapping class="pl.sebcel.genealogy.entity.Clan"/>
+        <mapping class="pl.sebcel.genealogy.entity.Person"/>
+        <mapping class="pl.sebcel.genealogy.entity.Relationship"/>
+        <mapping class="pl.sebcel.genealogy.entity.Document"/>
 
     </session-factory>
 

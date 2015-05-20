@@ -71,7 +71,7 @@ public class GuiRysownik extends JFrame implements ActionListener, IDrawOptionsL
     public void rysuj(final DiagramInfoStruct diagramInfo) {
         this.setSize(800, 600);
         this.setLocation(100, 100);
-        this.setTitle(diagramInfo.opis);
+        this.setTitle(diagramInfo.description);
         this.setVisible(true);
         this.diagramInfo = diagramInfo;
 
@@ -196,7 +196,7 @@ public class GuiRysownik extends JFrame implements ActionListener, IDrawOptionsL
             g.drawString(zamInfo, x, y + wysokosc);
         }
         String zawInfo = osoba.daneZawodu;
-        if (zawInfo.length() > 0 && opcjeRysowania.isPokazWyksztalcenie()) {
+        if (zawInfo.length() > 0 && opcjeRysowania.isPokazEducation()) {
             wysokosc += fontSize;
             g.drawString(zawInfo, x, y + wysokosc);
         }
@@ -205,7 +205,7 @@ public class GuiRysownik extends JFrame implements ActionListener, IDrawOptionsL
         }
 
         int szer = (int) g.getFont().getStringBounds(nazwa, new FontRenderContext(new AffineTransform(), false, false)).getWidth();
-        Dimension wymiaryRodzin = rysujRodziny(osoba, g, x, y + wysokosc, szer, wysokosc, szerokoscPokolenia, opcjeRysowania);
+        Dimension wymiaryRodzin = rysujFamilies(osoba, g, x, y + wysokosc, szer, wysokosc, szerokoscPokolenia, opcjeRysowania);
         wysokosc += wymiaryRodzin.height;
         if (wymiaryRodzin.width > szerokosc) {
             szerokosc = wymiaryRodzin.width;
@@ -214,7 +214,7 @@ public class GuiRysownik extends JFrame implements ActionListener, IDrawOptionsL
         return new Dimension(szerokosc, wysokosc);
     }
 
-    private Dimension rysujRodziny(DrzewoOsobaStruct osoba, Graphics g, int x, int y, int szerMalzonka, int wysMalzonka, int szerokoscPokolenia, OpcjeRysowania opcjeRysowania) {
+    private Dimension rysujFamilies(DrzewoOsobaStruct osoba, Graphics g, int x, int y, int szerMalzonka, int wysMalzonka, int szerokoscPokolenia, OpcjeRysowania opcjeRysowania) {
         int fontSize = g.getFont().getSize();
         int wysokosc = 0;
         int szerokosc = szerokoscPokolenia * fontSize;
@@ -239,13 +239,13 @@ public class GuiRysownik extends JFrame implements ActionListener, IDrawOptionsL
 
                 x1 = x0;
                 y1 = y0 + fontSize;
-                Dimension wymiaryRodziny = rysujRodzine(zwiazek, malzonek, g, x, y + wysokosc, licznik == 0, szerMalzonka, wysMalzonka, szerokoscPokolenia, opcjeRysowania);
-                int wysokoscRodziny = wymiaryRodziny.height;
-                wysokoscRodzin += wysokoscRodziny;
-                if (wymiaryRodziny.width > szerokosc) {
-                    szerokosc = wymiaryRodziny.width;
+                Dimension wymiaryFamilies = rysujRodzine(zwiazek, malzonek, g, x, y + wysokosc, licznik == 0, szerMalzonka, wysMalzonka, szerokoscPokolenia, opcjeRysowania);
+                int wysokoscFamilies = wymiaryFamilies.height;
+                wysokoscRodzin += wysokoscFamilies;
+                if (wymiaryFamilies.width > szerokosc) {
+                    szerokosc = wymiaryFamilies.width;
                 }
-                wysokosc += wysokoscRodziny + fontSize;
+                wysokosc += wysokoscFamilies + fontSize;
                 licznik++;
             }
         }
@@ -295,9 +295,9 @@ public class GuiRysownik extends JFrame implements ActionListener, IDrawOptionsL
         if (obnizenie) {
             wysokoscDzieci -= wysMalzonka;
         }
-        int wysokoscRodziny = Math.max(wymiaryMalzonka.height, wysokoscDzieci);
+        int wysokoscFamilies = Math.max(wymiaryMalzonka.height, wysokoscDzieci);
 
-        return new Dimension(szerokosc + szerokoscDzieci, wysokoscRodziny);
+        return new Dimension(szerokosc + szerokoscDzieci, wysokoscFamilies);
     }
 
     private Dimension rysujMalzonka(DrzewoRodzinaStruct zwiazek, DrzewoOsobaStruct malzonek, Graphics g, int x, int y, int szerokoscPokolenia, OpcjeRysowania opcjeRysowania) {
@@ -334,7 +334,7 @@ public class GuiRysownik extends JFrame implements ActionListener, IDrawOptionsL
             g.drawString(zamInfo, x, y + wysokosc);
         }
         String zawInfo = malzonek.daneZawodu;
-        if (zawInfo.length() > 0 && opcjeRysowania.isPokazWyksztalcenie()) {
+        if (zawInfo.length() > 0 && opcjeRysowania.isPokazEducation()) {
             wysokosc += fontSize;
             g.drawString(zawInfo, x, y + wysokosc);
         }

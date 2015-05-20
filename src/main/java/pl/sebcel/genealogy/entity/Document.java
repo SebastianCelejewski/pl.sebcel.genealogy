@@ -11,13 +11,13 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "dokumenty")
-public class Dokument {
+public class Document {
 
     private Long id;
-    private String tytul;
+    private String title;
     private String symbol;
-    private String opis;
-    private Set<Osoba> osoby;
+    private String description;
+    private Set<Person> relatedPeople;
 
     @Id
     @Column(name = "id")
@@ -31,12 +31,12 @@ public class Dokument {
     }
 
     @Column(name = "tytul", nullable = false, length = 255)
-    public String getTytul() {
-        return tytul;
+    public String getTitle() {
+        return title;
     }
 
-    public void setTytul(String tytul) {
-        this.tytul = tytul;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     @Column(name = "symbol", nullable = true, length = 255)
@@ -49,20 +49,20 @@ public class Dokument {
     }
 
     @Column(name = "opis", nullable = true)
-    public String getOpis() {
-        return opis;
+    public String getDescription() {
+        return description;
     }
 
-    public void setOpis(String opis) {
-        this.opis = opis;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    @ManyToMany(mappedBy = "dokumenty")
-    public Set<Osoba> getOsoby() {
-        return osoby;
+    @ManyToMany(mappedBy = "relatedDocuments")
+    public Set<Person> getRelatedPeople() {
+        return relatedPeople;
     }
 
-    public void setOsoby(Set<Osoba> osoby) {
-        this.osoby = osoby;
+    public void setRelatedPeople(Set<Person> relatedPeople) {
+        this.relatedPeople = relatedPeople;
     }
 }
