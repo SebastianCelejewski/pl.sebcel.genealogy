@@ -22,15 +22,15 @@ import pl.sebcel.genealogy.gui.component.list.RelationshipListComponent;
 
 public class MainFrame extends JFrame {
 
-    private EditConainer edycjaOsob = new EditConainer(new PersonEditComponent());
-    private EditConainer edycjaZwiazkow = new EditConainer(new RelationshipEditComponent());
-    private EditConainer edycjaKlanow = new EditConainer(new ClanEditComponent());
-    private EditConainer edycjaDokumentow = new EditConainer(new DocumentEditComponent());
+    private EditConainer personEditContainer = new EditConainer(new PersonEditComponent());
+    private EditConainer relationshipEditContainer = new EditConainer(new RelationshipEditComponent());
+    private EditConainer clanEditContainer = new EditConainer(new ClanEditComponent());
+    private EditConainer documentEditContainer = new EditConainer(new DocumentEditComponent());
 
-    private ListContainer listaOsob = new ListContainer(new PeopleListComponent(), edycjaOsob);
-    private ListContainer listaZwiazkow = new ListContainer(new RelationshipListComponent(), edycjaZwiazkow);
-    private ListContainer listaKlanow = new ListContainer(new ClanListComponent(), edycjaKlanow);
-    private ListContainer listaDokumentow = new ListContainer(new DocumentListComponent(), edycjaDokumentow);
+    private ListContainer peopleList = new ListContainer(new PeopleListComponent(), personEditContainer);
+    private ListContainer relationshipsList = new ListContainer(new RelationshipListComponent(), relationshipEditContainer);
+    private ListContainer clansList = new ListContainer(new ClanListComponent(), clanEditContainer);
+    private ListContainer documentsList = new ListContainer(new DocumentListComponent(), documentEditContainer);
     private JTabbedPane tabbedPane = new JTabbedPane();
 
     public final static long serialVersionUID = 0l;
@@ -40,10 +40,10 @@ public class MainFrame extends JFrame {
         this.add(tabbedPane, BorderLayout.CENTER);
         this.setTitle("Genealogia 1.2.6");
 
-        tabbedPane.addTab("Lista osób", listaOsob);
-        tabbedPane.addTab("Lista zwi¹zków", listaZwiazkow);
-        tabbedPane.addTab("Lista klanów", listaKlanow);
-        tabbedPane.addTab("Lista dokumentów", listaDokumentow);
+        tabbedPane.addTab("Lista osób", peopleList);
+        tabbedPane.addTab("Lista zwi¹zków", relationshipsList);
+        tabbedPane.addTab("Lista klanów", clansList);
+        tabbedPane.addTab("Lista dokumentów", documentsList);
 
         Dimension screenDimension = Toolkit.getDefaultToolkit().getScreenSize();
         int width = screenDimension.width / 2;
@@ -58,6 +58,5 @@ public class MainFrame extends JFrame {
             }
 
         });
-
     }
 }

@@ -13,7 +13,7 @@ import javax.swing.JPanel;
 import pl.sebcel.genealogy.dto.DiagramInfoStruct;
 import pl.sebcel.genealogy.export.DataExporter;
 import pl.sebcel.genealogy.gui.component.EditConainer;
-import pl.sebcel.genealogy.gui.component.AbstractEditComponent.TrybPracy;
+import pl.sebcel.genealogy.gui.component.AbstractEditComponent.EditMode;
 import pl.sebcel.genealogy.gui.component.list.model.CustomFileFilter;
 import pl.sebcel.genealogy.gui.control.UpdateListener;
 import pl.sebcel.genealogy.gui.pedigree.PedigreeChartFrame;
@@ -22,76 +22,76 @@ public class ListContainer extends JPanel implements UpdateListener, ActionListe
 	
 	public final static long serialVersionUID = 0l;
 	
-	private AbstractListComponent listaKomponent;
-	private EditConainer edycjaKontener;
-	private JPanel panelKlawiszy = new JPanel();
+	private AbstractListComponent listComponent;
+	private EditConainer editContainer;
+	private JPanel buttonsPanel = new JPanel();
 	
-	private JButton klawiszNowy = new JButton("Nowy");
-	private JButton klawiszEdycja = new JButton("Edycja");
-	private JButton klawiszUsun = new JButton("Usuñ");
-	private JButton klawiszDrzewo = new JButton("Drzewo");
-	private JButton klawiszZapisz = new JButton("Zapisz");
+	private JButton buttonCreateNew = new JButton("Nowy");
+	private JButton buttonEdit = new JButton("Edycja");
+	private JButton buttonDelete = new JButton("Usuñ");
+	private JButton buttonTree = new JButton("Drzewo");
+	private JButton buttonExport = new JButton("Eksportuj");
 	
-	public ListContainer(AbstractListComponent listaKomponent, EditConainer edycjaKontener) {
-		this.listaKomponent = listaKomponent;
-		this.edycjaKontener = edycjaKontener;
+	public ListContainer(AbstractListComponent listComponent, EditConainer editComponent) {
+		this.listComponent = listComponent;
+		this.editContainer = editComponent;
 		
 		this.setLayout(new BorderLayout());
-		this.add(listaKomponent, BorderLayout.CENTER);
-		this.add(panelKlawiszy, BorderLayout.SOUTH);
+		this.add(listComponent, BorderLayout.CENTER);
+		this.add(buttonsPanel, BorderLayout.SOUTH);
 		
-		panelKlawiszy.add(klawiszNowy);
-		panelKlawiszy.add(klawiszEdycja);
-		panelKlawiszy.add(klawiszUsun);
-		panelKlawiszy.add(klawiszDrzewo);
-		panelKlawiszy.add(klawiszZapisz);
+		buttonsPanel.add(buttonCreateNew);
+		buttonsPanel.add(buttonEdit);
+		buttonsPanel.add(buttonDelete);
+		buttonsPanel.add(buttonTree);
+		buttonsPanel.add(buttonExport);
 		
-		klawiszNowy.addActionListener(this);
-		klawiszEdycja.addActionListener(this);
-		klawiszUsun.addActionListener(this);
-		klawiszDrzewo.addActionListener(this);
-		klawiszZapisz.addActionListener(this);
+		buttonCreateNew.addActionListener(this);
+		buttonEdit.addActionListener(this);
+		buttonDelete.addActionListener(this);
+		buttonTree.addActionListener(this);
+		buttonExport.addActionListener(this);
 		
-		edycjaKontener.setUpdateListener(this);
+		editComponent.setUpdateListener(this);
 	}
 	
 	public void update() {
-		listaKomponent.refresh();
+		listComponent.refresh();
 		this.repaint();
 	}
 	
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource().equals(klawiszNowy)) nowy();
-		if (e.getSource().equals(klawiszEdycja)) edytuj(listaKomponent.getSelectedId());
-		if (e.getSource().equals(klawiszUsun)) usun(listaKomponent.getSelectedId());
-		if (e.getSource().equals(klawiszDrzewo)) rysuj(listaKomponent.getSelectedId());
-		if (e.getSource().equals(klawiszZapisz)) zapisz(listaKomponent);
+		if (e.getSource().equals(buttonCreateNew)) createNew();
+		if (e.getSource().equals(buttonEdit)) edit(listComponent.getSelectedId());
+		if (e.getSource().equals(buttonDelete)) delete(listComponent.getSelectedId());
+		if (e.getSource().equals(buttonTree)) draw(listComponent.getSelectedId());
+		if (e.getSource().equals(buttonExport)) export(listComponent);
 	}
 	
-	private void nowy() {
-		edycjaKontener.setTrybPracy(TrybPracy.DODAWANIE);
-		edycjaKontener.wczytajDane(null);
-		edycjaKontener.setModal(true);
-		edycjaKontener.setVisible(true);
+	private void createNew() {
+		editContainer.setEditMode(EditMode.CREATE_NEW);
+		editContainer.loadData(null);
+		editContainer.setModal(true);
+		editContainer.setVisible(true);
 	}
 	
-	private void edytuj(Long id) {
-		edycjaKontener.setTrybPracy(TrybPracy.EDYCJA);
-		edycjaKontener.wczytajDane(id);
-		edycjaKontener.setModal(true);
-		edycjaKontener.setVisible(true);
+	private void edit(Long id) {
+		editContainer.setEditMode(EditMode.EDIT_EXISTING);
+		editContainer.loadData(id);
+		editContainer.setModal(true);
+		editContainer.setVisible(true);
 	}
 	
-	private void usun(Long id) {
-		edycjaKontener.usunObiekt(id);
+	private void delete(Long id) {
+		editContainer.deleteObject(id);
 	}
 	
-	private void rysuj(Long id) {
-		DiagramInfoStruct diagramInfo = edycjaKontener.getDiagramInfo(id);
-		new PedigreeChartFrame().rysuj(diagramInfo);
+	private void draw(Long id) {
+		DiagramInfoStruct diagramInfo = editContainer.getDiagramInfo(id);
+		new PedigreeChartFrame().draw(diagramInfo);
 	}
 	
-	private void zapisz(AbstractListComponent listaKomponent) {
+	private void export(AbstractListComponent listComponent) {
 		JFileChooser fileChooser = new JFileChooser();
 		CustomFileFilter fileFilter = new CustomFileFilter("Export file formats", "txt", "xml");
 		fileChooser.setFileFilter(fileFilter);
@@ -100,7 +100,7 @@ public class ListContainer extends JPanel implements UpdateListener, ActionListe
 		if (returnVal==JFileChooser.APPROVE_OPTION) {
 			try {
 				File file = fileChooser.getSelectedFile();
-				DataExporter dataExporter = listaKomponent.getExporter(CustomFileFilter.getExtension(fileChooser.getSelectedFile()));
+				DataExporter dataExporter = listComponent.getExporter(CustomFileFilter.getExtension(fileChooser.getSelectedFile()));
 				dataExporter.exportData(file);
 			} catch (Exception ex) {
 				ex.printStackTrace();

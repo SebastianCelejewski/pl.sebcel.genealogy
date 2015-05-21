@@ -10,24 +10,24 @@ public abstract class AbstractEditComponent extends JPanel {
 	
 	public final static long serialVersionUID = 0l;
 	
-	public enum TrybPracy {DODAWANIE, EDYCJA};
+	public enum EditMode {CREATE_NEW, EDIT_EXISTING};
 	
-	protected TrybPracy trybPracy = TrybPracy.EDYCJA;
+	protected EditMode editMode = EditMode.EDIT_EXISTING;
 	
 	public AbstractEditComponent() {
 		this.setLayout(new GridBagLayout());
 	}
 	
-	public void setTrybPracy(TrybPracy trybPracy) {
-		this.trybPracy = trybPracy;
+	public void setEditMode(EditMode editMode) {
+		this.editMode = editMode;
 	}
-	public TrybPracy getTrybPracy() {
-		return this.trybPracy; 
+	public EditMode getEditMode() {
+		return this.editMode; 
 	}
 
-	public abstract void wczytajDane(Long id);
-	public abstract boolean zapiszDane();
-	public abstract void usunObiekt(Long id);
+	public abstract void loadData(Long id);
+	public abstract boolean saveData();
+	public abstract void deleteElement(Long id);
 	public abstract String getTitle();
 	public abstract DiagramInfoStruct getDiagramInfo(Long id);
 }

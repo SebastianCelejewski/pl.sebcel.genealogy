@@ -19,81 +19,81 @@ public class DocumentEditComponent extends AbstractEditComponent {
 
     public final static long serialVersionUID = 0l;
 
-    private DocumentEditData daneDokumentu;
+    private DocumentEditData documentData;
 
-    private Label lTytul = new Label("Tytu³:");
+    private Label lTitle = new Label("Tytu³:");
     private Label lSymbol = new Label("Symbol:");
     private Label lDescription = new Label("Description:");
-    private Label lOsoby = new Label("Osoby: ");
+    private Label lRelatedPeople = new Label("Osoby: ");
 
-    private TextField tTytul = new TextField();
+    private TextField tTitle = new TextField();
     private TextField tSymbol = new TextField();
     private TextArea tDescription = new TextArea();
-    private MultiValueReference tOsoby = new MultiValueReference();
+    private MultiValueReference tRelatedPeople = new MultiValueReference();
 
     public DocumentEditComponent() {
 
         int y = 0;
-        this.add(lTytul, lTytul.getConstraints(0, y++));
+        this.add(lTitle, lTitle.getConstraints(0, y++));
         this.add(lSymbol, lSymbol.getConstraints(0, y++));
         this.add(lDescription, lDescription.getConstraints(0, y++));
-        this.add(lOsoby, lOsoby.getConstraints(0, y++));
+        this.add(lRelatedPeople, lRelatedPeople.getConstraints(0, y++));
 
         y = 0;
-        this.add(tTytul, tTytul.getConstraints(1, y++));
+        this.add(tTitle, tTitle.getConstraints(1, y++));
         this.add(tSymbol, tSymbol.getConstraints(1, y++));
         this.add(tDescription, tDescription.getConstraints(1, y++));
-        this.add(tOsoby, tOsoby.getConstraints(1, y++));
+        this.add(tRelatedPeople, tRelatedPeople.getConstraints(1, y++));
     }
 
-    public void wczytajDane(Long id) {
-        odswiezListy();
+    public void loadData(Long id) {
+        refreshLists();
 
         if (id == null) {
-            wyczyscPola();
+            clearAllFields();
             return;
         }
-        daneDokumentu = DatabaseDelegate.getDocumentEditData(id);
+        documentData = DatabaseDelegate.getDocumentEditData(id);
 
-        tTytul.setText(daneDokumentu.getTitle());
-        tSymbol.setText(daneDokumentu.getSymbol());
-        tDescription.setText(daneDokumentu.getDescription());
-        tOsoby.setSelectedItems(new ArrayList<ReferenceListElement>(daneDokumentu.getRelatedPeople()));
+        tTitle.setText(documentData.getTitle());
+        tSymbol.setText(documentData.getSymbol());
+        tDescription.setText(documentData.getDescription());
+        tRelatedPeople.setSelectedItems(new ArrayList<ReferenceListElement>(documentData.getRelatedPeople()));
     }
 
-    private void odswiezListy() {
+    private void refreshLists() {
         List<ReferenceListElement> allPeople = DatabaseDelegate.getPeople();
-        tOsoby.setAllItems(allPeople);
+        tRelatedPeople.setAllItems(allPeople);
     }
 
-    public boolean zapiszDane() {
-        if (trybPracy == TrybPracy.DODAWANIE) {
-            daneDokumentu = new DocumentEditData();
+    public boolean saveData() {
+        if (editMode == EditMode.CREATE_NEW) {
+            documentData = new DocumentEditData();
         }
 
-        daneDokumentu.setTitle(tTytul.getText().trim());
-        daneDokumentu.setSymbol(tSymbol.getText().trim());
-        daneDokumentu.setDescription(tDescription.getText().trim());
-        daneDokumentu.setRelatedPeople(new HashSet<ReferenceListElement>(tOsoby.getSelectedItems()));
+        documentData.setTitle(tTitle.getText().trim());
+        documentData.setSymbol(tSymbol.getText().trim());
+        documentData.setDescription(tDescription.getText().trim());
+        documentData.setRelatedPeople(new HashSet<ReferenceListElement>(tRelatedPeople.getSelectedItems()));
 
-        if (trybPracy == TrybPracy.EDYCJA) {
-            DatabaseDelegate.saveEditedDocument(daneDokumentu);
+        if (editMode == EditMode.EDIT_EXISTING) {
+            DatabaseDelegate.saveEditedDocument(documentData);
         } else {
-            DatabaseDelegate.saveNewDocument(daneDokumentu);
+            DatabaseDelegate.saveNewDocument(documentData);
         }
 
         return true;
     }
 
-    private void wyczyscPola() {
-        tTytul.setText("");
+    private void clearAllFields() {
+        tTitle.setText("");
         tSymbol.setText("");
         tDescription.setText("");
-        tOsoby.setSelectedItems(new ArrayList<ReferenceListElement>());
+        tRelatedPeople.setSelectedItems(new ArrayList<ReferenceListElement>());
     }
 
     @Override
-    public void usunObiekt(Long id) {
+    public void deleteElement(Long id) {
         int result = JOptionPane.showConfirmDialog(this, "Czy na pewno chcesz usun¹æ ten dokument?", "Usuwanie dokumentu", JOptionPane.YES_NO_OPTION);
         if (result == JOptionPane.YES_OPTION) {
             DatabaseDelegate.deleteDocument(id);
@@ -102,7 +102,7 @@ public class DocumentEditComponent extends AbstractEditComponent {
 
     @Override
     public String getTitle() {
-        if (trybPracy == TrybPracy.DODAWANIE) {
+        if (editMode == EditMode.CREATE_NEW) {
             return "Dodawanie nowego dokumentu";
         } else {
             return "Edycja danych dokumentu";

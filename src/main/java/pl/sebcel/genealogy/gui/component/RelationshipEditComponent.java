@@ -17,7 +17,7 @@ public class RelationshipEditComponent extends AbstractEditComponent {
 
     public final static long serialVersionUID = 0l;
 
-    private RelationshipEditData daneZwiazku;
+    private RelationshipEditData relationshipEditData;
 
     private Label lMale = new Label("Mê¿czyzna:");
     private Label lFemale = new Label("Female:");
@@ -72,31 +72,31 @@ public class RelationshipEditComponent extends AbstractEditComponent {
 
     }
 
-    public void wczytajDane(Long idZwiazku) {
-        odswiezListy();
+    public void loadData(Long idZwiazku) {
+        refreshLists();
 
         if (idZwiazku == null) {
-            wyczyscPola();
+            clearAllFields();
             return;
         }
-        daneZwiazku = DatabaseDelegate.getRelationshipEditData(idZwiazku);
+        relationshipEditData = DatabaseDelegate.getRelationshipEditData(idZwiazku);
 
-        tMale.setSelectedItem(daneZwiazku.getMale());
-        tFemale.setSelectedItem(daneZwiazku.getFemale());
-        tFirstMetDate.setText(daneZwiazku.getFirstMetDate());
-        tFirstMetPlace.setText(daneZwiazku.getFirstMetPlace());
-        tMarriageDate.setText(daneZwiazku.getMarriageDate());
-        tMarriagePlace.setText(daneZwiazku.getMarriagePlace());
-        tSeparationDate.setText(daneZwiazku.getSeparationDate());
-        tSeparationPlace.setText(daneZwiazku.getSeparationPlace());
-        tDivorceDate.setText(daneZwiazku.getDivorceDate());
-        tDivorcePlace.setText(daneZwiazku.getDivorcePlace());
-        tDescription.setText(daneZwiazku.getDescription());
+        tMale.setSelectedItem(relationshipEditData.getMale());
+        tFemale.setSelectedItem(relationshipEditData.getFemale());
+        tFirstMetDate.setText(relationshipEditData.getFirstMetDate());
+        tFirstMetPlace.setText(relationshipEditData.getFirstMetPlace());
+        tMarriageDate.setText(relationshipEditData.getMarriageDate());
+        tMarriagePlace.setText(relationshipEditData.getMarriagePlace());
+        tSeparationDate.setText(relationshipEditData.getSeparationDate());
+        tSeparationPlace.setText(relationshipEditData.getSeparationPlace());
+        tDivorceDate.setText(relationshipEditData.getDivorceDate());
+        tDivorcePlace.setText(relationshipEditData.getDivorcePlace());
+        tDescription.setText(relationshipEditData.getDescription());
     }
 
-    private void odswiezListy() {
-        List<ReferenceListElement> mezczyzni = DatabaseDelegate.getMales();
-        List<ReferenceListElement> kobiety = DatabaseDelegate.getFemales();
+    private void refreshLists() {
+        List<ReferenceListElement> allMales = DatabaseDelegate.getMales();
+        List<ReferenceListElement> allFemales = DatabaseDelegate.getFemales();
 
         tMale.removeAllItems();
         tFemale.removeAllItems();
@@ -104,17 +104,17 @@ public class RelationshipEditComponent extends AbstractEditComponent {
         tMale.addItem("<Wybierz>");
         tFemale.addItem("<Wybierz>");
 
-        for (ReferenceListElement osoba : mezczyzni) {
-            tMale.addItem(osoba);
+        for (ReferenceListElement male : allMales) {
+            tMale.addItem(male);
         }
-        for (ReferenceListElement osoba : kobiety) {
-            tFemale.addItem(osoba);
+        for (ReferenceListElement female : allFemales) {
+            tFemale.addItem(female);
         }
     }
 
-    public boolean zapiszDane() {
-        if (trybPracy == TrybPracy.DODAWANIE)
-            daneZwiazku = new RelationshipEditData();
+    public boolean saveData() {
+        if (editMode == EditMode.CREATE_NEW)
+            relationshipEditData = new RelationshipEditData();
 
         if (tMale.getSelectedIndex() == 0) {
             JOptionPane.showMessageDialog(this, "Musisz wybraæ mê¿czyznê", "B³¹d", JOptionPane.ERROR_MESSAGE);
@@ -126,28 +126,28 @@ public class RelationshipEditComponent extends AbstractEditComponent {
             return false;
         }
 
-        daneZwiazku.setMale((ReferenceListElement) tMale.getSelectedItem());
-        daneZwiazku.setFemale((ReferenceListElement) tFemale.getSelectedItem());
-        daneZwiazku.setFirstMetDate(tFirstMetDate.getText().trim());
-        daneZwiazku.setFirstMetPlace(tFirstMetPlace.getText().trim());
-        daneZwiazku.setMarriageDate(tMarriageDate.getText().trim());
-        daneZwiazku.setMarriagePlace(tMarriagePlace.getText().trim());
-        daneZwiazku.setSeparationDate(tSeparationDate.getText().trim());
-        daneZwiazku.setSeparationPlace(tSeparationPlace.getText().trim());
-        daneZwiazku.setDivorceDate(tDivorceDate.getText().trim());
-        daneZwiazku.setDivorcePlace(tDivorcePlace.getText().trim());
-        daneZwiazku.setDescription(tDescription.getText().trim());
+        relationshipEditData.setMale((ReferenceListElement) tMale.getSelectedItem());
+        relationshipEditData.setFemale((ReferenceListElement) tFemale.getSelectedItem());
+        relationshipEditData.setFirstMetDate(tFirstMetDate.getText().trim());
+        relationshipEditData.setFirstMetPlace(tFirstMetPlace.getText().trim());
+        relationshipEditData.setMarriageDate(tMarriageDate.getText().trim());
+        relationshipEditData.setMarriagePlace(tMarriagePlace.getText().trim());
+        relationshipEditData.setSeparationDate(tSeparationDate.getText().trim());
+        relationshipEditData.setSeparationPlace(tSeparationPlace.getText().trim());
+        relationshipEditData.setDivorceDate(tDivorceDate.getText().trim());
+        relationshipEditData.setDivorcePlace(tDivorcePlace.getText().trim());
+        relationshipEditData.setDescription(tDescription.getText().trim());
 
-        if (trybPracy == TrybPracy.EDYCJA) {
-            DatabaseDelegate.saveEditedRelationship(daneZwiazku);
+        if (editMode == EditMode.EDIT_EXISTING) {
+            DatabaseDelegate.saveEditedRelationship(relationshipEditData);
         } else {
-            DatabaseDelegate.saveNewRelationship(daneZwiazku);
+            DatabaseDelegate.saveNewRelationship(relationshipEditData);
         }
 
         return true;
     }
 
-    private void wyczyscPola() {
+    private void clearAllFields() {
         tMale.setSelectedItem(0);
         tFemale.setSelectedItem(0);
         tFirstMetDate.setText("");
@@ -162,7 +162,7 @@ public class RelationshipEditComponent extends AbstractEditComponent {
     }
 
     @Override
-    public void usunObiekt(Long id) {
+    public void deleteElement(Long id) {
         int result = JOptionPane.showConfirmDialog(this, "Czy na pewno chcesz usun¹æ ten zwi¹zek?", "Usuwanie zwi¹zku", JOptionPane.YES_NO_OPTION);
         if (result == JOptionPane.YES_OPTION) {
             DatabaseDelegate.deleteRelationship(id);
@@ -171,7 +171,7 @@ public class RelationshipEditComponent extends AbstractEditComponent {
 
     @Override
     public String getTitle() {
-        if (trybPracy == TrybPracy.DODAWANIE) {
+        if (editMode == EditMode.CREATE_NEW) {
             return "Dodawanie nowego zwi¹zku";
         } else {
             return "Edycja danych zwi¹zku";
@@ -180,12 +180,12 @@ public class RelationshipEditComponent extends AbstractEditComponent {
 
     @Override
     public DiagramInfoStruct getDiagramInfo(Long id) {
-        RelationshipEditData daneZwiazku = DatabaseDelegate.getRelationshipEditData(id);
+        RelationshipEditData relationshipEditData = DatabaseDelegate.getRelationshipEditData(id);
         DiagramInfoStruct diagramInfo = new DiagramInfoStruct();
 
-        diagramInfo.idKorzenia = daneZwiazku.getMale().getId();
-        diagramInfo.nazwa = daneZwiazku.getMale().getDescription() + " i " + daneZwiazku.getFemale().getDescription();
-        diagramInfo.description = "Diagram zwi¹zku " + daneZwiazku.getMale().getDescription() + " " + daneZwiazku.getFemale().getDescription();
+        diagramInfo.setRootId(relationshipEditData.getMale().getId());
+        diagramInfo.setName(relationshipEditData.getMale().getDescription() + " i " + relationshipEditData.getFemale().getDescription());
+        diagramInfo.setDescription("Diagram zwi¹zku " + relationshipEditData.getMale().getDescription() + " " + relationshipEditData.getFemale().getDescription());
 
         return diagramInfo;
     }

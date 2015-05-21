@@ -415,7 +415,7 @@ public class DatabaseDelegate {
             }
         }
 
-        personEditData.setDokumenty(documents);
+        personEditData.setRelatedDocuments(documents);
         return personEditData;
     }
 
@@ -497,7 +497,7 @@ public class DatabaseDelegate {
         }
 
         person.getRelatedDocuments().clear();
-        for (ReferenceListElement documentElement : personData.getDokumenty()) {
+        for (ReferenceListElement documentElement : personData.getRelatedDocuments()) {
             Document document = DatabaseLib.getDocument(documentElement.getId());
             person.getRelatedDocuments().add(document);
             document.getRelatedPeople().add(person);
@@ -594,9 +594,9 @@ public class DatabaseDelegate {
             person.setParents(parentsRelationship);
         }
 
-        if (personData.getDokumenty() != null) {
+        if (personData.getRelatedDocuments() != null) {
             Set<Document> documents = new HashSet<Document>();
-            for (ReferenceListElement dokumentElement : personData.getDokumenty()) {
+            for (ReferenceListElement dokumentElement : personData.getRelatedDocuments()) {
                 Document document = DatabaseLib.getDocument(dokumentElement.getId());
                 documents.add(document);
                 document.getRelatedPeople().add(person);

@@ -67,7 +67,7 @@ public class ListaKlanowTableColumnModel extends DefaultTableColumnModel impleme
 	public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
 	}
 	
-	public void wpiszDane(List<ClanListElement> listaKlanow) {
+	public void setData(List<ClanListElement> listaKlanow) {
 		this.dane = listaKlanow;
 	}
 }

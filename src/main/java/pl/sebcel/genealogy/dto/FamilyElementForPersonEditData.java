@@ -5,6 +5,7 @@ import java.util.List;
 import pl.sebcel.genealogy.dto.list.ReferenceListElement;
 
 public class FamilyElementForPersonEditData {
+
     private ReferenceListElement spouse;
     private List<ReferenceListElement> children;
 

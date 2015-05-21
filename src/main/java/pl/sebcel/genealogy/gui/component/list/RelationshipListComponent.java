@@ -5,13 +5,13 @@ import java.util.List;
 import pl.sebcel.genealogy.db.DatabaseDelegate;
 import pl.sebcel.genealogy.dto.list.RelationshipsListElement;
 import pl.sebcel.genealogy.export.DataExporter;
-import pl.sebcel.genealogy.gui.component.list.model.ListaZwiazkowTableColumnModel;
+import pl.sebcel.genealogy.gui.component.list.model.RelationshipsListTableColumnModel;
 
 public class RelationshipListComponent extends AbstractListComponent {
 	
 	public final static long serialVersionUID = 0l;
 	
-	private ListaZwiazkowTableColumnModel tableColumnModel = new ListaZwiazkowTableColumnModel();
+	private RelationshipsListTableColumnModel tableColumnModel = new RelationshipsListTableColumnModel();
 	
 	public RelationshipListComponent() {
 		setComplexModel(tableColumnModel);
@@ -19,8 +19,8 @@ public class RelationshipListComponent extends AbstractListComponent {
 	
 	public void refresh() {
 		System.out.println("[ListaZwiazkowKomponent][refresh]");
-		List<RelationshipsListElement> zwiazki = DatabaseDelegate.getRelationshipsList();
-		tableColumnModel.wpiszDane(zwiazki);
+		List<RelationshipsListElement> relationships = DatabaseDelegate.getRelationshipsList();
+		tableColumnModel.wpiszDane(relationships);
 		table.invalidate();
 		this.repaint();
 	}
@@ -33,5 +33,4 @@ public class RelationshipListComponent extends AbstractListComponent {
 	public DataExporter getExporter(String format) {
 		throw new RuntimeException("Eksport zwi¹zków nie jest jeszcze zaimplementowany.");
 	}
-	
 }

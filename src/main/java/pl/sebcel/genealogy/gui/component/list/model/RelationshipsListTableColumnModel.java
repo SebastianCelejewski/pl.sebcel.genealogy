@@ -9,14 +9,14 @@ import javax.swing.table.TableColumn;
 
 import pl.sebcel.genealogy.dto.list.RelationshipsListElement;
 
-public class ListaZwiazkowTableColumnModel extends DefaultTableColumnModel implements ComplexTableModel {
+public class RelationshipsListTableColumnModel extends DefaultTableColumnModel implements ComplexTableModel {
 	
 	public static final long serialVersionUID = 0L;
 	
 	private List<RelationshipsListElement> dane = new ArrayList<RelationshipsListElement>();
 	private String[] kolumny = new String[] {"Id","Mê¿czyzna","Female","Description"};
 
-	public ListaZwiazkowTableColumnModel() {
+	public RelationshipsListTableColumnModel() {
 		super();
 		TableColumn columnId = new TableColumn(0,20);
 		TableColumn columnMale = new TableColumn(1,200); 

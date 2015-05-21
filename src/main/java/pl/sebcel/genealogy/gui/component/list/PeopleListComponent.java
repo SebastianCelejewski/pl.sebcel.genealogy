@@ -6,21 +6,21 @@ import pl.sebcel.genealogy.db.DatabaseDelegate;
 import pl.sebcel.genealogy.dto.list.PeopleListElement;
 import pl.sebcel.genealogy.export.DataExporter;
 import pl.sebcel.genealogy.export.DefaultExporter;
-import pl.sebcel.genealogy.gui.component.list.model.ListaOsobTableColumnModel;
+import pl.sebcel.genealogy.gui.component.list.model.PeopleListTableColumnModel;
 
 public class PeopleListComponent extends AbstractListComponent {
 	
 	public final static long serialVersionUID = 0l;
 	
-	private ListaOsobTableColumnModel tableColumnModel = new ListaOsobTableColumnModel();
+	private PeopleListTableColumnModel tableColumnModel = new PeopleListTableColumnModel();
 	
 	public PeopleListComponent() {
 		setComplexModel(tableColumnModel);
 	}
 	
 	public void refresh() {
-		List<PeopleListElement> ludzie = DatabaseDelegate.getPeopleList();
-		tableColumnModel.wpiszDane(ludzie);
+		List<PeopleListElement> people = DatabaseDelegate.getPeopleList();
+		tableColumnModel.setData(people);
 		table.invalidate();
 	}
 	

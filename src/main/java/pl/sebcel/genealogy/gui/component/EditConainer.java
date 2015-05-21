@@ -11,42 +11,42 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 
 import pl.sebcel.genealogy.dto.DiagramInfoStruct;
-import pl.sebcel.genealogy.gui.component.AbstractEditComponent.TrybPracy;
+import pl.sebcel.genealogy.gui.component.AbstractEditComponent.EditMode;
 import pl.sebcel.genealogy.gui.control.UpdateListener;
 
 public class EditConainer extends JDialog {
 
     public final static long serialVersionUID = 0l;
 
-    private AbstractEditComponent edycjaKomponent;
-    private JPanel panelPrzyciskow = new JPanel();
+    private AbstractEditComponent editComponent;
+    private JPanel buttonsPanel = new JPanel();
 
-    private JButton przyciskAkceptuj = new JButton("Zatwierdü");
-    private JButton przyciskAnuluj = new JButton("Anuluj");
+    private JButton acceptButton = new JButton("Zatwierdü");
+    private JButton cancelButton = new JButton("Anuluj");
     private UpdateListener updateListener;
 
-    public EditConainer(AbstractEditComponent edycjaKomponent) {
-        this.edycjaKomponent = edycjaKomponent;
+    public EditConainer(AbstractEditComponent editComponent) {
+        this.editComponent = editComponent;
         Dimension screenDimension = Toolkit.getDefaultToolkit().getScreenSize();
         int width = screenDimension.width / 2;
         int height = 2 * screenDimension.height / 3;
         this.setBounds(width / 2, height / 3, width, height);
         this.setLayout(new BorderLayout());
-        this.add(edycjaKomponent, BorderLayout.CENTER);
-        this.add(panelPrzyciskow, BorderLayout.SOUTH);
+        this.add(editComponent, BorderLayout.CENTER);
+        this.add(buttonsPanel, BorderLayout.SOUTH);
 
-        panelPrzyciskow.add(przyciskAkceptuj);
-        panelPrzyciskow.add(przyciskAnuluj);
+        buttonsPanel.add(acceptButton);
+        buttonsPanel.add(cancelButton);
 
-        przyciskAkceptuj.addActionListener(new ActionListener() {
+        acceptButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                zatwierdz();
+                confirm();
             }
         });
 
-        przyciskAnuluj.addActionListener(new ActionListener() {
+        cancelButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                anuluj();
+                cancel();
             }
         });
     }
@@ -55,37 +55,37 @@ public class EditConainer extends JDialog {
         this.updateListener = updateListener;
     }
 
-    public void wczytajDane(Long idOsoby) {
-        edycjaKomponent.wczytajDane(idOsoby);
+    public void loadData(Long objectId) {
+        editComponent.loadData(objectId);
     }
 
-    private void zatwierdz() {
-        if (edycjaKomponent.zapiszDane()) {
+    private void confirm() {
+        if (editComponent.saveData()) {
             updateListener.update();
-            zamknij();
+            close();
         }
     }
 
-    private void anuluj() {
-        zamknij();
+    private void cancel() {
+        close();
     }
 
-    private void zamknij() {
+    private void close() {
         this.setVisible(false);
         updateListener.update();
     }
 
-    public void setTrybPracy(TrybPracy trybPracy) {
-        edycjaKomponent.setTrybPracy(trybPracy);
-        this.setTitle(edycjaKomponent.getTitle());
+    public void setEditMode(EditMode editMode) {
+        editComponent.setEditMode(editMode);
+        this.setTitle(editComponent.getTitle());
     }
 
-    public void usunObiekt(Long id) {
-        edycjaKomponent.usunObiekt(id);
+    public void deleteObject(Long id) {
+        editComponent.deleteElement(id);
         updateListener.update();
     }
 
     public DiagramInfoStruct getDiagramInfo(Long id) {
-        return edycjaKomponent.getDiagramInfo(id);
+        return editComponent.getDiagramInfo(id);
     }
 }

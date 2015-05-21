@@ -6,13 +6,13 @@ import pl.sebcel.genealogy.db.DatabaseDelegate;
 import pl.sebcel.genealogy.dto.list.DocumentListElement;
 import pl.sebcel.genealogy.export.DataExporter;
 import pl.sebcel.genealogy.export.DefaultExporter;
-import pl.sebcel.genealogy.gui.component.list.model.ListaDokumentowTableColumnModel;
+import pl.sebcel.genealogy.gui.component.list.model.DocumentsListTableColumnModel;
 
 public class DocumentListComponent extends AbstractListComponent {
 
     public final static long serialVersionUID = 0l;
 
-    private ListaDokumentowTableColumnModel tableColumnModel = new ListaDokumentowTableColumnModel();
+    private DocumentsListTableColumnModel tableColumnModel = new DocumentsListTableColumnModel();
 
     public DocumentListComponent() {
         setComplexModel(tableColumnModel);
@@ -20,7 +20,7 @@ public class DocumentListComponent extends AbstractListComponent {
 
     public void refresh() {
         List<DocumentListElement> dokumenty = DatabaseDelegate.getDocumentsList();
-        tableColumnModel.wpiszDane(dokumenty);
+        tableColumnModel.setData(dokumenty);
         table.invalidate();
     }
 

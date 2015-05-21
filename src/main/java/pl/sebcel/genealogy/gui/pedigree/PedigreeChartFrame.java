@@ -35,7 +35,7 @@ import com.sun.jimi.core.Jimi;
 public class PedigreeChartFrame extends JFrame implements ActionListener, IDrawOptionsListener {
 
     public final static long serialVersionUID = 0l;
-    
+
     private static Color kolorOsoby = Color.RED;
     private static Color kolorMalzonka = Color.BLUE;
     private static Color kolorInfo = Color.GRAY;
@@ -69,10 +69,10 @@ public class PedigreeChartFrame extends JFrame implements ActionListener, IDrawO
         panelOpcji.setDrawOptionsListener(this);
     }
 
-    public void rysuj(final DiagramInfoStruct diagramInfo) {
+    public void draw(final DiagramInfoStruct diagramInfo) {
         this.setSize(800, 600);
         this.setLocation(100, 100);
-        this.setTitle(diagramInfo.description);
+        this.setTitle(diagramInfo.getDescription());
         this.setVisible(true);
         this.diagramInfo = diagramInfo;
 
@@ -90,7 +90,7 @@ public class PedigreeChartFrame extends JFrame implements ActionListener, IDrawO
 
     private void rysuj(PedigreeChartOptions opcjeRysowania) {
         System.out.println("rysujê");
-        Image obrazDrzewa = rysujDrzewo(diagramInfo.idKorzenia, new Font("Courier", Font.PLAIN, 12 * opcjeRysowania.getZoom()), 20, opcjeRysowania);
+        Image obrazDrzewa = rysujDrzewo(diagramInfo.getRootId(), new Font("Courier", Font.PLAIN, 12 * opcjeRysowania.getZoom()), 20, opcjeRysowania);
         drzewo.setImage(obrazDrzewa);
         scrollPane.setViewportView(PedigreeChartFrame.this.drzewo);
         repaint();

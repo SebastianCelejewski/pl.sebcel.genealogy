@@ -9,25 +9,25 @@ import javax.swing.table.TableColumn;
 
 import pl.sebcel.genealogy.dto.list.DocumentListElement;
 
-public class ListaDokumentowTableColumnModel extends DefaultTableColumnModel implements ComplexTableModel {
+public class DocumentsListTableColumnModel extends DefaultTableColumnModel implements ComplexTableModel {
 
     public static final long serialVersionUID = 0L;
 
-    private List<DocumentListElement> dane = new ArrayList<DocumentListElement>();
-    private String[] kolumny = new String[] { "Id", "Tytu³", "Symbol" };
+    private List<DocumentListElement> data = new ArrayList<DocumentListElement>();
+    private String[] columns = new String[] { "Id", "Tytu³", "Symbol" };
 
-    public ListaDokumentowTableColumnModel() {
+    public DocumentsListTableColumnModel() {
         super();
         TableColumn columnId = new TableColumn(0, 20);
-        TableColumn columnTytul = new TableColumn(1, 280);
+        TableColumn columnTitle = new TableColumn(1, 280);
         TableColumn columnSymbol = new TableColumn(2, 400);
 
-        columnId.setHeaderValue(kolumny[0]);
-        columnTytul.setHeaderValue(kolumny[1]);
-        columnSymbol.setHeaderValue(kolumny[2]);
+        columnId.setHeaderValue(columns[0]);
+        columnTitle.setHeaderValue(columns[1]);
+        columnSymbol.setHeaderValue(columns[2]);
 
         addColumn(columnId);
-        addColumn(columnTytul);
+        addColumn(columnTitle);
         addColumn(columnSymbol);
     }
 
@@ -39,24 +39,27 @@ public class ListaDokumentowTableColumnModel extends DefaultTableColumnModel imp
     }
 
     public int getColumnCount() {
-        return kolumny.length;
+        return columns.length;
     }
 
     public String getColumnName(int columnIndex) {
-        return kolumny[columnIndex];
+        return columns[columnIndex];
     }
 
     public int getRowCount() {
-        return dane.size();
+        return data.size();
     }
 
     public Object getValueAt(int rowIndex, int columnIndex) {
-        if (columnIndex == 0)
-            return dane.get(rowIndex).getId();
-        if (columnIndex == 1)
-            return dane.get(rowIndex).getTitle();
-        if (columnIndex == 2)
-            return dane.get(rowIndex).getSymbol();
+        if (columnIndex == 0) {
+            return data.get(rowIndex).getId();
+        }
+        if (columnIndex == 1) {
+            return data.get(rowIndex).getTitle();
+        }
+        if (columnIndex == 2) {
+            return data.get(rowIndex).getSymbol();
+        }
         return "";
     }
 
@@ -70,7 +73,7 @@ public class ListaDokumentowTableColumnModel extends DefaultTableColumnModel imp
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
     }
 
-    public void wpiszDane(List<DocumentListElement> listaDokumentow) {
-        this.dane = listaDokumentow;
+    public void setData(List<DocumentListElement> documentsList) {
+        this.data = documentsList;
     }
 }

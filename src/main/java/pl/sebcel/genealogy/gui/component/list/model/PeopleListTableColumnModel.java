@@ -9,14 +9,14 @@ import javax.swing.table.TableColumn;
 
 import pl.sebcel.genealogy.dto.list.PeopleListElement;
 
-public class ListaOsobTableColumnModel extends DefaultTableColumnModel implements ComplexTableModel {
+public class PeopleListTableColumnModel extends DefaultTableColumnModel implements ComplexTableModel {
 	
 	public static final long serialVersionUID = 0L;
 	
 	private List<PeopleListElement> dane = new ArrayList<PeopleListElement>();
 	private String[] kolumny = new String[] {"Id","Names i surname","Description"};
 
-	public ListaOsobTableColumnModel() {
+	public PeopleListTableColumnModel() {
 		super();
 		TableColumn columnId = new TableColumn(0,20);
 		TableColumn columnNazwa = new TableColumn(1,280); 
@@ -67,7 +67,7 @@ public class ListaOsobTableColumnModel extends DefaultTableColumnModel implement
 	public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
 	}
 	
-	public void wpiszDane(List<PeopleListElement> listaOsob) {
+	public void setData(List<PeopleListElement> listaOsob) {
 		this.dane = listaOsob;
 	}
 }

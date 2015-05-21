@@ -26,7 +26,7 @@ public class PersonEditComponent extends AbstractEditComponent {
 
     public final static long serialVersionUID = 0l;
 
-    private PersonEditData daneOsoby;
+    private PersonEditData personEditData;
 
     private Label lSex = new Label("P³eæ:");
     private Label lNames = new Label("Names:");
@@ -42,8 +42,8 @@ public class PersonEditComponent extends AbstractEditComponent {
     private Label lOccupation = new Label("Zawody wykonywane");
     private Label lParents = new Label("Parents");
     private Label lDescription = new Label("Description");
-    private Label lRodzina = new Label("Rodzina");
-    private Label lDokumenty = new Label("Dokumenty");
+    private Label lFamily = new Label("Rodzina");
+    private Label lRelatedDocuments = new Label("Dokumenty");
 
     private SingleValueReference tSex = new SingleValueReference();
     private TextField tNames = new TextField();
@@ -59,8 +59,8 @@ public class PersonEditComponent extends AbstractEditComponent {
     private TextField tOccupation = new TextField();
     private TextArea tDescription = new TextArea();
     private SingleValueReference tParents = new SingleValueReference();
-    private Tree tRodzina = new Tree();
-    private MultiValueReference tDokumenty = new MultiValueReference();
+    private Tree tFamily = new Tree();
+    private MultiValueReference tRelatedDocuments = new MultiValueReference();
 
     public PersonEditComponent() {
         this.setLayout(new GridBagLayout());
@@ -80,8 +80,8 @@ public class PersonEditComponent extends AbstractEditComponent {
         this.add(lOccupation, lOccupation.getConstraints(0, y++));
         this.add(lParents, lParents.getConstraints(0, y++));
         this.add(lDescription, lDescription.getConstraints(0, y++));
-        this.add(lRodzina, lRodzina.getConstraints(0, y++));
-        this.add(lDokumenty, lDokumenty.getConstraints(0, y++));
+        this.add(lFamily, lFamily.getConstraints(0, y++));
+        this.add(lRelatedDocuments, lRelatedDocuments.getConstraints(0, y++));
 
         y = 0;
         this.add(tSex, tSex.getConstraints(1, y++));
@@ -98,8 +98,8 @@ public class PersonEditComponent extends AbstractEditComponent {
         this.add(tOccupation, tOccupation.getConstraints(1, y++));
         this.add(tParents, tParents.getConstraints(1, y++));
         this.add(tDescription, tDescription.getConstraints(1, y++));
-        this.add(tRodzina, tRodzina.getConstraints(1, y++));
-        this.add(tDokumenty, tDokumenty.getConstraints(1, y++));
+        this.add(tFamily, tFamily.getConstraints(1, y++));
+        this.add(tRelatedDocuments, tRelatedDocuments.getConstraints(1, y++));
 
         tSex.removeAllItems();
         tSex.addItem("<Wybierz>");
@@ -107,118 +107,118 @@ public class PersonEditComponent extends AbstractEditComponent {
         tSex.addItem("Female");
     }
 
-    public void wczytajDane(Long idOsoby) {
-        odswiezListy();
+    public void loadData(Long personId) {
+        refreshLists();
 
-        if (idOsoby == null) {
-            wyczyscPola();
+        if (personId == null) {
+            clearAllFields();
             return;
         }
-        daneOsoby = DatabaseDelegate.getPersonEditData(idOsoby);
+        personEditData = DatabaseDelegate.getPersonEditData(personId);
 
-        if (daneOsoby.getSex() == null) {
+        if (personEditData.getSex() == null) {
             tSex.setSelectedIndex(0);
-        } else if (daneOsoby.getSex().equalsIgnoreCase("male")) {
+        } else if (personEditData.getSex().equalsIgnoreCase("male")) {
             tSex.setSelectedIndex(1);
-        } else if (daneOsoby.getSex().equalsIgnoreCase("female")) {
+        } else if (personEditData.getSex().equalsIgnoreCase("female")) {
             tSex.setSelectedIndex(2);
         } else {
             tSex.setSelectedIndex(0);
         }
-        tNames.setText(daneOsoby.getNames());
-        tSurname.setText(daneOsoby.getSurname());
-        tBirthDate.setText(daneOsoby.getBirthDate());
-        tBirthPlace.setText(daneOsoby.getBirthPlace());
-        tDeathDate.setText(daneOsoby.getDeathDate());
-        tDeathPlace.setText(daneOsoby.getDeathPlace());
-        tBurialDate.setText(daneOsoby.getBurialDate());
-        tBurialPlace.setText(daneOsoby.getBurialPlace());
-        tEducation.setText(daneOsoby.getEducation());
-        tOccupation.setText(daneOsoby.getOccupation());
-        tResidence.setText(daneOsoby.getResidence());
-        tDescription.setText(daneOsoby.getDescription());
-        if (daneOsoby.getParents() != null) {
-            tParents.setSelectedItem(daneOsoby.getParents());
+        tNames.setText(personEditData.getNames());
+        tSurname.setText(personEditData.getSurname());
+        tBirthDate.setText(personEditData.getBirthDate());
+        tBirthPlace.setText(personEditData.getBirthPlace());
+        tDeathDate.setText(personEditData.getDeathDate());
+        tDeathPlace.setText(personEditData.getDeathPlace());
+        tBurialDate.setText(personEditData.getBurialDate());
+        tBurialPlace.setText(personEditData.getBurialPlace());
+        tEducation.setText(personEditData.getEducation());
+        tOccupation.setText(personEditData.getOccupation());
+        tResidence.setText(personEditData.getResidence());
+        tDescription.setText(personEditData.getDescription());
+        if (personEditData.getParents() != null) {
+            tParents.setSelectedItem(personEditData.getParents());
         } else {
             tParents.setSelectedIndex(0);
         }
 
-        List<FamilyElementForPersonEditData> rodziny = daneOsoby.getFamilies();
+        List<FamilyElementForPersonEditData> families = personEditData.getFamilies();
         DefaultMutableTreeNode root = new DefaultMutableTreeNode();
-        if (rodziny != null && rodziny.size() > 0) {
-            for (FamilyElementForPersonEditData rodzina : rodziny) {
-                DefaultMutableTreeNode nodeRodzina = new DefaultMutableTreeNode(rodzina.getSpouse());
-                root.add(nodeRodzina);
-                List<ReferenceListElement> dzieci = rodzina.getChildren();
-                if (dzieci != null && dzieci.size() > 0) {
-                    for (ReferenceListElement dziecko : dzieci) {
-                        DefaultMutableTreeNode nodeDziecko = new DefaultMutableTreeNode(dziecko);
-                        nodeRodzina.add(nodeDziecko);
+        if (families != null && families.size() > 0) {
+            for (FamilyElementForPersonEditData family : families) {
+                DefaultMutableTreeNode familyNode = new DefaultMutableTreeNode(family.getSpouse());
+                root.add(familyNode);
+                List<ReferenceListElement> children = family.getChildren();
+                if (children != null && children.size() > 0) {
+                    for (ReferenceListElement child : children) {
+                        DefaultMutableTreeNode childNode = new DefaultMutableTreeNode(child);
+                        familyNode.add(childNode);
                     }
                 }
             }
         }
         TreeModel treeModel = new DefaultTreeModel(root);
-        tRodzina.setModel(treeModel);
+        tFamily.setModel(treeModel);
 
-        List<ReferenceListElement> dokumentyWybrane = new ArrayList<ReferenceListElement>(daneOsoby.getDokumenty());
-        tDokumenty.setSelectedItems(dokumentyWybrane);
+        List<ReferenceListElement> relatedDocuments = new ArrayList<ReferenceListElement>(personEditData.getRelatedDocuments());
+        tRelatedDocuments.setSelectedItems(relatedDocuments);
     }
 
-    private void odswiezListy() {
-        List<ReferenceListElement> zwiazki = DatabaseDelegate.getRelationships();
-        List<ReferenceListElement> wszystkieDokumenty = DatabaseDelegate.getDocuments();
+    private void refreshLists() {
+        List<ReferenceListElement> allRelationships = DatabaseDelegate.getRelationships();
+        List<ReferenceListElement> allDocuments = DatabaseDelegate.getDocuments();
         tParents.removeAllItems();
         tParents.addItem(new String("<Brak>"));
-        for (ReferenceListElement zwiazek : zwiazki) {
-            tParents.addItem(zwiazek);
+        for (ReferenceListElement relationship : allRelationships) {
+            tParents.addItem(relationship);
         }
 
-        tDokumenty.setAllItems(wszystkieDokumenty);
+        tRelatedDocuments.setAllItems(allDocuments);
     }
 
-    public boolean zapiszDane() {
-        if (trybPracy == TrybPracy.DODAWANIE)
-            daneOsoby = new PersonEditData();
+    public boolean saveData() {
+        if (editMode == EditMode.CREATE_NEW)
+            personEditData = new PersonEditData();
 
         if (tSex.getSelectedIndex() == 0) {
             JOptionPane.showMessageDialog(this, "Wybierz p³eæ", "B³¹d", JOptionPane.ERROR_MESSAGE);
             return false;
         }
         if (tSex.getSelectedIndex() == 1) {
-            daneOsoby.setSex("male");
+            personEditData.setSex("male");
         } else {
-            daneOsoby.setSex("female");
+            personEditData.setSex("female");
         }
-        daneOsoby.setNames(tNames.getText().trim());
-        daneOsoby.setSurname(tSurname.getText().trim());
-        daneOsoby.setBirthDate(tBirthDate.getText().trim());
-        daneOsoby.setBirthPlace(tBirthPlace.getText().trim());
-        daneOsoby.setDeathDate(tDeathDate.getText().trim());
-        daneOsoby.setDeathPlace(tDeathPlace.getText().trim());
-        daneOsoby.setBurialDate(tBurialDate.getText().trim());
-        daneOsoby.setBurialPlace(tBurialPlace.getText().trim());
-        daneOsoby.setEducation(tEducation.getText().trim());
-        daneOsoby.setOccupation(tOccupation.getText().trim());
-        daneOsoby.setResidence(tResidence.getText().trim());
-        daneOsoby.setDescription(tDescription.getText().trim());
+        personEditData.setNames(tNames.getText().trim());
+        personEditData.setSurname(tSurname.getText().trim());
+        personEditData.setBirthDate(tBirthDate.getText().trim());
+        personEditData.setBirthPlace(tBirthPlace.getText().trim());
+        personEditData.setDeathDate(tDeathDate.getText().trim());
+        personEditData.setDeathPlace(tDeathPlace.getText().trim());
+        personEditData.setBurialDate(tBurialDate.getText().trim());
+        personEditData.setBurialPlace(tBurialPlace.getText().trim());
+        personEditData.setEducation(tEducation.getText().trim());
+        personEditData.setOccupation(tOccupation.getText().trim());
+        personEditData.setResidence(tResidence.getText().trim());
+        personEditData.setDescription(tDescription.getText().trim());
         if (tParents.getSelectedIndex() == 0) {
-            daneOsoby.setParents(null);
+            personEditData.setParents(null);
         } else {
-            daneOsoby.setParents((ReferenceListElement) tParents.getSelectedItem());
+            personEditData.setParents((ReferenceListElement) tParents.getSelectedItem());
         }
-        daneOsoby.setDokumenty(new HashSet<ReferenceListElement>(tDokumenty.getSelectedItems()));
+        personEditData.setRelatedDocuments(new HashSet<ReferenceListElement>(tRelatedDocuments.getSelectedItems()));
 
-        if (trybPracy == TrybPracy.EDYCJA) {
-            DatabaseDelegate.saveEditedPerson(daneOsoby);
+        if (editMode == EditMode.EDIT_EXISTING) {
+            DatabaseDelegate.saveEditedPerson(personEditData);
         } else {
-            DatabaseDelegate.saveNewPerson(daneOsoby);
+            DatabaseDelegate.saveNewPerson(personEditData);
         }
 
         return true;
     }
 
-    private void wyczyscPola() {
+    private void clearAllFields() {
         tNames.setText("");
         tSurname.setText("");
         tBirthDate.setText("");
@@ -232,11 +232,11 @@ public class PersonEditComponent extends AbstractEditComponent {
         tOccupation.setText("");
         tDescription.setText("");
         tParents.setSelectedIndex(0);
-        tRodzina.setModel(new DefaultTreeModel(new DefaultMutableTreeNode()));
+        tFamily.setModel(new DefaultTreeModel(new DefaultMutableTreeNode()));
     }
 
     @Override
-    public void usunObiekt(Long id) {
+    public void deleteElement(Long id) {
         int result = JOptionPane.showConfirmDialog(this, "Czy na pewno chcesz usun¹æ tê osobê?", "Usuwanie osoby", JOptionPane.YES_NO_OPTION);
         if (result == JOptionPane.YES_OPTION) {
             DatabaseDelegate.deletePersonOsobe(id);
@@ -245,7 +245,7 @@ public class PersonEditComponent extends AbstractEditComponent {
 
     @Override
     public String getTitle() {
-        if (trybPracy == TrybPracy.DODAWANIE) {
+        if (editMode == EditMode.CREATE_NEW) {
             return "Dodawanie nowej osoby";
         } else {
             return "Edycja danych osoby";
@@ -254,11 +254,11 @@ public class PersonEditComponent extends AbstractEditComponent {
 
     @Override
     public DiagramInfoStruct getDiagramInfo(Long id) {
-        PersonEditData daneOsoby = DatabaseDelegate.getPersonEditData(id);
+        PersonEditData personEditData = DatabaseDelegate.getPersonEditData(id);
         DiagramInfoStruct diagramInfo = new DiagramInfoStruct();
-        diagramInfo.idKorzenia = daneOsoby.getId();
-        diagramInfo.nazwa = daneOsoby.getNames() + " " + daneOsoby.getSurname() + " (" + daneOsoby.getId() + ")";
-        diagramInfo.description = "Diagram osoby '" + daneOsoby.getNames() + " " + daneOsoby.getSurname() + "'";
+        diagramInfo.setRootId(personEditData.getId());
+        diagramInfo.setName(personEditData.getNames() + " " + personEditData.getSurname() + " (" + personEditData.getId() + ")");
+        diagramInfo.setDescription("Diagram osoby '" + personEditData.getNames() + " " + personEditData.getSurname() + "'");
         return diagramInfo;
     }
 }

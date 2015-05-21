@@ -16,84 +16,84 @@ public class ClanEditComponent extends AbstractEditComponent {
 
     public final static long serialVersionUID = 0l;
 
-    private ClanEditData daneKlanu;
+    private ClanEditData clanData;
 
-    private Label lNazwa = new Label("Nazwa:");
+    private Label lName = new Label("Nazwa:");
     private Label lDescription = new Label("Description:");
-    private Label lKorzen = new Label("Protoplasta:");
+    private Label lRoot = new Label("Protoplasta:");
 
-    private TextField tNazwa = new TextField();
+    private TextField tName = new TextField();
     private TextField tDescription = new TextField();
-    private SingleValueReference tKorzen = new SingleValueReference();
+    private SingleValueReference tRoot = new SingleValueReference();
 
     public ClanEditComponent() {
 
         int y = 0;
-        this.add(lNazwa, lNazwa.getConstraints(0, y++));
+        this.add(lName, lName.getConstraints(0, y++));
         this.add(lDescription, lDescription.getConstraints(0, y++));
-        this.add(lKorzen, lKorzen.getConstraints(0, y++));
+        this.add(lRoot, lRoot.getConstraints(0, y++));
 
         y = 0;
-        this.add(tNazwa, tNazwa.getConstraints(1, y++));
+        this.add(tName, tName.getConstraints(1, y++));
         this.add(tDescription, tDescription.getConstraints(1, y++));
-        this.add(tKorzen, tKorzen.getConstraints(1, y++));
+        this.add(tRoot, tRoot.getConstraints(1, y++));
 
     }
 
-    public void wczytajDane(Long id) {
-        odswiezListy();
+    public void loadData(Long id) {
+        refreshLists();
 
         if (id == null) {
-            wyczyscPola();
+            clearAllFields();
             return;
         }
-        daneKlanu = DatabaseDelegate.getClanEditData(id);
+        clanData = DatabaseDelegate.getClanEditData(id);
 
-        tNazwa.setText(daneKlanu.getName());
-        tDescription.setText(daneKlanu.getDescription());
-        tKorzen.setSelectedItem(daneKlanu.getRoot());
+        tName.setText(clanData.getName());
+        tDescription.setText(clanData.getDescription());
+        tRoot.setSelectedItem(clanData.getRoot());
 
     }
 
-    private void odswiezListy() {
-        List<ReferenceListElement> osoby = DatabaseDelegate.getPeople();
-        tKorzen.removeAllItems();
-        tKorzen.addItem(new String("<Wybierz>"));
-        for (ReferenceListElement osoba : osoby) {
-            tKorzen.addItem(osoba);
+    private void refreshLists() {
+        List<ReferenceListElement> people = DatabaseDelegate.getPeople();
+        tRoot.removeAllItems();
+        tRoot.addItem(new String("<Wybierz>"));
+        for (ReferenceListElement person : people) {
+            tRoot.addItem(person);
         }
     }
 
-    public boolean zapiszDane() {
-        if (trybPracy == TrybPracy.DODAWANIE)
-            daneKlanu = new ClanEditData();
+    public boolean saveData() {
+        if (editMode == EditMode.CREATE_NEW)
+            clanData = new ClanEditData();
 
-        if (tKorzen.getSelectedIndex() == 0) {
+        if (tRoot.getSelectedIndex() == 0) {
             JOptionPane.showMessageDialog(this, "Wska¿ protoplastê klanu", "B³¹d", JOptionPane.ERROR_MESSAGE);
             return false;
         }
 
-        daneKlanu.setName(tNazwa.getText().trim());
-        daneKlanu.setDescription(tDescription.getText().trim());
-        daneKlanu.setRoot((ReferenceListElement) tKorzen.getSelectedItem());
+        clanData.setName(tName.getText().trim());
+        clanData.setDescription(tDescription.getText().trim());
+        clanData.setRoot((ReferenceListElement) tRoot.getSelectedItem());
 
-        if (trybPracy == TrybPracy.EDYCJA) {
-            DatabaseDelegate.saveEditedClan(daneKlanu);
+        if (editMode == EditMode.EDIT_EXISTING) {
+            DatabaseDelegate.saveEditedClan(clanData);
         } else {
-            DatabaseDelegate.saveNewClan(daneKlanu);
+            DatabaseDelegate.saveNewClan(clanData);
         }
 
         return true;
     }
 
-    private void wyczyscPola() {
-        tNazwa.setText("");
+    private void clearAllFields() {
+        tName.setText("");
         tDescription.setText("");
-        tKorzen.setSelectedItem(0);
+        tRoot.setSelectedItem(0);
     }
 
     @Override
-    public void usunObiekt(Long id) {
+    public void deleteElement(Long id) {
         int result = JOptionPane.showConfirmDialog(this, "Czy na pewno chcesz usun¹æ ten klan?", "Usuwanie klanu", JOptionPane.YES_NO_OPTION);
         if (result == JOptionPane.YES_OPTION) {
             DatabaseDelegate.deleteClan(id);
@@ -102,7 +102,7 @@ public class ClanEditComponent extends AbstractEditComponent {
 
     @Override
     public String getTitle() {
-        if (trybPracy == TrybPracy.DODAWANIE) {
+        if (editMode == EditMode.CREATE_NEW) {
             return "Dodawanie nowego klanu";
         } else {
             return "Edycja danych klanu";
@@ -111,11 +111,11 @@ public class ClanEditComponent extends AbstractEditComponent {
 
     @Override
     public DiagramInfoStruct getDiagramInfo(Long id) {
-        ClanEditData daneKlanu = DatabaseDelegate.getClanEditData(id);
+        ClanEditData clanData = DatabaseDelegate.getClanEditData(id);
         DiagramInfoStruct diagramInfo = new DiagramInfoStruct();
-        diagramInfo.idKorzenia = daneKlanu.getRoot().getId();
-        diagramInfo.nazwa = daneKlanu.getName();
-        diagramInfo.description = "Diagram klanu '" + daneKlanu.getName() + "'";
+        diagramInfo.setRootId(clanData.getRoot().getId());
+        diagramInfo.setName(clanData.getName());
+        diagramInfo.setDescription("Diagram klanu '" + clanData.getName() + "'");
         return diagramInfo;
     }
 }

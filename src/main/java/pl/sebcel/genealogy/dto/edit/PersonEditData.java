@@ -150,15 +150,15 @@ public class PersonEditData {
         return residence;
     }
 
-    public void setResidence(String miejsceZamieszkania) {
-        this.residence = miejsceZamieszkania;
+    public void setResidence(String residence) {
+        this.residence = residence;
     }
 
-    public Set<ReferenceListElement> getDokumenty() {
+    public Set<ReferenceListElement> getRelatedDocuments() {
         return relatedDocuments;
     }
 
-    public void setDokumenty(Set<ReferenceListElement> dokumenty) {
-        this.relatedDocuments = dokumenty;
+    public void setRelatedDocuments(Set<ReferenceListElement> relatedDocuments) {
+        this.relatedDocuments = relatedDocuments;
     }
 }
