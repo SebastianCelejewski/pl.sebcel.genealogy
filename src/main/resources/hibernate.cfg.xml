@@ -9,9 +9,9 @@
 
         <!-- Database connection settings -->
         <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
-        <property name="connection.url">jdbc:mysql://localhost:3306/genealogia</property>
-        <property name="connection.username">genealogia</property>
-        <property name="connection.password">genealogia</property>
+        <property name="connection.url">jdbc:mysql://localhost:3306/genealogy</property>
+        <property name="connection.username">genealogy</property>
+        <property name="connection.password">genealogy</property>
 
         <!-- JDBC connection pool (use the built-in) -->
         <property name="connection.pool_size">1</property>
@@ -31,12 +31,11 @@
         <!-- Drop and re-create the database schema on startup -->
         <property name="hbm2ddl.auto">none</property>
         
-        <mapping package="sebcel.genealogia.entity"/>
-        <mapping class="sebcel.genealogia.entity.Klan"/>
-        <mapping class="sebcel.genealogia.entity.Osoba"/>
-        <mapping class="sebcel.genealogia.entity.Zwiazek"/>
-        <mapping class="sebcel.genealogia.entity.Dokument"/>
-        <mapping class="sebcel.genealogia.entity.Notatka"/>
+        <mapping package="pl.sebcel.genealogy.entity"/>
+        <mapping class="pl.sebcel.genealogy.entity.Clan"/>
+        <mapping class="pl.sebcel.genealogy.entity.Person"/>
+        <mapping class="pl.sebcel.genealogy.entity.Relationship"/>
+        <mapping class="pl.sebcel.genealogy.entity.Document"/>
 
     </session-factory>
 
