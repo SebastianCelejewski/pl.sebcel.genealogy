@@ -1,7 +1,9 @@
 package pl.sebcel.genealogy.gui;
 
+import pl.sebcel.genealogy.gui.pedigree.PedigreeChartOptions;
+
 public interface IDrawOptionsListener {
     
-    public void updateDrawing(OpcjeRysowania opcjeRysowania);
+    public void updateDrawing(PedigreeChartOptions opcjeRysowania);
 
 }

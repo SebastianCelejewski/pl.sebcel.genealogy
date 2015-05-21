@@ -13,8 +13,8 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import pl.sebcel.genealogy.dto.ReferenceListElement;
-import pl.sebcel.genealogy.gui.component.list.MultiValueReferenceModel;
+import pl.sebcel.genealogy.dto.list.ReferenceListElement;
+import pl.sebcel.genealogy.gui.component.list.model.MultiValueReferenceModel;
 
 public class ReferenceSelector extends JDialog implements ActionListener {
 

@@ -9,28 +9,28 @@ import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 
-import pl.sebcel.genealogy.gui.component.EdycjaDokumentuKomponent;
-import pl.sebcel.genealogy.gui.component.EdycjaKlanuKomponent;
-import pl.sebcel.genealogy.gui.component.EdycjaKontener;
-import pl.sebcel.genealogy.gui.component.EdycjaOsobyKomponent;
-import pl.sebcel.genealogy.gui.component.EdycjaZwiazkuKomponent;
-import pl.sebcel.genealogy.gui.component.list.ListaDokumentowKomponent;
-import pl.sebcel.genealogy.gui.component.list.ListaKlanowKomponent;
-import pl.sebcel.genealogy.gui.component.list.ListaKontener;
-import pl.sebcel.genealogy.gui.component.list.ListaOsobKomponent;
-import pl.sebcel.genealogy.gui.component.list.ListaZwiazkowKomponent;
+import pl.sebcel.genealogy.gui.component.DocumentEditComponent;
+import pl.sebcel.genealogy.gui.component.ClanEditComponent;
+import pl.sebcel.genealogy.gui.component.EditConainer;
+import pl.sebcel.genealogy.gui.component.PersonEditComponent;
+import pl.sebcel.genealogy.gui.component.RelationshipEditComponent;
+import pl.sebcel.genealogy.gui.component.list.DocumentListComponent;
+import pl.sebcel.genealogy.gui.component.list.ClanListComponent;
+import pl.sebcel.genealogy.gui.component.list.ListContainer;
+import pl.sebcel.genealogy.gui.component.list.PeopleListComponent;
+import pl.sebcel.genealogy.gui.component.list.RelationshipListComponent;
 
 public class MainFrame extends JFrame {
 
-    private EdycjaKontener edycjaOsob = new EdycjaKontener(new EdycjaOsobyKomponent());
-    private EdycjaKontener edycjaZwiazkow = new EdycjaKontener(new EdycjaZwiazkuKomponent());
-    private EdycjaKontener edycjaKlanow = new EdycjaKontener(new EdycjaKlanuKomponent());
-    private EdycjaKontener edycjaDokumentow = new EdycjaKontener(new EdycjaDokumentuKomponent());
+    private EditConainer edycjaOsob = new EditConainer(new PersonEditComponent());
+    private EditConainer edycjaZwiazkow = new EditConainer(new RelationshipEditComponent());
+    private EditConainer edycjaKlanow = new EditConainer(new ClanEditComponent());
+    private EditConainer edycjaDokumentow = new EditConainer(new DocumentEditComponent());
 
-    private ListaKontener listaOsob = new ListaKontener(new ListaOsobKomponent(), edycjaOsob);
-    private ListaKontener listaZwiazkow = new ListaKontener(new ListaZwiazkowKomponent(), edycjaZwiazkow);
-    private ListaKontener listaKlanow = new ListaKontener(new ListaKlanowKomponent(), edycjaKlanow);
-    private ListaKontener listaDokumentow = new ListaKontener(new ListaDokumentowKomponent(), edycjaDokumentow);
+    private ListContainer listaOsob = new ListContainer(new PeopleListComponent(), edycjaOsob);
+    private ListContainer listaZwiazkow = new ListContainer(new RelationshipListComponent(), edycjaZwiazkow);
+    private ListContainer listaKlanow = new ListContainer(new ClanListComponent(), edycjaKlanow);
+    private ListContainer listaDokumentow = new ListContainer(new DocumentListComponent(), edycjaDokumentow);
     private JTabbedPane tabbedPane = new JTabbedPane();
 
     public final static long serialVersionUID = 0l;
