@@ -10,7 +10,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "dokumenty")
+@Table(name = "documents")
 public class Document {
 
     private Long id;
@@ -30,7 +30,7 @@ public class Document {
         this.id = id;
     }
 
-    @Column(name = "tytul", nullable = false, length = 255)
+    @Column(name = "title", nullable = false, length = 255)
     public String getTitle() {
         return title;
     }
@@ -48,7 +48,7 @@ public class Document {
         this.symbol = symbol;
     }
 
-    @Column(name = "opis", nullable = true)
+    @Column(name = "description", nullable = true)
     public String getDescription() {
         return description;
     }

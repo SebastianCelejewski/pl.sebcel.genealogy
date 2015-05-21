@@ -390,7 +390,7 @@ public class DatabaseDelegate {
         if (families != null) {
             for (Relationship relationship : families) {
                 Person spouse = null;
-                if (personEditData.getSex() != null && personEditData.getSex().equalsIgnoreCase("Male")) {
+                if (personEditData.getSex() != null && personEditData.getSex().equalsIgnoreCase("male")) {
                     spouse = relationship.getFemale();
                 } else {
                     spouse = relationship.getMale();

@@ -15,13 +15,13 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "osoby")
+@Table(name = "people")
 public class Person {
 
     private Long id;
     private String names;
     private String surname;
-    private String plec;
+    private String sex;
 
     private String birthDate;
     private String birthPlace;
@@ -52,16 +52,16 @@ public class Person {
         this.id = id;
     }
 
-    @Column(name = "plec", nullable = true, length = 1)
+    @Column(name = "sex", nullable = true, length = 1)
     public String getSex() {
-        return plec;
+        return sex;
     }
 
-    public void setSex(String plec) {
-        this.plec = plec;
+    public void setSex(String sex) {
+        this.sex = sex;
     }
 
-    @Column(name = "imiona", nullable = true, length = 64)
+    @Column(name = "names", nullable = true, length = 64)
     public String getNames() {
         return names;
     }
@@ -70,7 +70,7 @@ public class Person {
         this.names = names;
     }
 
-    @Column(name = "nazwisko", nullable = true, length = 128)
+    @Column(name = "surname", nullable = true, length = 128)
     public String getSurname() {
         return surname;
     }
@@ -79,7 +79,7 @@ public class Person {
         this.surname = surname;
     }
 
-    @Column(name = "data_urodzenia", nullable = true, length = 64)
+    @Column(name = "birth_date", nullable = true, length = 64)
     public String getBirthDate() {
         return birthDate;
     }
@@ -88,7 +88,7 @@ public class Person {
         this.birthDate = birthDate;
     }
 
-    @Column(name = "miejsce_urodzenia", nullable = true, length = 128)
+    @Column(name = "birth_place", nullable = true, length = 128)
     public String getBirthPlace() {
         return birthPlace;
     }
@@ -97,7 +97,7 @@ public class Person {
         this.birthPlace = birthPlace;
     }
 
-    @Column(name = "data_smierci", nullable = true, length = 64)
+    @Column(name = "death_date", nullable = true, length = 64)
     public String getDeathDate() {
         return deathDate;
     }
@@ -106,7 +106,7 @@ public class Person {
         this.deathDate = deathDate;
     }
 
-    @Column(name = "miejsce_smierci", nullable = true, length = 128)
+    @Column(name = "death_place", nullable = true, length = 128)
     public String getDeathPlace() {
         return deathPlace;
     }
@@ -115,7 +115,7 @@ public class Person {
         this.deathPlace = deathPlace;
     }
 
-    @Column(name = "data_pochowania", nullable = true, length = 64)
+    @Column(name = "burial_date", nullable = true, length = 64)
     public String getBurialDate() {
         return burialDate;
     }
@@ -124,7 +124,7 @@ public class Person {
         this.burialDate = burialDate;
     }
 
-    @Column(name = "miejsce_pochowania", nullable = true, length = 128)
+    @Column(name = "burial_place", nullable = true, length = 128)
     public String getBurialPlace() {
         return burialPlace;
     }
@@ -134,7 +134,7 @@ public class Person {
     }
 
     @ManyToOne
-    @JoinColumn(name = "id_zwiazku_rodzicow")
+    @JoinColumn(name = "parents_relationship_id")
     public Relationship getParents() {
         return parents;
     }
@@ -161,7 +161,7 @@ public class Person {
         this.relationshipsAsFemale = relationshipsAsFemale;
     }
 
-    @Column(name = "zawody_wykonywane", nullable = true, length = 255)
+    @Column(name = "occupation", nullable = true, length = 255)
     public String getOccupation() {
         return occupation;
     }
@@ -170,7 +170,7 @@ public class Person {
         this.occupation = occupation;
     }
 
-    @Column(name = "wyksztalcenie", nullable = true)
+    @Column(name = "education", nullable = true)
     public String getEducation() {
         return education;
     }
@@ -179,7 +179,7 @@ public class Person {
         this.education = education;
     }
 
-    @Column(name = "opis", nullable = true)
+    @Column(name = "description", nullable = true)
     public String getDescription() {
         return description;
     }
@@ -188,7 +188,7 @@ public class Person {
         this.description = description;
     }
 
-    @Column(name = "miejsce_zamieszkania", nullable = true)
+    @Column(name = "residence", nullable = true)
     public String getResidence() {
         return residence;
     }
@@ -198,9 +198,9 @@ public class Person {
     }
 
     @ManyToMany
-    @JoinTable (name = "dokumenty_osoby", 
-        joinColumns = {@JoinColumn(name = "id_osoby", nullable = false)}, 
-        inverseJoinColumns = {@JoinColumn (name = "id_dokumentu", nullable = false) }
+    @JoinTable (name = "documents_people", 
+        joinColumns = {@JoinColumn(name = "person_id", nullable = false)}, 
+        inverseJoinColumns = {@JoinColumn (name = "document_id", nullable = false) }
     )
     public Set<Document> getRelatedDocuments() {
         return relatedDocuments;

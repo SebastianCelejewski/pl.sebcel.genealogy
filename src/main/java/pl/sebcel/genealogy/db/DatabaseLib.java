@@ -71,7 +71,7 @@ public class DatabaseLib {
         System.out.println("[DatabaseLib][getMales]");
         Session session = HibernateUtil.getSession();
         Criteria criteria = session.createCriteria(Person.class);
-        criteria.add(Expression.eq("plec", "male"));
+        criteria.add(Expression.eq("sex", "male"));
         List<Person> result = criteria.list();
         return result;
     }
@@ -81,7 +81,7 @@ public class DatabaseLib {
         System.out.println("[DatabaseLib][getFemales]");
         Session session = HibernateUtil.getSession();
         Criteria criteria = session.createCriteria(Person.class);
-        criteria.add(Expression.eq("plec", "female"));
+        criteria.add(Expression.eq("sex", "female"));
         List<Person> result = criteria.list();
         return result;
     }

@@ -9,7 +9,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table (name="klany")
+@Table (name="clans")
 public class Clan {
 
 	private Long id;
@@ -27,7 +27,7 @@ public class Clan {
 		this.id = id;
 	}
 
-	@Column (name="nazwa", nullable=true, length=64)
+	@Column (name="name", nullable=true, length=64)
 	public String getName() {
 		return name;
 	}
@@ -35,7 +35,7 @@ public class Clan {
 		this.name = name;
 	}
 
-	@Column (name="opis", nullable=true, length=512)
+	@Column (name="description", nullable=true, length=512)
 	public String getDescription() {
 		return description;
 	}
@@ -44,7 +44,7 @@ public class Clan {
 	}
 	
 	@ManyToOne 
-	@JoinColumn (name="korzen_id")
+	@JoinColumn (name="root_id")
 	public Person getRoot() {
 		return root;
 	}

@@ -1,10 +1,5 @@
-CREATE DATABASE  IF NOT EXISTS `genealogia` /*!40100 DEFAULT CHARACTER SET utf8 */;
-USE `genealogia`;
--- MySQL dump 10.13  Distrib 5.6.23, for Win64 (x86_64)
---
--- Host: localhost    Database: genealogia_dev
--- ------------------------------------------------------
--- Server version	5.6.14-log
+CREATE DATABASE  IF NOT EXISTS `genealogy` /*!40100 DEFAULT CHARACTER SET utf8 */;
+USE `genealogy`;
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -18,118 +13,102 @@ USE `genealogia`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `dokumenty`
+-- Table structure for table `clans`
 --
 
-DROP TABLE IF EXISTS `dokumenty`;
+DROP TABLE IF EXISTS `clans`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `dokumenty` (
+CREATE TABLE `clans` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `tytul` varchar(255) DEFAULT NULL,
+  `name` varchar(64) DEFAULT NULL,
+  `description` varchar(512) DEFAULT NULL,
+  `root_id` int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `documents`
+--
+
+DROP TABLE IF EXISTS `documents`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `documents` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) DEFAULT NULL,
   `symbol` varchar(255) DEFAULT NULL,
-  `opis` text,
+  `description` text,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `dokumenty_osoby`
+-- Table structure for table `documents_people`
 --
 
-DROP TABLE IF EXISTS `dokumenty_osoby`;
+DROP TABLE IF EXISTS `documents_people`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `dokumenty_osoby` (
-  `id_osoby` int(11) unsigned NOT NULL,
-  `id_dokumentu` int(11) unsigned NOT NULL,
-  PRIMARY KEY (`id_osoby`,`id_dokumentu`),
-  KEY `fk_dokumenty_osoby_id_dokumentu_idx` (`id_dokumentu`),
-  CONSTRAINT `fk_dokumenty_osoby_id_osoby` FOREIGN KEY (`id_osoby`) REFERENCES `osoby` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_dokumenty_osoby_id_dokumentu` FOREIGN KEY (`id_dokumentu`) REFERENCES `dokumenty` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+CREATE TABLE `documents_people` (
+  `person_id` int(11) unsigned NOT NULL,
+  `document_id` int(11) unsigned NOT NULL,
+  PRIMARY KEY (`person_id`,`document_id`),
+  KEY `fk_dokumenty_osoby_id_dokumentu_idx` (`document_id`),
+  CONSTRAINT `fk_document_id` FOREIGN KEY (`document_id`) REFERENCES `documents` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_person_id` FOREIGN KEY (`person_id`) REFERENCES `people` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `klany`
+-- Table structure for table `people`
 --
 
-DROP TABLE IF EXISTS `klany`;
+DROP TABLE IF EXISTS `people`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `klany` (
+CREATE TABLE `people` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `nazwa` varchar(64) DEFAULT NULL,
-  `opis` varchar(512) DEFAULT NULL,
-  `korzen_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `names` varchar(45) DEFAULT NULL,
+  `surname` varchar(128) DEFAULT NULL,
+  `birth_date` varchar(45) DEFAULT NULL,
+  `birth_place` varchar(128) DEFAULT NULL,
+  `death_date` varchar(45) DEFAULT NULL,
+  `death_place` varchar(128) DEFAULT NULL,
+  `sex` varchar(10) DEFAULT NULL,
+  `parents_relationship_id` int(10) unsigned DEFAULT NULL,
+  `burial_date` varchar(45) DEFAULT NULL,
+  `burial_place` varchar(128) DEFAULT NULL,
+  `occupation` varchar(255) DEFAULT NULL,
+  `description` text,
+  `education` varchar(255) DEFAULT NULL,
+  `residence` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='Lista osób rodziny';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `notatki`
+-- Table structure for table `relationships`
 --
 
-DROP TABLE IF EXISTS `notatki`;
+DROP TABLE IF EXISTS `relationships`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `notatki` (
+CREATE TABLE `relationships` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `id_osoby` int(10) unsigned NOT NULL DEFAULT '0',
-  `tresc` text,
-  `tytul` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `osoby`
---
-
-DROP TABLE IF EXISTS `osoby`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `osoby` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `imiona` varchar(45) DEFAULT NULL,
-  `nazwisko` varchar(128) DEFAULT NULL,
-  `data_urodzenia` varchar(45) DEFAULT NULL,
-  `miejsce_urodzenia` varchar(128) DEFAULT NULL,
-  `data_smierci` varchar(45) DEFAULT NULL,
-  `miejsce_smierci` varchar(128) DEFAULT NULL,
-  `plec` varchar(10) DEFAULT NULL,
-  `id_zwiazku_rodzicow` int(10) unsigned DEFAULT NULL,
-  `data_pochowania` varchar(45) DEFAULT NULL,
-  `miejsce_pochowania` varchar(128) DEFAULT NULL,
-  `zawody_wykonywane` varchar(255) DEFAULT NULL,
-  `opis` text,
-  `wyksztalcenie` varchar(255) DEFAULT NULL,
-  `miejsce_zamieszkania` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `zwiazki`
---
-
-DROP TABLE IF EXISTS `zwiazki`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `zwiazki` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `id_mezczyzny` int(10) unsigned NOT NULL DEFAULT '0',
-  `id_kobiety` int(10) unsigned NOT NULL DEFAULT '0',
-  `data_slubu` varchar(45) DEFAULT NULL,
-  `miejsce_slubu` varchar(128) DEFAULT NULL,
-  `data_poznania` varchar(45) DEFAULT NULL,
-  `miejsce_poznania` varchar(128) DEFAULT NULL,
-  `data_rozstania` varchar(45) DEFAULT NULL,
-  `miejsce_rozstania` varchar(128) DEFAULT NULL,
-  `data_rozwodu` varchar(45) DEFAULT NULL,
-  `miejsce_rozwodu` varchar(128) DEFAULT NULL,
-  `opis` text,
+  `male_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `female_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `marriage_date` varchar(45) DEFAULT NULL,
+  `marriage_place` varchar(128) DEFAULT NULL,
+  `first_met_date` varchar(45) DEFAULT NULL,
+  `first_met_place` varchar(128) DEFAULT NULL,
+  `separation_date` varchar(45) DEFAULT NULL,
+  `separation_place` varchar(128) DEFAULT NULL,
+  `divorce_date` varchar(45) DEFAULT NULL,
+  `divorce_place` varchar(128) DEFAULT NULL,
+  `description` text,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -142,5 +121,3 @@ CREATE TABLE `zwiazki` (
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
--- Dump completed on 2015-05-12 22:08:50

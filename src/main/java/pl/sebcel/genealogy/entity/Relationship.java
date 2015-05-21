@@ -12,7 +12,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table (name="zwiazki")
+@Table (name="relationships")
 public class Relationship {
 
 	private Long id;
@@ -40,7 +40,7 @@ public class Relationship {
 	}
 
 	@ManyToOne
-	@JoinColumn (name="id_mezczyzny")
+	@JoinColumn (name="male_id")
 	public Person getMale() {
 		return male;
 	}
@@ -49,7 +49,7 @@ public class Relationship {
 	}
 
 	@ManyToOne
-	@JoinColumn (name="id_kobiety")
+	@JoinColumn (name="female_id")
 	public Person getFemale() {
 		return female;
 	}
@@ -57,7 +57,7 @@ public class Relationship {
 		this.female = female;
 	}
 
-	@Column (name="data_slubu", nullable=true)
+	@Column (name="marriage_date", nullable=true)
 	public String getMarriageDate() {
 		return MarriageDate;
 	}
@@ -65,7 +65,7 @@ public class Relationship {
 		this.MarriageDate = MarriageDate;
 	}
 	
-	@Column (name="miejsce_slubu", nullable=true)
+	@Column (name="marriage_place", nullable=true)
 	public String getMarriagePlace() {
 		return marriagePlace;
 	}
@@ -81,7 +81,7 @@ public class Relationship {
 		this.children = children;
 	}
 	
-	@Column (name="data_poznania", nullable=true)
+	@Column (name="first_met_date", nullable=true)
 	public String getFirstMetDate() {
 		return firstMetDate;
 	}
@@ -89,7 +89,7 @@ public class Relationship {
 		this.firstMetDate = firstMetDate;
 	}
 	
-	@Column (name="miejsce_poznania", nullable=true)
+	@Column (name="first_met_place", nullable=true)
 	public String getFirstMetPlace() {
 		return firstMetPlace;
 	}
@@ -97,7 +97,7 @@ public class Relationship {
 		this.firstMetPlace = firstMetPlace;
 	}
 
-	@Column (name="data_rozstania", nullable=true)
+	@Column (name="separation_date", nullable=true)
 	public String getSeparationDate() {
 		return separationDate;
 	}
@@ -105,7 +105,7 @@ public class Relationship {
 		this.separationDate = separationDate;
 	}
 	
-	@Column (name="miejsce_rozstania", nullable=true)
+	@Column (name="separation_place", nullable=true)
 	public String getSeparationPlace() {
 		return separationPlace;
 	}
@@ -113,7 +113,7 @@ public class Relationship {
 		this.separationPlace = separationPlace;
 	}
 
-	@Column (name="data_rozwodu", nullable=true)
+	@Column (name="divorce_date", nullable=true)
 	public String getDivorceDate() {
 		return divorceDate;
 	}
@@ -121,7 +121,7 @@ public class Relationship {
 		this.divorceDate = divorceDate;
 	}
 
-	@Column (name="miejsce_rozwodu", nullable=true)
+	@Column (name="divorce_place", nullable=true)
 	public String getDivorcePlace() {
 		return divorcePlace;
 	}
@@ -129,7 +129,7 @@ public class Relationship {
 		this.divorcePlace = divorcePlace;
 	}
 	
-	@Column (name="opis", nullable = true)
+	@Column (name="description", nullable = true)
     public String getDescription() {
         return description;
     }
