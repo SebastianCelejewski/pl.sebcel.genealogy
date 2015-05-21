@@ -36,40 +36,40 @@ public class PedigreeChartFrame extends JFrame implements ActionListener, IDrawO
 
     public final static long serialVersionUID = 0l;
 
-    private static Color kolorOsoby = Color.RED;
-    private static Color kolorMalzonka = Color.BLUE;
-    private static Color kolorInfo = Color.GRAY;
-    private static Color kolorDzieci = Color.BLACK;
-    private static Color kolorMalzonkow = new Color(200, 200, 200);
-    private static Color kolorSlubu = new Color(0, 200, 0);
+    private static Color personColor = Color.RED;
+    private static Color spouseColor = Color.BLUE;
+    private static Color personInfoColor = Color.GRAY;
+    private static Color childrenColor = Color.BLACK;
+    private static Color spouseLineColor = new Color(200, 200, 200);
+    private static Color marriageInfoColor = new Color(0, 200, 0);
 
-    private final JPanel panelKlawiszy = new JPanel();
-    private final PedigreeChartOptionsPanel panelOpcji = new PedigreeChartOptionsPanel();
-    private final JButton klawiszZapisz = new JButton("Zapisz");
-    private final JButton klawiszZamknij = new JButton("Zamknij");
-    private final JButton klawiszOpcje = new JButton("Opcje");
-    private final PedigreeTreeComponent drzewo = new PedigreeTreeComponent();
+    private final JPanel buttonsPanel = new JPanel();
+    private final PedigreeChartOptionsPanel chartOptionsPanel = new PedigreeChartOptionsPanel();
+    private final JButton saveButton = new JButton("Zapisz");
+    private final JButton closeButton = new JButton("Zamknij");
+    private final JButton optionsButton = new JButton("Opcje");
+    private final PedigreeTreeComponent treeComponent = new PedigreeTreeComponent();
     private final JScrollPane scrollPane = new JScrollPane(new JLabel("Proszê czekaæ...", JLabel.CENTER));
 
     private DiagramInfoStruct diagramInfo;
 
     public PedigreeChartFrame() {
-        panelKlawiszy.add(klawiszZapisz);
-        panelKlawiszy.add(klawiszZamknij);
-        panelKlawiszy.add(klawiszOpcje);
+        buttonsPanel.add(saveButton);
+        buttonsPanel.add(closeButton);
+        buttonsPanel.add(optionsButton);
 
-        klawiszZapisz.addActionListener(this);
-        klawiszZamknij.addActionListener(this);
-        klawiszOpcje.addActionListener(this);
+        saveButton.addActionListener(this);
+        closeButton.addActionListener(this);
+        optionsButton.addActionListener(this);
 
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         this.add(scrollPane, BorderLayout.CENTER);
-        this.add(panelKlawiszy, BorderLayout.SOUTH);
-        panelOpcji.setDrawOptionsListener(this);
+        this.add(buttonsPanel, BorderLayout.SOUTH);
+        chartOptionsPanel.setDrawOptionsListener(this);
     }
 
-    public void draw(final DiagramInfoStruct diagramInfo) {
+    public void drawPedigreeChart(final DiagramInfoStruct diagramInfo) {
         this.setSize(800, 600);
         this.setLocation(100, 100);
         this.setTitle(diagramInfo.getDescription());
@@ -78,50 +78,55 @@ public class PedigreeChartFrame extends JFrame implements ActionListener, IDrawO
 
         new Thread() {
             public void run() {
-                rysuj(new PedigreeChartOptions());
+                draw(new PedigreeChartOptions());
             }
         }.start();
     }
 
     @Override
-    public void updateDrawing(PedigreeChartOptions opcjeRysowania) {
-        rysuj(opcjeRysowania);
+    public void updateDrawing(PedigreeChartOptions chartOptions) {
+        draw(chartOptions);
     }
 
-    private void rysuj(PedigreeChartOptions opcjeRysowania) {
+    private void draw(PedigreeChartOptions chartOptions) {
         System.out.println("rysujê");
-        Image obrazDrzewa = rysujDrzewo(diagramInfo.getRootId(), new Font("Courier", Font.PLAIN, 12 * opcjeRysowania.getZoom()), 20, opcjeRysowania);
-        drzewo.setImage(obrazDrzewa);
-        scrollPane.setViewportView(PedigreeChartFrame.this.drzewo);
+        Image pedigreeTreeImage = drawTree(diagramInfo.getRootId(), new Font("Courier", Font.PLAIN, 12 * chartOptions.getZoom()), 20, chartOptions);
+        treeComponent.setImage(pedigreeTreeImage);
+        scrollPane.setViewportView(PedigreeChartFrame.this.treeComponent);
         repaint();
     }
 
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource().equals(klawiszZamknij)) {
+        if (e.getSource().equals(closeButton)) {
             this.setVisible(false);
         }
 
-        if (e.getSource().equals(klawiszOpcje)) {
-            panelOpcji.setVisible(true);
+        if (e.getSource().equals(optionsButton)) {
+            chartOptionsPanel.setVisible(true);
         }
 
-        if (e.getSource().equals(klawiszZapisz)) {
+        if (e.getSource().equals(saveButton)) {
             JFileChooser fileChooser = new JFileChooser();
             fileChooser.setFileFilter(new FileFilter() {
 
                 @Override
                 public boolean accept(File f) {
                     String end = f.getName().substring(f.getName().length() - 4).toLowerCase();
-                    if (end.equals(".png"))
+                    if (end.equals(".png")) {
                         return true;
-                    if (end.equals(".jpg"))
+                    }
+                    if (end.equals(".jpg")) {
                         return true;
-                    if (end.equals(".gif"))
+                    }
+                    if (end.equals(".gif")) {
                         return true;
-                    if (end.equals(".bmp"))
+                    }
+                    if (end.equals(".bmp")) {
                         return true;
-                    if (end.equals(".png"))
+                    }
+                    if (end.equals(".png")) {
                         return true;
+                    }
                     return false;
                 }
 
@@ -136,7 +141,7 @@ public class PedigreeChartFrame extends JFrame implements ActionListener, IDrawO
             if (returnVal == JFileChooser.APPROVE_OPTION) {
                 try {
                     String filename = fileChooser.getSelectedFile().getCanonicalPath();
-                    Image image = drzewo.getImage();
+                    Image image = treeComponent.getImage();
                     Jimi.putImage(image, filename);
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(this, "Wyst¹pi³ b³¹d:\n" + ex.getMessage(), "B³¹d", JOptionPane.ERROR_MESSAGE);
@@ -145,15 +150,15 @@ public class PedigreeChartFrame extends JFrame implements ActionListener, IDrawO
         }
     }
 
-    private Image rysujDrzewo(Long idOsoby, Font font, int szerokoscPokolenia, PedigreeChartOptions opcjeRysowania) {
-        Dimension bufferDimensions = new Dimension(10 * font.getSize() * szerokoscPokolenia, 500 * font.getSize());
+    private Image drawTree(Long personId, Font font, int widthOfGeneration, PedigreeChartOptions chartOptions) {
+        Dimension bufferDimensions = new Dimension(10 * font.getSize() * widthOfGeneration, 500 * font.getSize());
         BufferedImage image = new BufferedImage(bufferDimensions.width, bufferDimensions.height, BufferedImage.TYPE_BYTE_INDEXED);
         Graphics g = image.getGraphics();
         g.setColor(Color.WHITE);
         g.fillRect(0, 0, bufferDimensions.width, bufferDimensions.height);
         g.setFont(font);
-        Dimension wymiary = rysuj(idOsoby, g, 0, 0, szerokoscPokolenia, opcjeRysowania);
-        BufferedImage newImage = new BufferedImage(wymiary.width, wymiary.height, BufferedImage.TYPE_BYTE_INDEXED);
+        Dimension dimension = draw(personId, g, 0, 0, widthOfGeneration, chartOptions);
+        BufferedImage newImage = new BufferedImage(dimension.width, dimension.height, BufferedImage.TYPE_BYTE_INDEXED);
         newImage.getGraphics().drawImage(image, 0, 0, new ImageObserver() {
 
             public boolean imageUpdate(Image img, int infoflags, int x, int y, int width, int height) {
@@ -164,248 +169,247 @@ public class PedigreeChartFrame extends JFrame implements ActionListener, IDrawO
         return newImage;
     }
 
-    private Dimension rysuj(Long idOsoby, Graphics g, int x, int y, int szerokoscPokolenia, PedigreeChartOptions opcjeRysowania) {
+    private Dimension draw(Long personId, Graphics g, int x, int y, int widthOfGeneration, PedigreeChartOptions chartOptions) {
         int fontSize = g.getFont().getSize();
-        int szerokosc = szerokoscPokolenia * fontSize;
-        int wysokosc = fontSize;
+        int width = widthOfGeneration * fontSize;
+        int height = fontSize;
 
-        PersonTreeElement osoba = DatabaseDelegate.getPersonDataForPedigree(idOsoby);
-        String nazwa = osoba.getDescription();
-        if (opcjeRysowania.isPokazId()) {
-            nazwa += " (" + osoba.getId() + ")";
+        PersonTreeElement person = DatabaseDelegate.getPersonDataForPedigree(personId);
+        String personName = person.getDescription();
+        if (chartOptions.isShowIdentifiers()) {
+            personName += " (" + person.getId() + ")";
         }
 
-        g.setColor(kolorOsoby);
+        g.setColor(personColor);
         g.setFont(new Font(g.getFont().getName(), Font.BOLD, fontSize));
-        g.drawString(nazwa, x, y + wysokosc);
+        g.drawString(personName, x, y + height);
         g.setFont(new Font(g.getFont().getName(), Font.PLAIN, fontSize));
 
-        g.setColor(kolorInfo);
-        String urInfo = osoba.getBirthData();
-        if (urInfo.length() > 0 && opcjeRysowania.isPokazDaneUrodzenia()) {
-            wysokosc += fontSize;
-            g.drawString(urInfo, x, y + wysokosc);
+        g.setColor(personInfoColor);
+        String birthInfo = person.getBirthData();
+        if (birthInfo.length() > 0 && chartOptions.isShowBirthInfo()) {
+            height += fontSize;
+            g.drawString(birthInfo, x, y + height);
         }
-        String smInfo = osoba.getDeathData();
-        if (smInfo.length() > 0 && opcjeRysowania.isPokazDaneSmierci()) {
-            wysokosc += fontSize;
-            g.drawString(smInfo, x, y + wysokosc);
+        String deathInfo = person.getDeathData();
+        if (deathInfo.length() > 0 && chartOptions.isShowDeathInfo()) {
+            height += fontSize;
+            g.drawString(deathInfo, x, y + height);
         }
-        String zamInfo = osoba.getResidenceData();
-        if (zamInfo.length() > 0 && opcjeRysowania.isPokazDaneZamieszkania()) {
-            wysokosc += fontSize;
-            g.drawString(zamInfo, x, y + wysokosc);
+        String residenceInfo = person.getResidenceData();
+        if (residenceInfo.length() > 0 && chartOptions.isShowResidenceInfo()) {
+            height += fontSize;
+            g.drawString(residenceInfo, x, y + height);
         }
-        String zawInfo = osoba.getOccupationData();
-        if (zawInfo.length() > 0 && opcjeRysowania.isPokazEducation()) {
-            wysokosc += fontSize;
-            g.drawString(zawInfo, x, y + wysokosc);
+        String occupationInfo = person.getOccupationData();
+        if (occupationInfo.length() > 0 && chartOptions.isShowOccupationInfo()) {
+            height += fontSize;
+            g.drawString(occupationInfo, x, y + height);
         }
-        if (urInfo.length() > 0 || smInfo.length() > 0 || zawInfo.length() > 0 || zamInfo.length() > 0) {
-            wysokosc += fontSize / 2;
-        }
-
-        int szer = (int) g.getFont().getStringBounds(nazwa, new FontRenderContext(new AffineTransform(), false, false)).getWidth();
-        Dimension wymiaryRodzin = rysujFamilies(osoba, g, x, y + wysokosc, szer, wysokosc, szerokoscPokolenia, opcjeRysowania);
-        wysokosc += wymiaryRodzin.height;
-        if (wymiaryRodzin.width > szerokosc) {
-            szerokosc = wymiaryRodzin.width;
+        if (birthInfo.length() > 0 || deathInfo.length() > 0 || occupationInfo.length() > 0 || residenceInfo.length() > 0) {
+            height += fontSize / 2;
         }
 
-        return new Dimension(szerokosc, wysokosc);
+        int personNameWidth = (int) g.getFont().getStringBounds(personName, new FontRenderContext(new AffineTransform(), false, false)).getWidth();
+        Dimension familiesDimension = drawFamilies(person, g, x, y + height, personNameWidth, height, widthOfGeneration, chartOptions);
+        height += familiesDimension.height;
+        if (familiesDimension.width > width) {
+            width = familiesDimension.width;
+        }
+
+        return new Dimension(width, height);
     }
 
-    private Dimension rysujFamilies(PersonTreeElement osoba, Graphics g, int x, int y, int szerMalzonka, int wysMalzonka, int szerokoscPokolenia, PedigreeChartOptions opcjeRysowania) {
+    private Dimension drawFamilies(PersonTreeElement person, Graphics g, int x, int y, int spouseInfoWidth, int spouseInfoHeight, int widthOfGeneration, PedigreeChartOptions chartOptions) {
         int fontSize = g.getFont().getSize();
-        int wysokosc = 0;
-        int szerokosc = szerokoscPokolenia * fontSize;
+        int height = 0;
+        int width = widthOfGeneration * fontSize;
 
-        List<FamilyTreeElement> zwiazki = osoba.getFamilies();
+        List<FamilyTreeElement> families = person.getFamilies();
 
-        int wysokoscRodzin = 0;
-        if (zwiazki != null && zwiazki.size() > 0) {
+        int heightOfFamilies = 0;
+        if (families != null && families.size() > 0) {
             int x1 = 0;
             int y1 = 0;
-            int licznik = 0;
-            for (FamilyTreeElement zwiazek : zwiazki) {
-                Long idMalzonka = zwiazek.getSpouseId();
-                PersonTreeElement malzonek = DatabaseDelegate.getPersonDataForPedigree(idMalzonka);
+            int counter = 0;
+            for (FamilyTreeElement family : families) {
+                Long spouseId = family.getSpouseId();
+                PersonTreeElement spouse = DatabaseDelegate.getPersonDataForPedigree(spouseId);
 
                 int x0 = x;
-                int y0 = y + wysokosc;
+                int y0 = y + height;
                 if (x1 > 0 && y1 > 0) {
-                    g.setColor(kolorMalzonkow);
+                    g.setColor(spouseLineColor);
                     g.drawLine(x0, y0, x1, y1);
                 }
 
                 x1 = x0;
                 y1 = y0 + fontSize;
-                Dimension wymiaryFamilies = rysujRodzine(zwiazek, malzonek, g, x, y + wysokosc, licznik == 0, szerMalzonka, wysMalzonka, szerokoscPokolenia, opcjeRysowania);
-                int wysokoscFamilies = wymiaryFamilies.height;
-                wysokoscRodzin += wysokoscFamilies;
-                if (wymiaryFamilies.width > szerokosc) {
-                    szerokosc = wymiaryFamilies.width;
+                Dimension familiesDimension = drawFamily(family, spouse, g, x, y + height, counter == 0, spouseInfoWidth, spouseInfoHeight, widthOfGeneration, chartOptions);
+                int familiesHeight = familiesDimension.height;
+                heightOfFamilies += familiesHeight;
+                if (familiesDimension.width > width) {
+                    width = familiesDimension.width;
                 }
-                wysokosc += wysokoscFamilies + fontSize;
-                licznik++;
+                height += familiesHeight + fontSize;
+                counter++;
             }
         }
 
-        return new Dimension(szerokosc, wysokosc);
+        return new Dimension(width, height);
     }
 
-    private Dimension rysujRodzine(FamilyTreeElement zwiazek, PersonTreeElement malzonek, Graphics g, int x, int y, boolean obnizenie, int szerMalzonka, int wysMalzonka, int szerokoscPokolenia, PedigreeChartOptions opcjeRysowania) {
+    private Dimension drawFamily(FamilyTreeElement family, PersonTreeElement spouse, Graphics g, int x, int y, boolean lowered, int spouseInfoWidth, int spouseInfoHeight, int widthOfGeneration, PedigreeChartOptions chartOptions) {
 
         int fontSize = g.getFont().getSize();
-        int rozmiar = fontSize * szerokoscPokolenia;
+        int width = fontSize * widthOfGeneration;
 
-        int wysokosc = fontSize;
-        int szerokosc = szerokoscPokolenia * fontSize;
+        int height = fontSize;
 
-        int szerokoscDzieci = 0;
-        int wysokoscDzieci = 0;
+        int childrenWidth = 0;
+        int childrenHeight = 0;
 
-        Dimension wymiaryMalzonka = rysujMalzonka(zwiazek, malzonek, g, x, y, szerokoscPokolenia, opcjeRysowania);
-        wysokosc += wymiaryMalzonka.height;
+        Dimension spouseDimension = drawSpouse(family, spouse, g, x, y, widthOfGeneration, chartOptions);
+        height += spouseDimension.height;
 
-        String nazwaMalzonka = malzonek.getDescription();
-        if (opcjeRysowania.isPokazId()) {
-            nazwaMalzonka += " (" + malzonek.getId() + ")";
+        String spouseName = spouse.getDescription();
+        if (chartOptions.isShowIdentifiers()) {
+            spouseName += " (" + spouse.getId() + ")";
         }
 
-        int szer = (int) g.getFont().getStringBounds("+ " + nazwaMalzonka, new FontRenderContext(new AffineTransform(), false, false)).getWidth();
-        int mar = 5;
+        int spouseNameWidth = (int) g.getFont().getStringBounds("+ " + spouseName, new FontRenderContext(new AffineTransform(), false, false)).getWidth();
+        int margin = 5;
 
-        if (zwiazek.getChildrenIds() != null && zwiazek.getChildrenIds().size() > 0) {
+        if (family.getChildrenIds() != null && family.getChildrenIds().size() > 0) {
             int yy = y;
-            int xx = x + szer + mar;
-            if (obnizenie) {
-                yy -= wysMalzonka;
-                xx = x + szerMalzonka + mar;
+            int xx = x + spouseNameWidth + margin;
+            if (lowered) {
+                yy -= spouseInfoHeight;
+                xx = x + spouseInfoWidth + margin;
             }
-            Dimension wymiaryDzieci = rysujDzieci(zwiazek.getChildrenIds(), g, x + rozmiar, yy, szerokoscPokolenia, opcjeRysowania);
-            wysokoscDzieci += wymiaryDzieci.height;
+            Dimension childrenDimension = drawChildren(family.getChildrenIds(), g, x + width, yy, widthOfGeneration, chartOptions);
+            childrenHeight += childrenDimension.height;
 
-            if (wymiaryDzieci.width > szerokoscDzieci) {
-                szerokoscDzieci = wymiaryDzieci.width;
+            if (childrenDimension.width > childrenWidth) {
+                childrenWidth = childrenDimension.width;
             }
-            g.setColor(kolorDzieci);
-            g.drawLine(xx, yy + fontSize / 2, x + rozmiar - mar, yy + fontSize / 2);
+            g.setColor(childrenColor);
+            g.drawLine(xx, yy + fontSize / 2, x + width - margin, yy + fontSize / 2);
         }
 
-        if (obnizenie) {
-            wysokoscDzieci -= wysMalzonka;
+        if (lowered) {
+            childrenHeight -= spouseInfoHeight;
         }
-        int wysokoscFamilies = Math.max(wymiaryMalzonka.height, wysokoscDzieci);
+        int familiesHeight = Math.max(spouseDimension.height, childrenHeight);
 
-        return new Dimension(szerokosc + szerokoscDzieci, wysokoscFamilies);
+        return new Dimension(width + childrenWidth, familiesHeight);
     }
 
-    private Dimension rysujMalzonka(FamilyTreeElement zwiazek, PersonTreeElement malzonek, Graphics g, int x, int y, int szerokoscPokolenia, PedigreeChartOptions opcjeRysowania) {
+    private Dimension drawSpouse(FamilyTreeElement family, PersonTreeElement spouse, Graphics g, int x, int y, int widthOfGeneration, PedigreeChartOptions chartOptions) {
         int fontSize = g.getFont().getSize();
-        int wysokosc = fontSize;
+        int height = fontSize;
 
-        String nazwa = malzonek.getDescription();
-        if (opcjeRysowania.isPokazId()) {
-            nazwa += " (" + malzonek.getId() + ")";
+        String spouseName = spouse.getDescription();
+        if (chartOptions.isShowIdentifiers()) {
+            spouseName += " (" + spouse.getId() + ")";
         }
 
-        g.setColor(kolorMalzonka);
-        int rozmiar = fontSize * szerokoscPokolenia;
+        g.setColor(spouseColor);
+        int width = fontSize * widthOfGeneration;
         g.setFont(new Font(g.getFont().getName(), Font.BOLD, fontSize));
-        g.drawString("+ " + nazwa, x, y + fontSize);
+        g.drawString("+ " + spouseName, x, y + fontSize);
         g.setFont(new Font(g.getFont().getName(), Font.PLAIN, fontSize));
 
-        g.setColor(kolorInfo);
-        String urInfo = malzonek.getBirthData();
-        if (urInfo.length() > 0 && opcjeRysowania.isPokazDaneUrodzenia()) {
-            g.setColor(kolorInfo);
-            wysokosc += fontSize;
-            g.drawString(urInfo, x, y + wysokosc);
+        g.setColor(personInfoColor);
+        String birthInfo = spouse.getBirthData();
+        if (birthInfo.length() > 0 && chartOptions.isShowBirthInfo()) {
+            g.setColor(personInfoColor);
+            height += fontSize;
+            g.drawString(birthInfo, x, y + height);
         }
-        String smInfo = malzonek.getDeathData();
-        if (smInfo.length() > 0 && opcjeRysowania.isPokazDaneSmierci()) {
-            g.setColor(kolorInfo);
-            wysokosc += fontSize;
-            g.drawString(smInfo, x, y + wysokosc);
+        String deathInfo = spouse.getDeathData();
+        if (deathInfo.length() > 0 && chartOptions.isShowDeathInfo()) {
+            g.setColor(personInfoColor);
+            height += fontSize;
+            g.drawString(deathInfo, x, y + height);
         }
-        String zamInfo = malzonek.getResidenceData();
-        if (zamInfo.length() > 0 && opcjeRysowania.isPokazDaneZamieszkania()) {
-            wysokosc += fontSize;
-            g.drawString(zamInfo, x, y + wysokosc);
+        String residenceInfo = spouse.getResidenceData();
+        if (residenceInfo.length() > 0 && chartOptions.isShowResidenceInfo()) {
+            height += fontSize;
+            g.drawString(residenceInfo, x, y + height);
         }
-        String zawInfo = malzonek.getOccupationData();
-        if (zawInfo.length() > 0 && opcjeRysowania.isPokazEducation()) {
-            wysokosc += fontSize;
-            g.drawString(zawInfo, x, y + wysokosc);
-        }
-
-        wysokosc += fontSize / 2;
-
-        if (opcjeRysowania.isPokazId()) {
-            g.setColor(kolorSlubu);
-            String zwiazekInfo = "Id zwi¹zku: " + zwiazek.getRelationshipId();
-            wysokosc += fontSize;
-            g.drawString(zwiazekInfo, x, y + wysokosc);
+        String occupationInfo = spouse.getOccupationData();
+        if (occupationInfo.length() > 0 && chartOptions.isShowOccupationInfo()) {
+            height += fontSize;
+            g.drawString(occupationInfo, x, y + height);
         }
 
-        String pozInfo = zwiazek.getFirstMetData();
-        if (pozInfo.length() > 0 && opcjeRysowania.isPokazDanePoznaniaSie()) {
-            g.setColor(kolorSlubu);
-            wysokosc += fontSize;
-            g.drawString(pozInfo, x, y + wysokosc);
-        }
-        String slInfo = zwiazek.getMarriageData();
-        if (slInfo.length() > 0 && opcjeRysowania.isPokazDaneSlubu()) {
-            g.setColor(kolorSlubu);
-            wysokosc += fontSize;
-            g.drawString(slInfo, x, y + wysokosc);
-        }
-        String rozInfo = zwiazek.getSeparationData();
-        if (rozInfo.length() > 0 && opcjeRysowania.isPokazDaneRozstaniaSie()) {
-            g.setColor(kolorSlubu);
-            wysokosc += fontSize;
-            g.drawString(rozInfo, x, y + wysokosc);
-        }
-        String rzwInfo = zwiazek.getDivorceData();
-        if (rzwInfo.length() > 0 && opcjeRysowania.isPokazDaneRozwodu()) {
-            g.setColor(kolorSlubu);
-            wysokosc += fontSize;
-            g.drawString(rzwInfo, x, y + wysokosc);
+        height += fontSize / 2;
+
+        if (chartOptions.isShowIdentifiers()) {
+            g.setColor(marriageInfoColor);
+            String relationshipInfo = "Id zwi¹zku: " + family.getRelationshipId();
+            height += fontSize;
+            g.drawString(relationshipInfo, x, y + height);
         }
 
-        return new Dimension(rozmiar, wysokosc);
+        String firstMetInfo = family.getFirstMetData();
+        if (firstMetInfo.length() > 0 && chartOptions.isShowFirstMetInfo()) {
+            g.setColor(marriageInfoColor);
+            height += fontSize;
+            g.drawString(firstMetInfo, x, y + height);
+        }
+        String marriageInfo = family.getMarriageData();
+        if (marriageInfo.length() > 0 && chartOptions.isShowMarriageInfo()) {
+            g.setColor(marriageInfoColor);
+            height += fontSize;
+            g.drawString(marriageInfo, x, y + height);
+        }
+        String separationInfo = family.getSeparationData();
+        if (separationInfo.length() > 0 && chartOptions.isShowSeparationInfo()) {
+            g.setColor(marriageInfoColor);
+            height += fontSize;
+            g.drawString(separationInfo, x, y + height);
+        }
+        String divorceInfo = family.getDivorceData();
+        if (divorceInfo.length() > 0 && chartOptions.isShowDivorceInfo()) {
+            g.setColor(marriageInfoColor);
+            height += fontSize;
+            g.drawString(divorceInfo, x, y + height);
+        }
+
+        return new Dimension(width, height);
     }
 
-    private Dimension rysujDzieci(List<Long> idDzieci, Graphics g, int x, int y, int szerokoscPokolenia, PedigreeChartOptions opcjeRysowania) {
+    private Dimension drawChildren(List<Long> childrenIds, Graphics g, int x, int y, int widthOfGeneration, PedigreeChartOptions chartOptions) {
         int fontSize = g.getFont().getSize();
-        int wysokosc = 0;
-        int szerokosc = szerokoscPokolenia * fontSize;
-        int staryX0 = 0;
-        int staryY0 = 0;
+        int height = 0;
+        int width = widthOfGeneration * fontSize;
+        int oldX = 0;
+        int oldY = 0;
 
-        if (idDzieci != null && idDzieci.size() > 0) {
-            for (Long idDziecka : idDzieci) {
-                Dimension wymiaryDziecka = rysuj(idDziecka, g, x + fontSize, y + wysokosc, szerokoscPokolenia, opcjeRysowania);
-                int wysokoscDziecka = wymiaryDziecka.height;
-                if (wymiaryDziecka.width > szerokosc) {
-                    szerokosc = wymiaryDziecka.width;
+        if (childrenIds != null && childrenIds.size() > 0) {
+            for (Long childId : childrenIds) {
+                Dimension childDimension = draw(childId, g, x + fontSize, y + height, widthOfGeneration, chartOptions);
+                int childHeight = childDimension.height;
+                if (childDimension.width > width) {
+                    width = childDimension.width;
                 }
                 int x0 = x - fontSize / 2;
-                int y0 = y + wysokosc + fontSize / 2;
+                int y0 = y + height + fontSize / 2;
                 int x1 = x + fontSize / 2;
-                int y1 = y + wysokosc + fontSize / 2;
-                g.setColor(kolorDzieci);
+                int y1 = y + height + fontSize / 2;
+                g.setColor(childrenColor);
                 g.drawLine(x0, y0, x1, y1);
-                if (staryX0 > 0 && staryY0 > 0) {
-                    g.drawLine(x0, y0, staryX0, staryY0);
+                if (oldX > 0 && oldY > 0) {
+                    g.drawLine(x0, y0, oldX, oldY);
                 }
-                wysokosc += wysokoscDziecka + fontSize;
-                staryX0 = x0;
-                staryY0 = y0;
+                height += childHeight + fontSize;
+                oldX = x0;
+                oldY = y0;
             }
         }
 
-        return new Dimension(szerokosc, wysokosc);
+        return new Dimension(width, height);
     }
 }

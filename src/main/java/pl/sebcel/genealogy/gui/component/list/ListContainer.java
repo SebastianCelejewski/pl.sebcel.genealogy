@@ -88,7 +88,7 @@ public class ListContainer extends JPanel implements UpdateListener, ActionListe
 	
 	private void draw(Long id) {
 		DiagramInfoStruct diagramInfo = editContainer.getDiagramInfo(id);
-		new PedigreeChartFrame().draw(diagramInfo);
+		new PedigreeChartFrame().drawPedigreeChart(diagramInfo);
 	}
 	
 	private void export(AbstractListComponent listComponent) {

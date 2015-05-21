@@ -14,7 +14,7 @@ import pl.sebcel.genealogy.gui.component.ClanEditComponent;
 import pl.sebcel.genealogy.gui.component.EditConainer;
 import pl.sebcel.genealogy.gui.component.PersonEditComponent;
 import pl.sebcel.genealogy.gui.component.RelationshipEditComponent;
-import pl.sebcel.genealogy.gui.component.list.DocumentListComponent;
+import pl.sebcel.genealogy.gui.component.list.DocumentsListComponent;
 import pl.sebcel.genealogy.gui.component.list.ClanListComponent;
 import pl.sebcel.genealogy.gui.component.list.ListContainer;
 import pl.sebcel.genealogy.gui.component.list.PeopleListComponent;
@@ -30,7 +30,7 @@ public class MainFrame extends JFrame {
     private ListContainer peopleList = new ListContainer(new PeopleListComponent(), personEditContainer);
     private ListContainer relationshipsList = new ListContainer(new RelationshipListComponent(), relationshipEditContainer);
     private ListContainer clansList = new ListContainer(new ClanListComponent(), clanEditContainer);
-    private ListContainer documentsList = new ListContainer(new DocumentListComponent(), documentEditContainer);
+    private ListContainer documentsList = new ListContainer(new DocumentsListComponent(), documentEditContainer);
     private JTabbedPane tabbedPane = new JTabbedPane();
 
     public final static long serialVersionUID = 0l;

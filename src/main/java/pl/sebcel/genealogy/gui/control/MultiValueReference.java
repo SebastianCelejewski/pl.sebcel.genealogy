@@ -73,8 +73,8 @@ public class MultiValueReference extends JPanel implements ActionListener {
     }
 
     private void addItem() {
-        ReferenceSelector wybieraczka = new ReferenceSelector(allItems);
-        ReferenceListElement selectedObject = wybieraczka.getSelectedItem();
+        ReferenceSelector selector = new ReferenceSelector(allItems);
+        ReferenceListElement selectedObject = selector.getSelectedItem();
         if (selectedObject != null) {
             listModel.addElement(selectedObject);
         }

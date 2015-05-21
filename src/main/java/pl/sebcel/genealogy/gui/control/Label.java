@@ -10,8 +10,8 @@ public class Label extends JLabel {
 	
 	public final static long serialVersionUID = 0l;
 	
-	public Label(String nazwa) {
-		super(nazwa);
+	public Label(String name) {
+		super(name);
 		this.setPreferredSize(new Dimension(120,21));
 		this.setHorizontalAlignment(JLabel.RIGHT);
 	}

@@ -2,87 +2,87 @@ package pl.sebcel.genealogy.gui.pedigree;
 
 public class PedigreeChartOptions {
 
-    private boolean pokazId;
-    private boolean pokazDaneUrodzenia;
-    private boolean pokazDaneSmierci;
-    private boolean pokazEducation;
-    private boolean pokazDaneZamieszkania;
-    private boolean pokazDanePoznaniaSie;
-    private boolean pokazDaneSlubu;
-    private boolean pokazDaneRozstaniaSie;
-    private boolean pokazDaneRozwodu;
+    private boolean showIdentifiers;
+    private boolean showBirthInfo;
+    private boolean showDeathInfo;
+    private boolean showOccupationInfo;
+    private boolean showResidenceInfo;
+    private boolean showFirstMetInfo;
+    private boolean showMarriageInfo;
+    private boolean showSeparationInfo;
+    private boolean showDivorceInfo;
     private int zoom = 1;
 
-    public boolean isPokazId() {
-        return pokazId;
+    public boolean isShowIdentifiers() {
+        return showIdentifiers;
     }
 
-    public void setPokazId(boolean pokazId) {
-        this.pokazId = pokazId;
+    public void setShowIdentifiers(boolean showIdentifiers) {
+        this.showIdentifiers = showIdentifiers;
     }
 
-    public boolean isPokazDaneUrodzenia() {
-        return pokazDaneUrodzenia;
+    public boolean isShowBirthInfo() {
+        return showBirthInfo;
     }
 
-    public void setPokazDaneUrodzenia(boolean pokazDaneUrodzenia) {
-        this.pokazDaneUrodzenia = pokazDaneUrodzenia;
+    public void setShowBirthInfo(boolean showBirthInfo) {
+        this.showBirthInfo = showBirthInfo;
     }
 
-    public boolean isPokazDaneSmierci() {
-        return pokazDaneSmierci;
+    public boolean isShowDeathInfo() {
+        return showDeathInfo;
     }
 
-    public void setPokazDaneSmierci(boolean pokazDaneSmierci) {
-        this.pokazDaneSmierci = pokazDaneSmierci;
+    public void setShowDeathInfo(boolean showDeathInfo) {
+        this.showDeathInfo = showDeathInfo;
     }
 
-    public boolean isPokazEducation() {
-        return pokazEducation;
+    public boolean isShowOccupationInfo() {
+        return showOccupationInfo;
     }
 
-    public void setPokazEducation(boolean pokazEducation) {
-        this.pokazEducation = pokazEducation;
+    public void setShowOccupationInfo(boolean showOccupationInfo) {
+        this.showOccupationInfo = showOccupationInfo;
     }
 
-    public boolean isPokazDaneZamieszkania() {
-        return pokazDaneZamieszkania;
+    public boolean isShowResidenceInfo() {
+        return showResidenceInfo;
     }
 
-    public void setPokazDaneZamieszkania(boolean pokazDaneZamieszkania) {
-        this.pokazDaneZamieszkania = pokazDaneZamieszkania;
+    public void setShowResidenceInfo(boolean showResidenceInfo) {
+        this.showResidenceInfo = showResidenceInfo;
     }
 
-    public boolean isPokazDanePoznaniaSie() {
-        return pokazDanePoznaniaSie;
+    public boolean isShowFirstMetInfo() {
+        return showFirstMetInfo;
     }
 
-    public void setPokazDanePoznaniaSie(boolean pokazDanePoznaniaSie) {
-        this.pokazDanePoznaniaSie = pokazDanePoznaniaSie;
+    public void setShowFirstMetInfo(boolean showFirstMetInfo) {
+        this.showFirstMetInfo = showFirstMetInfo;
     }
 
-    public boolean isPokazDaneSlubu() {
-        return pokazDaneSlubu;
+    public boolean isShowMarriageInfo() {
+        return showMarriageInfo;
     }
 
-    public void setPokazDaneSlubu(boolean pokazDaneSlubu) {
-        this.pokazDaneSlubu = pokazDaneSlubu;
+    public void setShowMarriageInfo(boolean showMarriageInfo) {
+        this.showMarriageInfo = showMarriageInfo;
     }
 
-    public boolean isPokazDaneRozstaniaSie() {
-        return pokazDaneRozstaniaSie;
+    public boolean isShowSeparationInfo() {
+        return showSeparationInfo;
     }
 
-    public void setPokazDaneRozstaniaSie(boolean pokazDaneRozstaniaSie) {
-        this.pokazDaneRozstaniaSie = pokazDaneRozstaniaSie;
+    public void setShowSeparationInfo(boolean showSeparationInfo) {
+        this.showSeparationInfo = showSeparationInfo;
     }
 
-    public boolean isPokazDaneRozwodu() {
-        return pokazDaneRozwodu;
+    public boolean isShowDivorceInfo() {
+        return showDivorceInfo;
     }
 
-    public void setPokazDaneRozwodu(boolean pokazDaneRozwodu) {
-        this.pokazDaneRozwodu = pokazDaneRozwodu;
+    public void setShowDivorceInfo(boolean showDivorceInfo) {
+        this.showDivorceInfo = showDivorceInfo;
     }
 
     public int getZoom() {

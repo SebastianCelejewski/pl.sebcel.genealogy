@@ -19,9 +19,9 @@ public class PedigreeChartOptionsPanel extends JFrame implements ActionListener 
 
     private static final long serialVersionUID = 1L;
 
-    private PedigreeChartOptions opcjeRysowania = new PedigreeChartOptions();
+    private PedigreeChartOptions chartOptions = new PedigreeChartOptions();
 
-    private JButton buttonZamknij = new JButton("Zamknij");
+    private JButton buttonClose = new JButton("Zamknij");
     private JButton buttonApply = new JButton("Zastosuj");
     private JCheckBox checkBoxShowIds = new JCheckBox();
     private JCheckBox checkBoxShowBirthData = new JCheckBox();
@@ -47,7 +47,7 @@ public class PedigreeChartOptionsPanel extends JFrame implements ActionListener 
         this.add(buttonPanel, BorderLayout.SOUTH);
         this.add(optionsPanel, BorderLayout.CENTER);
         buttonPanel.add(buttonApply);
-        buttonPanel.add(buttonZamknij);
+        buttonPanel.add(buttonClose);
 
         optionsPanel.add(new JLabel("Identyfikatory"), new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(1, 1, 1, 1), 1, 1));
         optionsPanel.add(checkBoxShowIds, new GridBagConstraints(1, 0, 1, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(1, 1, 1, 1), 1, 1));
@@ -81,7 +81,7 @@ public class PedigreeChartOptionsPanel extends JFrame implements ActionListener 
         checkBoxShowDivorceInfo.addActionListener(this);
         zoomPanel.addActionListener(this);
 
-        buttonZamknij.addActionListener(new ActionListener() {
+        buttonClose.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 PedigreeChartOptionsPanel.this.setVisible(false);
@@ -92,8 +92,7 @@ public class PedigreeChartOptionsPanel extends JFrame implements ActionListener 
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("!");
-                drawOptionsListener.updateDrawing(opcjeRysowania);
+                drawOptionsListener.updateDrawing(chartOptions);
             }
         });
 
@@ -104,21 +103,21 @@ public class PedigreeChartOptionsPanel extends JFrame implements ActionListener 
         this.drawOptionsListener = drawOptionsListener;
     }
 
-    public PedigreeChartOptions getOpcjeRysowania() {
-        return opcjeRysowania;
+    public PedigreeChartOptions getChartOptions() {
+        return chartOptions;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        opcjeRysowania.setPokazId(checkBoxShowIds.isSelected());
-        opcjeRysowania.setPokazDaneUrodzenia(checkBoxShowBirthData.isSelected());
-        opcjeRysowania.setPokazDaneSmierci(checkBoxShowDeathData.isSelected());
-        opcjeRysowania.setPokazDaneZamieszkania(checkBoxShowLocation.isSelected());
-        opcjeRysowania.setPokazEducation(checkBoxShowOccupation.isSelected());
-        opcjeRysowania.setPokazDanePoznaniaSie(checkBoxShowMeetingInfo.isSelected());
-        opcjeRysowania.setPokazDaneSlubu(checkBoxShowMarriageInfo.isSelected());
-        opcjeRysowania.setPokazDaneRozstaniaSie(checkBoxShowSeparationInfo.isSelected());
-        opcjeRysowania.setPokazDaneRozwodu(checkBoxShowDivorceInfo.isSelected());
-        opcjeRysowania.setZoom(zoomPanel.getZoom());
+        chartOptions.setShowIdentifiers(checkBoxShowIds.isSelected());
+        chartOptions.setShowBirthInfo(checkBoxShowBirthData.isSelected());
+        chartOptions.setShowDeathInfo(checkBoxShowDeathData.isSelected());
+        chartOptions.setShowResidenceInfo(checkBoxShowLocation.isSelected());
+        chartOptions.setShowOccupationInfo(checkBoxShowOccupation.isSelected());
+        chartOptions.setShowFirstMetInfo(checkBoxShowMeetingInfo.isSelected());
+        chartOptions.setShowMarriageInfo(checkBoxShowMarriageInfo.isSelected());
+        chartOptions.setShowSeparationInfo(checkBoxShowSeparationInfo.isSelected());
+        chartOptions.setShowDivorceInfo(checkBoxShowDivorceInfo.isSelected());
+        chartOptions.setZoom(zoomPanel.getZoom());
     }
 }

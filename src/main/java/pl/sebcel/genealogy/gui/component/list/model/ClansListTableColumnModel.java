@@ -7,28 +7,28 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.TableColumn;
 
-import pl.sebcel.genealogy.dto.list.PeopleListElement;
+import pl.sebcel.genealogy.dto.list.ClanListElement;
 
-public class PeopleListTableColumnModel extends DefaultTableColumnModel implements ComplexTableModel {
+public class ClansListTableColumnModel extends DefaultTableColumnModel implements ComplexTableModel {
 
     public static final long serialVersionUID = 0L;
 
-    private List<PeopleListElement> data = new ArrayList<PeopleListElement>();
-    private String[] columns = new String[] { "Id", "Names i surname", "Description" };
+    private List<ClanListElement> data = new ArrayList<ClanListElement>();
+    private String[] columns = new String[] { "Id", "Nazwa", "Protoplasta" };
 
-    public PeopleListTableColumnModel() {
+    public ClansListTableColumnModel() {
         super();
         TableColumn columnId = new TableColumn(0, 20);
         TableColumn columnName = new TableColumn(1, 280);
-        TableColumn columnDescription = new TableColumn(2, 400);
+        TableColumn columnRoot = new TableColumn(2, 400);
 
         columnId.setHeaderValue(columns[0]);
         columnName.setHeaderValue(columns[1]);
-        columnDescription.setHeaderValue(columns[2]);
+        columnRoot.setHeaderValue(columns[2]);
 
         addColumn(columnId);
         addColumn(columnName);
-        addColumn(columnDescription);
+        addColumn(columnRoot);
     }
 
     public void addTableModelListener(TableModelListener l) {
@@ -58,7 +58,7 @@ public class PeopleListTableColumnModel extends DefaultTableColumnModel implemen
             return data.get(rowIndex).getName();
         }
         if (columnIndex == 2) {
-            return data.get(rowIndex).getDescription();
+            return data.get(rowIndex).getRoot();
         }
         return "";
     }
@@ -73,7 +73,7 @@ public class PeopleListTableColumnModel extends DefaultTableColumnModel implemen
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
     }
 
-    public void setData(List<PeopleListElement> peopleList) {
-        this.data = peopleList;
+    public void setData(List<ClanListElement> clansList) {
+        this.data = clansList;
     }
 }

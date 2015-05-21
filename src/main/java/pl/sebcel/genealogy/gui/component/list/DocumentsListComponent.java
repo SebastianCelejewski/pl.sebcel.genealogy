@@ -8,19 +8,19 @@ import pl.sebcel.genealogy.export.DataExporter;
 import pl.sebcel.genealogy.export.DefaultExporter;
 import pl.sebcel.genealogy.gui.component.list.model.DocumentsListTableColumnModel;
 
-public class DocumentListComponent extends AbstractListComponent {
+public class DocumentsListComponent extends AbstractListComponent {
 
     public final static long serialVersionUID = 0l;
 
     private DocumentsListTableColumnModel tableColumnModel = new DocumentsListTableColumnModel();
 
-    public DocumentListComponent() {
+    public DocumentsListComponent() {
         setComplexModel(tableColumnModel);
     }
 
     public void refresh() {
-        List<DocumentListElement> dokumenty = DatabaseDelegate.getDocumentsList();
-        tableColumnModel.setData(dokumenty);
+        List<DocumentListElement> documents = DatabaseDelegate.getDocumentsList();
+        tableColumnModel.setData(documents);
         table.invalidate();
     }
 

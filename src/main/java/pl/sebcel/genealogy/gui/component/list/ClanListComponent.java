@@ -5,13 +5,13 @@ import java.util.List;
 import pl.sebcel.genealogy.db.DatabaseDelegate;
 import pl.sebcel.genealogy.dto.list.ClanListElement;
 import pl.sebcel.genealogy.export.DataExporter;
-import pl.sebcel.genealogy.gui.component.list.model.ListaKlanowTableColumnModel;
+import pl.sebcel.genealogy.gui.component.list.model.ClansListTableColumnModel;
 
 public class ClanListComponent extends AbstractListComponent {
 
     public final static long serialVersionUID = 0l;
 
-    private ListaKlanowTableColumnModel tableColumnModel = new ListaKlanowTableColumnModel();
+    private ClansListTableColumnModel tableColumnModel = new ClansListTableColumnModel();
 
     public ClanListComponent() {
         setComplexModel(tableColumnModel);
