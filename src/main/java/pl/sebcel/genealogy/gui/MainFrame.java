@@ -38,12 +38,12 @@ public class MainFrame extends JFrame {
     public MainFrame() {
         this.setLayout(new BorderLayout());
         this.add(tabbedPane, BorderLayout.CENTER);
-        this.setTitle("Genealogy 1.3.0");
+        this.setTitle("Genealogy 1.3.1");
 
-        tabbedPane.addTab("Lista os骲", peopleList);
-        tabbedPane.addTab("Lista zwi箊k體", relationshipsList);
-        tabbedPane.addTab("Lista klan體", clansList);
-        tabbedPane.addTab("Lista dokument體", documentsList);
+        tabbedPane.addTab("Lista os贸b", peopleList);
+        tabbedPane.addTab("Lista zwi膮zk贸w", relationshipsList);
+        tabbedPane.addTab("Lista klan贸w", clansList);
+        tabbedPane.addTab("Lista dokument贸w", documentsList);
 
         Dimension screenDimension = Toolkit.getDefaultToolkit().getScreenSize();
         int width = screenDimension.width / 2;

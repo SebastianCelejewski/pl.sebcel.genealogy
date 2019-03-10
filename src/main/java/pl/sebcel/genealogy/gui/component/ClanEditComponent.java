@@ -69,7 +69,7 @@ public class ClanEditComponent extends AbstractEditComponent {
             clanData = new ClanEditData();
 
         if (tRoot.getSelectedIndex() == 0) {
-            JOptionPane.showMessageDialog(this, "Wska¿ protoplastê klanu", "B³¹d", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "WskaÅ¼ protoplastÄ™ klanu", "BÅ‚Ä…d", JOptionPane.ERROR_MESSAGE);
             return false;
         }
 
@@ -94,7 +94,7 @@ public class ClanEditComponent extends AbstractEditComponent {
 
     @Override
     public void deleteElement(Long id) {
-        int result = JOptionPane.showConfirmDialog(this, "Czy na pewno chcesz usun¹æ ten klan?", "Usuwanie klanu", JOptionPane.YES_NO_OPTION);
+        int result = JOptionPane.showConfirmDialog(this, "Czy na pewno chcesz usunÄ…Ä‡ ten klan?", "Usuwanie klanu", JOptionPane.YES_NO_OPTION);
         if (result == JOptionPane.YES_OPTION) {
             DatabaseDelegate.deleteClan(id);
         }

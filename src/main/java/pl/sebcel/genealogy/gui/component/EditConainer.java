@@ -21,7 +21,7 @@ public class EditConainer extends JDialog {
     private AbstractEditComponent editComponent;
     private JPanel buttonsPanel = new JPanel();
 
-    private JButton acceptButton = new JButton("Zatwierdü");
+    private JButton acceptButton = new JButton("Zatwierd≈∫");
     private JButton cancelButton = new JButton("Anuluj");
     private UpdateListener updateListener;
 

@@ -31,6 +31,6 @@ public class RelationshipListComponent extends AbstractListComponent {
 	}
 	
 	public DataExporter getExporter(String format) {
-		throw new RuntimeException("Eksport zwi¹zków nie jest jeszcze zaimplementowany.");
+		throw new RuntimeException("Eksport zwiÄ…zkÃ³w nie jest jeszcze zaimplementowany.");
 	}
 }

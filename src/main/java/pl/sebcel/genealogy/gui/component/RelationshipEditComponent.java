@@ -19,12 +19,12 @@ public class RelationshipEditComponent extends AbstractEditComponent {
 
     private RelationshipEditData relationshipEditData;
 
-    private Label lMale = new Label("Mê¿czyzna:");
-    private Label lFemale = new Label("Female:");
+    private Label lMale = new Label("MÄ™Å¼czyzna:");
+    private Label lFemale = new Label("Kobieta:");
     private Label lFirstMetDate = new Label("Data poznania:");
     private Label lFirstMetPlace = new Label("Miejsce poznania:");
-    private Label lMarriageDate = new Label("Data œlubu:");
-    private Label lMarriagePlace = new Label("Miejsce œlubu:");
+    private Label lMarriageDate = new Label("Data Å›lubu:");
+    private Label lMarriagePlace = new Label("Miejsce Å›lubu:");
     private Label lSeparationDate = new Label("Data rozstania:");
     private Label lSeparationPlace = new Label("Miejsce rozstania:");
     private Label lDivorceDate = new Label("Data rozwodu:");
@@ -117,12 +117,12 @@ public class RelationshipEditComponent extends AbstractEditComponent {
             relationshipEditData = new RelationshipEditData();
 
         if (tMale.getSelectedIndex() == 0) {
-            JOptionPane.showMessageDialog(this, "Musisz wybraæ mê¿czyznê", "B³¹d", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Musisz wybraÄ‡ mÄ™Å¼czyznÄ™", "BÅ‚Ä…d", JOptionPane.ERROR_MESSAGE);
             return false;
         }
 
         if (tFemale.getSelectedIndex() == 0) {
-            JOptionPane.showMessageDialog(this, "Musisz wybraæ kobietê", "B³¹d", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Musisz wybraÄ‡ kobietÄ™", "BÅ‚Ä…d", JOptionPane.ERROR_MESSAGE);
             return false;
         }
 
@@ -163,7 +163,7 @@ public class RelationshipEditComponent extends AbstractEditComponent {
 
     @Override
     public void deleteElement(Long id) {
-        int result = JOptionPane.showConfirmDialog(this, "Czy na pewno chcesz usun¹æ ten zwi¹zek?", "Usuwanie zwi¹zku", JOptionPane.YES_NO_OPTION);
+        int result = JOptionPane.showConfirmDialog(this, "Czy na pewno chcesz usunÄ…Ä‡ ten zwiÄ…zek?", "Usuwanie zwiÄ…zku", JOptionPane.YES_NO_OPTION);
         if (result == JOptionPane.YES_OPTION) {
             DatabaseDelegate.deleteRelationship(id);
         }
@@ -172,9 +172,9 @@ public class RelationshipEditComponent extends AbstractEditComponent {
     @Override
     public String getTitle() {
         if (editMode == EditMode.CREATE_NEW) {
-            return "Dodawanie nowego zwi¹zku";
+            return "Dodawanie nowego zwiÄ…zku";
         } else {
-            return "Edycja danych zwi¹zku";
+            return "Edycja danych zwiÄ…zku";
         }
     }
 
@@ -185,7 +185,7 @@ public class RelationshipEditComponent extends AbstractEditComponent {
 
         diagramInfo.setRootId(relationshipEditData.getMale().getId());
         diagramInfo.setName(relationshipEditData.getMale().getDescription() + " i " + relationshipEditData.getFemale().getDescription());
-        diagramInfo.setDescription("Diagram zwi¹zku " + relationshipEditData.getMale().getDescription() + " " + relationshipEditData.getFemale().getDescription());
+        diagramInfo.setDescription("Diagram zwiÄ…zku " + relationshipEditData.getMale().getDescription() + " " + relationshipEditData.getFemale().getDescription());
 
         return diagramInfo;
     }

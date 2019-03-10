@@ -29,6 +29,6 @@ public class ClanListComponent extends AbstractListComponent {
     }
 
     public DataExporter getExporter(String format) {
-        throw new RuntimeException("Eksport klanów nie jest zaimplementowany.");
+        throw new RuntimeException("Eksport klanÃ³w nie jest zaimplementowany.");
     }
 }

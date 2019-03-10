@@ -15,6 +15,7 @@ import java.awt.image.ImageObserver;
 import java.io.File;
 import java.util.List;
 
+import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -29,8 +30,6 @@ import pl.sebcel.genealogy.dto.DiagramInfoStruct;
 import pl.sebcel.genealogy.dto.pedigree.FamilyTreeElement;
 import pl.sebcel.genealogy.dto.pedigree.PersonTreeElement;
 import pl.sebcel.genealogy.gui.IDrawOptionsListener;
-
-import com.sun.jimi.core.Jimi;
 
 public class PedigreeChartFrame extends JFrame implements ActionListener, IDrawOptionsListener {
 
@@ -49,7 +48,7 @@ public class PedigreeChartFrame extends JFrame implements ActionListener, IDrawO
     private final JButton closeButton = new JButton("Zamknij");
     private final JButton optionsButton = new JButton("Opcje");
     private final PedigreeTreeComponent treeComponent = new PedigreeTreeComponent();
-    private final JScrollPane scrollPane = new JScrollPane(new JLabel("Proszê czekaæ...", JLabel.CENTER));
+    private final JScrollPane scrollPane = new JScrollPane(new JLabel("ProszÄ™ czekaÄ‡...", JLabel.CENTER));
 
     private DiagramInfoStruct diagramInfo;
 
@@ -89,8 +88,8 @@ public class PedigreeChartFrame extends JFrame implements ActionListener, IDrawO
     }
 
     private void draw(PedigreeChartOptions chartOptions) {
-        System.out.println("rysujê");
-        Image pedigreeTreeImage = drawTree(diagramInfo.getRootId(), new Font("Courier", Font.PLAIN, 12 * chartOptions.getZoom()), 20, chartOptions);
+        System.out.println("rysujï¿½");
+        Image pedigreeTreeImage = drawTree(diagramInfo.getRootId(), new Font("Times", Font.PLAIN, 12 * chartOptions.getZoom()), 20, chartOptions);
         treeComponent.setImage(pedigreeTreeImage);
         scrollPane.setViewportView(PedigreeChartFrame.this.treeComponent);
         repaint();
@@ -142,9 +141,12 @@ public class PedigreeChartFrame extends JFrame implements ActionListener, IDrawO
                 try {
                     String filename = fileChooser.getSelectedFile().getCanonicalPath();
                     Image image = treeComponent.getImage();
-                    Jimi.putImage(image, filename);
+                    
+                    BufferedImage bufferedImage = new BufferedImage(image.getWidth(this), image.getHeight(this), BufferedImage.TYPE_INT_RGB);
+                    bufferedImage.getGraphics().drawImage(image, 0, 0, null);
+                    ImageIO.write(bufferedImage, "png", new File(filename));
                 } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(this, "Wyst¹pi³ b³¹d:\n" + ex.getMessage(), "B³¹d", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(this, "WystÄ…piÅ‚ bÅ‚Ä…d:\n" + ex.getMessage(), "BÅ‚Ä…d", JOptionPane.ERROR_MESSAGE);
                 }
             }
         }
@@ -348,7 +350,7 @@ public class PedigreeChartFrame extends JFrame implements ActionListener, IDrawO
 
         if (chartOptions.isShowIdentifiers()) {
             g.setColor(marriageInfoColor);
-            String relationshipInfo = "Id zwi¹zku: " + family.getRelationshipId();
+            String relationshipInfo = "Id zwiï¿½zku: " + family.getRelationshipId();
             height += fontSize;
             g.drawString(relationshipInfo, x, y + height);
         }

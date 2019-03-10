@@ -14,7 +14,7 @@ public class PeopleListTableColumnModel extends DefaultTableColumnModel implemen
     public static final long serialVersionUID = 0L;
 
     private List<PeopleListElement> data = new ArrayList<PeopleListElement>();
-    private String[] columns = new String[] { "Id", "Names i surname", "Description" };
+    private String[] columns = new String[] { "Id", "Imiona i nazwisko", "Opis" };
 
     public PeopleListTableColumnModel() {
         super();

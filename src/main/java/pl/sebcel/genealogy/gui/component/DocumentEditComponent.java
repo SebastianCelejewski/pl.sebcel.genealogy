@@ -21,7 +21,7 @@ public class DocumentEditComponent extends AbstractEditComponent {
 
     private DocumentEditData documentData;
 
-    private Label lTitle = new Label("Tytu³:");
+    private Label lTitle = new Label("TytuÅ‚:");
     private Label lSymbol = new Label("Symbol:");
     private Label lDescription = new Label("Description:");
     private Label lRelatedPeople = new Label("Osoby: ");
@@ -94,7 +94,7 @@ public class DocumentEditComponent extends AbstractEditComponent {
 
     @Override
     public void deleteElement(Long id) {
-        int result = JOptionPane.showConfirmDialog(this, "Czy na pewno chcesz usun¹æ ten dokument?", "Usuwanie dokumentu", JOptionPane.YES_NO_OPTION);
+        int result = JOptionPane.showConfirmDialog(this, "Czy na pewno chcesz usunÄ…Ä‡ ten dokument?", "Usuwanie dokumentu", JOptionPane.YES_NO_OPTION);
         if (result == JOptionPane.YES_OPTION) {
             DatabaseDelegate.deleteDocument(id);
         }

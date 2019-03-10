@@ -14,7 +14,7 @@ public class DocumentsListTableColumnModel extends DefaultTableColumnModel imple
     public static final long serialVersionUID = 0L;
 
     private List<DocumentListElement> data = new ArrayList<DocumentListElement>();
-    private String[] columns = new String[] { "Id", "Tytu≥", "Symbol" };
+    private String[] columns = new String[] { "Id", "Tytu≈Ç", "Symbol" };
 
     public DocumentsListTableColumnModel() {
         super();

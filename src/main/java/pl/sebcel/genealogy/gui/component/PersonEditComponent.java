@@ -28,17 +28,17 @@ public class PersonEditComponent extends AbstractEditComponent {
 
     private PersonEditData personEditData;
 
-    private Label lSex = new Label("P³eæ:");
-    private Label lNames = new Label("Names:");
-    private Label lSurname = new Label("Surname:");
+    private Label lSex = new Label("PÅ‚eÄ‡:");
+    private Label lNames = new Label("Imiona:");
+    private Label lSurname = new Label("Nazwisko:");
     private Label lBirthDate = new Label("Data urodzenia:");
     private Label lBirthPlace = new Label("Miejsce urodzenia:");
-    private Label lDeathDate = new Label("Data œmierci:");
-    private Label lDeathPlace = new Label("Miejsce œmierci:");
+    private Label lDeathDate = new Label("Data Å›mierci:");
+    private Label lDeathPlace = new Label("Miejsce Å›mierci:");
     private Label lBurialDate = new Label("Data pochowania:");
     private Label lBurialPlace = new Label("Miejsce pochowania:");
     private Label lMiejsceZamiekszania = new Label("Miejsce zamieszkania:");
-    private Label lEducation = new Label("Wykszta³cenie");
+    private Label lEducation = new Label("WyksztaÅ‚cenie");
     private Label lOccupation = new Label("Zawody wykonywane");
     private Label lParents = new Label("Parents");
     private Label lDescription = new Label("Description");
@@ -103,7 +103,7 @@ public class PersonEditComponent extends AbstractEditComponent {
 
         tSex.removeAllItems();
         tSex.addItem("<Wybierz>");
-        tSex.addItem("Mê¿czyzna");
+        tSex.addItem("Mï¿½czyzna");
         tSex.addItem("Female");
     }
 
@@ -182,7 +182,7 @@ public class PersonEditComponent extends AbstractEditComponent {
             personEditData = new PersonEditData();
 
         if (tSex.getSelectedIndex() == 0) {
-            JOptionPane.showMessageDialog(this, "Wybierz p³eæ", "B³¹d", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Wybierz pÅ‚eÄ‡", "BÅ‚Ä…d", JOptionPane.ERROR_MESSAGE);
             return false;
         }
         if (tSex.getSelectedIndex() == 1) {
@@ -237,7 +237,7 @@ public class PersonEditComponent extends AbstractEditComponent {
 
     @Override
     public void deleteElement(Long id) {
-        int result = JOptionPane.showConfirmDialog(this, "Czy na pewno chcesz usun¹æ tê osobê?", "Usuwanie osoby", JOptionPane.YES_NO_OPTION);
+        int result = JOptionPane.showConfirmDialog(this, "Czy na pewno chcesz usunÄ…Ä‡ tÄ™ osobÄ™?", "Usuwanie osoby", JOptionPane.YES_NO_OPTION);
         if (result == JOptionPane.YES_OPTION) {
             DatabaseDelegate.deletePersonOsobe(id);
         }

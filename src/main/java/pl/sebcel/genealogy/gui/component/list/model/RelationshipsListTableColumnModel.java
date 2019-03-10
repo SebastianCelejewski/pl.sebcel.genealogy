@@ -14,7 +14,7 @@ public class RelationshipsListTableColumnModel extends DefaultTableColumnModel i
     public static final long serialVersionUID = 0L;
 
     private List<RelationshipsListElement> data = new ArrayList<RelationshipsListElement>();
-    private String[] columns = new String[] { "Id", "M�czyzna", "Female", "Description" };
+    private String[] columns = new String[] { "Id", "Mężczyzna", "Kobieta", "Opis" };
 
     public RelationshipsListTableColumnModel() {
         super();

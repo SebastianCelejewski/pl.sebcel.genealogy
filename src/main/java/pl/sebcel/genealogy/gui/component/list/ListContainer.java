@@ -28,7 +28,7 @@ public class ListContainer extends JPanel implements UpdateListener, ActionListe
 	
 	private JButton buttonCreateNew = new JButton("Nowy");
 	private JButton buttonEdit = new JButton("Edycja");
-	private JButton buttonDelete = new JButton("Usuñ");
+	private JButton buttonDelete = new JButton("UsuÅ„");
 	private JButton buttonTree = new JButton("Drzewo");
 	private JButton buttonExport = new JButton("Eksportuj");
 	
@@ -104,7 +104,7 @@ public class ListContainer extends JPanel implements UpdateListener, ActionListe
 				dataExporter.exportData(file);
 			} catch (Exception ex) {
 				ex.printStackTrace();
-				JOptionPane.showMessageDialog(this, "Wyst¹pi³ b³¹d:\n"+ex.getMessage(), "B³¹d", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(this, "WystÄ…piÅ‚ bÅ‚Ä…d:\n"+ex.getMessage(), "BÅ‚Ä…d", JOptionPane.ERROR_MESSAGE);
 			}
 		}
 	}
