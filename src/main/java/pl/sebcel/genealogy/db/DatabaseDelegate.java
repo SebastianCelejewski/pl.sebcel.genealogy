@@ -93,14 +93,14 @@ public class DatabaseDelegate {
         return xmlData.toString();
     }
 
-    public static String getPeopleListTXT() {
+    public static String getPeopleListCSV() {
         System.out.println("[DatabaseDelegate][getPeopleListTXT]");
         StringBuffer xmlData = new StringBuffer();
-        xmlData.append("id;first-names;last-name;birth-date;birth-place;death-date;death-place;burial-date;burial-place;residence;occupation;professions;parents;relationships\n");
+        xmlData.append("\"id\",\"first-names\",\"last-name\",\"birth-date\",\"birth-place\",\"death-date\",\"death-place\",\"burial-date\",\"burial-place\",\"residence\",\"occupation\",\"professions\",\"father\",\"mother\",\"relationships\"\n");
         Collection<Person> people = DatabaseLib.getPeople();
         if (people != null && people.size() > 0) {
             for (Person person : people) {
-                xmlData.append(getPersonTXT(person) + "\n");
+                xmlData.append(getPersonCSV(person) + "\n");
             }
         }
         return xmlData.toString();
@@ -172,21 +172,36 @@ public class DatabaseDelegate {
         return xmlData.toString();
     }
 
-    public static String getPersonTXT(Person osoba) {
+    public static String getPersonCSV(Person osoba) {
         System.out.println("[DatabaseDelegate][getPersonTXT]");
-        StringBuffer xmlData = new StringBuffer();
-        xmlData.append(getTXTField(osoba.getId()));
-        xmlData.append(getTXTField(osoba.getNames()));
-        xmlData.append(getTXTField(osoba.getSurname()));
-        xmlData.append(getTXTField(osoba.getBirthDate()));
-        xmlData.append(getTXTField(osoba.getBirthPlace()));
-        xmlData.append(getTXTField(osoba.getDeathDate()));
-        xmlData.append(getTXTField(osoba.getDeathPlace()));
-        xmlData.append(getTXTField(osoba.getBurialDate()));
-        xmlData.append(getTXTField(osoba.getBurialPlace()));
-        xmlData.append(getTXTField(osoba.getResidence()));
-        xmlData.append(getTXTField(osoba.getEducation()));
-        xmlData.append(getTXTField(osoba.getOccupation()));
+        StringBuffer csvRow = new StringBuffer();
+        csvRow.append(getCSVField(osoba.getId()));
+        csvRow.append(getCSVField(osoba.getNames()));
+        csvRow.append(getCSVField(osoba.getSurname()));
+        csvRow.append(getCSVField(osoba.getBirthDate()));
+        csvRow.append(getCSVField(osoba.getBirthPlace()));
+        csvRow.append(getCSVField(osoba.getDeathDate()));
+        csvRow.append(getCSVField(osoba.getDeathPlace()));
+        csvRow.append(getCSVField(osoba.getBurialDate()));
+        csvRow.append(getCSVField(osoba.getBurialPlace()));
+        csvRow.append(getCSVField(osoba.getResidence()));
+        csvRow.append(getCSVField(osoba.getEducation()));
+        csvRow.append(getCSVField(osoba.getOccupation()));
+        
+        if (osoba.getParents() != null) {
+            Person maleParent = osoba.getParents().getMale();
+            Person femaleParent = osoba.getParents().getFemale();
+            if (maleParent != null) {
+                csvRow.append(maleParent.getId());
+            } 
+            csvRow.append(",");
+            if (femaleParent != null) {
+                csvRow.append(femaleParent.getId());
+            } 
+            csvRow.append(",");
+        } else {
+            csvRow.append(",,");
+        }
 
         Collection<Relationship> zwiazki = null;
         StringBuffer zwiazkiStr = new StringBuffer();
@@ -204,7 +219,7 @@ public class DatabaseDelegate {
                 } else {
                     idMalzonka = zwiazek.getMale().getId();
                 }
-                String zwiazekStr = "" + zwiazek.getId() + ":(" + idMalzonka;
+                String zwiazekStr = "" + idMalzonka + ":(";
 
                 Collection<Person> dzieci = zwiazek.getChildren();
                 if (dzieci != null && dzieci.size() > 0) {
@@ -215,7 +230,7 @@ public class DatabaseDelegate {
                         }
                         dzieciStr += dziecko.getId();
                     }
-                    zwiazekStr += "; " + dzieciStr;
+                    zwiazekStr += dzieciStr;
                 }
                 zwiazekStr += ")";
 
@@ -225,9 +240,9 @@ public class DatabaseDelegate {
                 zwiazkiStr.append(zwiazekStr);
             }
         }
-        xmlData.append(zwiazkiStr);
+        csvRow.append("\"" + zwiazkiStr+"\"");
 
-        return xmlData.toString();
+        return csvRow.toString();
     }
 
     public static List<RelationshipsListElement> getRelationshipsList() {
@@ -291,7 +306,7 @@ public class DatabaseDelegate {
         result.setBurialData("");
         result.setResidenceData(DatabaseUtil.getResidenceInfo(person));
         result.setOccupationData(DatabaseUtil.getOccupationInfo(person));
-
+        
         Collection<Relationship> relationships = null;
         if (person.getSex().equalsIgnoreCase("male")) {
             relationships = person.getRelationshipsAsMale();
@@ -762,14 +777,14 @@ public class DatabaseDelegate {
         }
     }
 
-    private static String getTXTField(Object value) {
+    private static String getCSVField(Object value) {
         if (value == null) {
-            return ";";
+            return ",";
         }
         if (value instanceof String) {
-            return "\"" + value + "\";";
+            return "\"" + value + "\",";
         }
-        return value.toString() + ";";
+        return value.toString() + ",";
     }
 
     private static String reformatDate(String input) {

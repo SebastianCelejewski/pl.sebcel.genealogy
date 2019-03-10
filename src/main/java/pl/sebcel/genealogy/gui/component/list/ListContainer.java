@@ -93,7 +93,7 @@ public class ListContainer extends JPanel implements UpdateListener, ActionListe
 	
 	private void export(AbstractListComponent listComponent) {
 		JFileChooser fileChooser = new JFileChooser();
-		CustomFileFilter fileFilter = new CustomFileFilter("Export file formats", "txt", "xml");
+		CustomFileFilter fileFilter = new CustomFileFilter("Export file formats", "csv", "xml");
 		fileChooser.setFileFilter(fileFilter);
 		
 		int returnVal = fileChooser.showSaveDialog(this);

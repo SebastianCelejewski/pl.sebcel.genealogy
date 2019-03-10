@@ -229,7 +229,6 @@ public class PedigreeChartFrame extends JFrame implements ActionListener, IDrawO
 
         List<FamilyTreeElement> families = person.getFamilies();
 
-        int heightOfFamilies = 0;
         if (families != null && families.size() > 0) {
             int x1 = 0;
             int y1 = 0;
@@ -249,7 +248,6 @@ public class PedigreeChartFrame extends JFrame implements ActionListener, IDrawO
                 y1 = y0 + fontSize;
                 Dimension familiesDimension = drawFamily(family, spouse, g, x, y + height, counter == 0, spouseInfoWidth, spouseInfoHeight, widthOfGeneration, chartOptions);
                 int familiesHeight = familiesDimension.height;
-                heightOfFamilies += familiesHeight;
                 if (familiesDimension.width > width) {
                     width = familiesDimension.width;
                 }
@@ -266,13 +264,10 @@ public class PedigreeChartFrame extends JFrame implements ActionListener, IDrawO
         int fontSize = g.getFont().getSize();
         int width = fontSize * widthOfGeneration;
 
-        int height = fontSize;
-
         int childrenWidth = 0;
         int childrenHeight = 0;
 
         Dimension spouseDimension = drawSpouse(family, spouse, g, x, y, widthOfGeneration, chartOptions);
-        height += spouseDimension.height;
 
         String spouseName = spouse.getDescription();
         if (chartOptions.isShowIdentifiers()) {

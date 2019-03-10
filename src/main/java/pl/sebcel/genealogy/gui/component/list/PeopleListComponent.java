@@ -33,8 +33,8 @@ public class PeopleListComponent extends AbstractListComponent {
 		if (format.equals("xml")) {
 			return new DefaultExporter(DatabaseDelegate.getPeopleListXML());
 		}
-		if (format.equals("txt")) {
-			return new DefaultExporter(DatabaseDelegate.getPeopleListTXT());
+		if (format.equals("csv")) {
+			return new DefaultExporter(DatabaseDelegate.getPeopleListCSV());
 		}
 		throw new IllegalArgumentException("Illegal export format: "+format+".");
 	}
