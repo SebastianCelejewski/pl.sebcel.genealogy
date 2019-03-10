@@ -64,7 +64,7 @@ public class DatabaseUtil {
             info += zwiazek.getMarriagePlace();
         }
         if (info.length() > 0)
-            return "œlub: " + info;
+            return "Å›lub: " + info;
         else
             return "";
     }
@@ -96,7 +96,7 @@ public class DatabaseUtil {
             info += zwiazek.getDivorcePlace();
         }
         if (info.length() > 0)
-            return "rozwód: " + info;
+            return "rozwÃ³d: " + info;
         else
             return "";
     }

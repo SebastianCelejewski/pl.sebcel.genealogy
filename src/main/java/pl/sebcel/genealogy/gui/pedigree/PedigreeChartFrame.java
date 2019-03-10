@@ -350,7 +350,7 @@ public class PedigreeChartFrame extends JFrame implements ActionListener, IDrawO
 
         if (chartOptions.isShowIdentifiers()) {
             g.setColor(marriageInfoColor);
-            String relationshipInfo = "Id zwi�zku: " + family.getRelationshipId();
+            String relationshipInfo = "Id związku: " + family.getRelationshipId();
             height += fontSize;
             g.drawString(relationshipInfo, x, y + height);
         }
