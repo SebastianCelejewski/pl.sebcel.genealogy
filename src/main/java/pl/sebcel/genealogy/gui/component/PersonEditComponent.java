@@ -103,8 +103,8 @@ public class PersonEditComponent extends AbstractEditComponent {
 
         tSex.removeAllItems();
         tSex.addItem("<Wybierz>");
-        tSex.addItem("M�czyzna");
-        tSex.addItem("Female");
+        tSex.addItem("Mężczyzna");
+        tSex.addItem("Kobieta");
     }
 
     public void loadData(Long personId) {

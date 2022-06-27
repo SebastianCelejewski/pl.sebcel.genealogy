@@ -88,8 +88,8 @@ public class PedigreeChartFrame extends JFrame implements ActionListener, IDrawO
     }
 
     private void draw(PedigreeChartOptions chartOptions) {
-        System.out.println("rysuj�");
-        Image pedigreeTreeImage = drawTree(diagramInfo.getRootId(), new Font("Times", Font.PLAIN, 12 * chartOptions.getZoom()), 20, chartOptions);
+        System.out.println("rysuję");
+        Image pedigreeTreeImage = drawTree(diagramInfo.getRootId(), new Font("Times", Font.PLAIN, 12 * chartOptions.getZoom()), 24, chartOptions);
         treeComponent.setImage(pedigreeTreeImage);
         scrollPane.setViewportView(PedigreeChartFrame.this.treeComponent);
         repaint();
@@ -110,20 +110,26 @@ public class PedigreeChartFrame extends JFrame implements ActionListener, IDrawO
 
                 @Override
                 public boolean accept(File f) {
-                    String end = f.getName().substring(f.getName().length() - 4).toLowerCase();
-                    if (end.equals(".png")) {
+                	String fileName = f.getName();
+                	String extension = "";
+                	int lastDot = fileName.lastIndexOf('.');
+                	if (lastDot != -1) {
+                		extension = fileName.substring(lastDot + 1).toLowerCase();
+                	}
+
+                    if (extension.equals("png")) {
                         return true;
                     }
-                    if (end.equals(".jpg")) {
+                    if (extension.equals("jpg")) {
                         return true;
                     }
-                    if (end.equals(".gif")) {
+                    if (extension.equals("gif")) {
                         return true;
                     }
-                    if (end.equals(".bmp")) {
+                    if (extension.equals("bmp")) {
                         return true;
                     }
-                    if (end.equals(".png")) {
+                    if (extension.equals("png")) {
                         return true;
                     }
                     return false;
@@ -135,15 +141,13 @@ public class PedigreeChartFrame extends JFrame implements ActionListener, IDrawO
                 }
 
             });
-
             int returnVal = fileChooser.showSaveDialog(this);
             if (returnVal == JFileChooser.APPROVE_OPTION) {
                 try {
                     String filename = fileChooser.getSelectedFile().getCanonicalPath();
                     Image image = treeComponent.getImage();
-                    
                     BufferedImage bufferedImage = new BufferedImage(image.getWidth(this), image.getHeight(this), BufferedImage.TYPE_INT_RGB);
-                    bufferedImage.getGraphics().drawImage(image, 0, 0, null);
+                	bufferedImage.getGraphics().drawImage(image, 0, 0, null);
                     ImageIO.write(bufferedImage, "png", new File(filename));
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(this, "Wystąpił błąd:\n" + ex.getMessage(), "Błąd", JOptionPane.ERROR_MESSAGE);
@@ -153,7 +157,7 @@ public class PedigreeChartFrame extends JFrame implements ActionListener, IDrawO
     }
 
     private Image drawTree(Long personId, Font font, int widthOfGeneration, PedigreeChartOptions chartOptions) {
-        Dimension bufferDimensions = new Dimension(10 * font.getSize() * widthOfGeneration, 500 * font.getSize());
+        Dimension bufferDimensions = new Dimension(15 * font.getSize() * widthOfGeneration, 1000 * font.getSize());
         BufferedImage image = new BufferedImage(bufferDimensions.width, bufferDimensions.height, BufferedImage.TYPE_BYTE_INDEXED);
         Graphics g = image.getGraphics();
         g.setColor(Color.WHITE);
