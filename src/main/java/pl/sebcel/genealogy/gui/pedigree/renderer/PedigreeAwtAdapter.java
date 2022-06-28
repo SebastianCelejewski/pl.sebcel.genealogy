@@ -10,6 +10,10 @@ import java.awt.font.FontRenderContext;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 import pl.sebcel.genealogy.gui.pedigree.PedigreeTreeComponent;
 
@@ -19,6 +23,8 @@ public class PedigreeAwtAdapter implements PedigreeAdapter {
 	private Graphics g;
 	private Dimension bufferDimensions;
 
+	private PedigreeTreeComponent treeComponent = new PedigreeTreeComponent();
+	
 	@Override
 	public int getFontSize() {
 		return 12;
@@ -39,10 +45,9 @@ public class PedigreeAwtAdapter implements PedigreeAdapter {
 				return true;
 			}
 		});
-
-		PedigreeTreeComponent result = new PedigreeTreeComponent();
-		result.setImage(newImage);
-		return result;
+		
+		treeComponent.setImage(newImage);
+		return treeComponent;
 	}
 
 	public void drawText(String text, int x, int y, int fontSize, Color color) {
@@ -61,5 +66,13 @@ public class PedigreeAwtAdapter implements PedigreeAdapter {
 	@Override
 	public int getTextWidth(String text) {
 		return (int) g.getFont().getStringBounds(text, new FontRenderContext(new AffineTransform(), false, false)).getWidth();
+	}
+
+	@Override
+	public void saveImage(String fileName) throws IOException {
+        Image image = treeComponent.getImage();
+        BufferedImage bufferedImage = new BufferedImage(image.getWidth(treeComponent), image.getHeight(treeComponent), BufferedImage.TYPE_INT_RGB);
+    	bufferedImage.getGraphics().drawImage(image, 0, 0, null);
+        ImageIO.write(bufferedImage, "png", new File(fileName));
 	}
 }

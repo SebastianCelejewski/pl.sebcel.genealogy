@@ -19,19 +19,16 @@ public class HibernateUtil {
     }
     
     public static Session openSession() throws HibernateException {
-    	System.out.println("[HibernateUtil][openSession]");
         session = sessionFactory.openSession(); 
     	return session;
     }
 
     public static Session getSession() throws HibernateException {
-    	System.out.println("[HibernateUtil][getSession]");
     	if (session==null) openSession();
         return session;
     }
     
     public static void closeSession() {
-    	System.out.println("[HibernateUtil][closeSession]");
     	session.close();
     	session = null;
     }

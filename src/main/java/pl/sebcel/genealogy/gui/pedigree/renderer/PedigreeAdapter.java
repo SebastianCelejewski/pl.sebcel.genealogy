@@ -3,6 +3,7 @@ package pl.sebcel.genealogy.gui.pedigree.renderer;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.io.IOException;
 
 public interface PedigreeAdapter {
 	
@@ -17,5 +18,7 @@ public interface PedigreeAdapter {
 	public int getTextWidth(String text);
 	
 	public Component getResult(Dimension dimension);
+	
+	public void saveImage(String fileName) throws IOException;
 	
 }

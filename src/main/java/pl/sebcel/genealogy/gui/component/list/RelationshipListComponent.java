@@ -18,7 +18,6 @@ public class RelationshipListComponent extends AbstractListComponent {
 	}
 	
 	public void refresh() {
-		System.out.println("[ListaZwiazkowKomponent][refresh]");
 		List<RelationshipsListElement> relationships = DatabaseDelegate.getRelationshipsList();
 		tableColumnModel.wpiszDane(relationships);
 		table.invalidate();
@@ -31,6 +30,6 @@ public class RelationshipListComponent extends AbstractListComponent {
 	}
 	
 	public DataExporter getExporter(String format) {
-		throw new RuntimeException("Eksport związków nie jest jeszcze zaimplementowany.");
+		throw new RuntimeException("Not implemented");
 	}
 }

@@ -3,14 +3,18 @@ package pl.sebcel.genealogy.gui.pedigree;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
 
+import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.filechooser.FileFilter;
@@ -18,7 +22,6 @@ import javax.swing.filechooser.FileFilter;
 import pl.sebcel.genealogy.dto.DiagramInfoStruct;
 import pl.sebcel.genealogy.gui.IDrawOptionsListener;
 import pl.sebcel.genealogy.gui.pedigree.renderer.PedigreeAdapter;
-import pl.sebcel.genealogy.gui.pedigree.renderer.PedigreeAwtAdapter;
 import pl.sebcel.genealogy.gui.pedigree.renderer.PedigreeRenderer;
 import pl.sebcel.genealogy.gui.pedigree.renderer.PedigreeSvgAdapter;
 
@@ -34,6 +37,9 @@ public class PedigreeChartFrame extends JFrame implements ActionListener, IDrawO
     private final JScrollPane scrollPane = new JScrollPane(new JLabel("Proszę czekać...", JLabel.CENTER));
 
     private DiagramInfoStruct diagramInfo;
+    
+    private PedigreeRenderer renderer = new PedigreeRenderer();
+    private PedigreeAdapter adapter = new PedigreeSvgAdapter();
     
     public PedigreeChartFrame() {
         buttonsPanel.add(saveButton);
@@ -71,11 +77,6 @@ public class PedigreeChartFrame extends JFrame implements ActionListener, IDrawO
     }
 
     private void draw(PedigreeChartOptions chartOptions) {
-        System.out.println("rysuję");
-        PedigreeRenderer renderer = new PedigreeRenderer();
-//        PedigreeAdapter adapter = new PedigreeAwtAdapter();
-        PedigreeAdapter adapter = new PedigreeSvgAdapter();
-
         Font font = new Font("Times", Font.PLAIN, 12 * chartOptions.getZoom());
         int width = 24;
         		
@@ -133,15 +134,12 @@ public class PedigreeChartFrame extends JFrame implements ActionListener, IDrawO
             });
             int returnVal = fileChooser.showSaveDialog(this);
             if (returnVal == JFileChooser.APPROVE_OPTION) {
-//                try {
-//                    String filename = fileChooser.getSelectedFile().getCanonicalPath();
-//                    Image image = treeComponent.getImage();
-//                    BufferedImage bufferedImage = new BufferedImage(image.getWidth(this), image.getHeight(this), BufferedImage.TYPE_INT_RGB);
-//                	bufferedImage.getGraphics().drawImage(image, 0, 0, null);
-//                    ImageIO.write(bufferedImage, "png", new File(filename));
-//                } catch (Exception ex) {
-//                    JOptionPane.showMessageDialog(this, "Wystąpił błąd:\n" + ex.getMessage(), "Błąd", JOptionPane.ERROR_MESSAGE);
-//                }
+                try {
+                    String fileName = fileChooser.getSelectedFile().getCanonicalPath();
+                	adapter.saveImage(fileName);
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(this, "Wystąpił błąd:\n" + ex.getMessage(), "Błąd", JOptionPane.ERROR_MESSAGE);
+                }
             }
         }
     }

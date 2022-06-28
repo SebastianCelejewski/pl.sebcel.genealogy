@@ -3,10 +3,9 @@ package pl.sebcel.genealogy.gui.pedigree.renderer;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.geom.AffineTransform;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.net.URI;
+import java.io.IOException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -22,25 +21,25 @@ import org.w3c.dom.Element;
 
 public class PedigreeSvgAdapter implements PedigreeAdapter {
 
-    private DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-    private DocumentBuilder documentBuilder;
-    private Document svgDocument;
-    private Element svg;
+	private DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+	private DocumentBuilder documentBuilder;
+	private Document svgDocument;
+	private Element svg;
 
 	@Override
 	public void initialize(int fontSize, int widthOfGeneration) {
 		try {
-        	documentBuilder = dbf.newDocumentBuilder();
-        } catch (Exception ex) {
-        	throw new RuntimeException("Failed to inicialize DocumentBuilder: " + ex.getMessage(), ex);
-        }
-        svgDocument = documentBuilder.newDocument();
+			documentBuilder = dbf.newDocumentBuilder();
+		} catch (Exception ex) {
+			throw new RuntimeException("Failed to inicialize DocumentBuilder: " + ex.getMessage(), ex);
+		}
+		svgDocument = documentBuilder.newDocument();
 
-        svg = svgDocument.createElement("svg");
-        svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
-        svg.setAttribute("width", "10000");
-        svg.setAttribute("height", "10000");
-        svgDocument.appendChild(svg);
+		svg = svgDocument.createElement("svg");
+		svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+		svg.setAttribute("width", "10000");
+		svg.setAttribute("height", "10000");
+		svgDocument.appendChild(svg);
 	}
 
 	@Override
@@ -62,13 +61,13 @@ public class PedigreeSvgAdapter implements PedigreeAdapter {
 
 	@Override
 	public void drawLine(int x1, int y1, int x2, int y2, Color color) {
-        Element line = svg.getOwnerDocument().createElement("line");
-        line.setAttribute("x1", Integer.toString(x1));
-        line.setAttribute("y1", Integer.toString(y1));
-        line.setAttribute("x2", Integer.toString(x2));
-        line.setAttribute("y2", Integer.toString(y2));
-        line.setAttribute("stroke", "grey");
-        svg.appendChild(line);
+		Element line = svg.getOwnerDocument().createElement("line");
+		line.setAttribute("x1", Integer.toString(x1));
+		line.setAttribute("y1", Integer.toString(y1));
+		line.setAttribute("x2", Integer.toString(x2));
+		line.setAttribute("y2", Integer.toString(y2));
+		line.setAttribute("stroke", "grey");
+		svg.appendChild(line);
 	}
 
 	@Override
@@ -78,27 +77,35 @@ public class PedigreeSvgAdapter implements PedigreeAdapter {
 
 	@Override
 	public Component getResult(Dimension dimension) {
-        JSVGCanvas canvas = new JSVGCanvas();
-        URI uri = saveSvg(svgDocument);
-        canvas.setURI(uri.toString());
-        return canvas;
-	}
-	
-    private URI saveSvg(Document svgDocument) {
+		JSVGCanvas canvas = new JSVGCanvas();
 		File svgFile = null;
-    	try {
-    		svgFile = File.createTempFile("pl.sebcel.genealogy", ".svg");
-            TransformerFactory transformerFactory = TransformerFactory.newInstance();
-            Transformer transformer = transformerFactory.newTransformer();
-            DOMSource source = new DOMSource(svgDocument);
-            FileOutputStream output = new FileOutputStream(svgFile);
-            StreamResult result = new StreamResult(output);
-            transformer.setOutputProperty(OutputKeys.DOCTYPE_SYSTEM, "HTML");
-            transformer.transform(source, result);
-            output.close();
-            return svgFile.toURI();
-    	} catch (Exception ex) {
-    		throw new RuntimeException("Failed to save SVG image to file " + svgFile.getAbsolutePath() + ": " + ex.getMessage(), ex);
-    	}
-    }	
+		try {
+			svgFile = File.createTempFile("pl.sebcel.genealogy", ".svg");
+			saveSvg(svgDocument, svgFile.getAbsolutePath());
+			canvas.setURI(svgFile.toURI().toString());
+			return canvas;
+		} catch (Exception ex) {
+			throw new RuntimeException("Failed to render SVG file: " + ex.getMessage(), ex);
+		}
+	}
+
+	private void saveSvg(Document svgDocument, String fileName) {
+		try {
+			TransformerFactory transformerFactory = TransformerFactory.newInstance();
+			Transformer transformer = transformerFactory.newTransformer();
+			DOMSource source = new DOMSource(svgDocument);
+			FileOutputStream output = new FileOutputStream(fileName);
+			StreamResult result = new StreamResult(output);
+			transformer.setOutputProperty(OutputKeys.DOCTYPE_SYSTEM, "HTML");
+			transformer.transform(source, result);
+			output.close();
+		} catch (Exception ex) {
+			throw new RuntimeException("Failed to save SVG image to file " + fileName + ": " + ex.getMessage(), ex);
+		}
+	}
+
+	@Override
+	public void saveImage(String fileName) throws IOException {
+		saveSvg(svgDocument, fileName);
+	}
 }
