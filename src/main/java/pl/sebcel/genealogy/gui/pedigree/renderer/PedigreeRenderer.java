@@ -6,6 +6,9 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import pl.sebcel.genealogy.db.DatabaseDelegate;
 import pl.sebcel.genealogy.dto.pedigree.FamilyTreeElement;
 import pl.sebcel.genealogy.dto.pedigree.PersonTreeElement;
@@ -13,6 +16,8 @@ import pl.sebcel.genealogy.gui.pedigree.PedigreeChartOptions;
 
 public class PedigreeRenderer {
 
+	private Logger log = LogManager.getLogger(PedigreeRenderer.class);
+	
 	private static Color personColor = Color.RED;
     private static Color spouseColor = Color.BLUE;
     private static Color personInfoColor = Color.GRAY;
@@ -21,8 +26,10 @@ public class PedigreeRenderer {
     private static Color marriageInfoColor = new Color(0, 200, 0);
 	
     public Component drawTree(Long personId, Font font, int widthOfGeneration, PedigreeAdapter g, PedigreeChartOptions chartOptions) {
+    	log.info("Rendering tree for person " + personId + " using " + g.getClass().toString());
     	g.initialize(font, widthOfGeneration);
     	Dimension dimension = draw(personId, g, 0, 0, font.getSize(), widthOfGeneration, chartOptions);
+    	log.debug("Rendering tree completed");
     	return g.getResult(dimension);
     }
     
