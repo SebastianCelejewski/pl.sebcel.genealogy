@@ -1,4 +1,4 @@
-# genealogy-1.0
+# pl.sebcel.genealogy
 
 Simple genealogy application with basic graphs
 
