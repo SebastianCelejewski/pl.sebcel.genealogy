@@ -3,13 +3,10 @@ package pl.sebcel.genealogy.gui.pedigree;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Font;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 import java.io.File;
 
-import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -22,6 +19,7 @@ import javax.swing.filechooser.FileFilter;
 import pl.sebcel.genealogy.dto.DiagramInfoStruct;
 import pl.sebcel.genealogy.gui.IDrawOptionsListener;
 import pl.sebcel.genealogy.gui.pedigree.renderer.PedigreeAdapter;
+import pl.sebcel.genealogy.gui.pedigree.renderer.PedigreeAwtAdapter;
 import pl.sebcel.genealogy.gui.pedigree.renderer.PedigreeRenderer;
 import pl.sebcel.genealogy.gui.pedigree.renderer.PedigreeSvgAdapter;
 
@@ -39,7 +37,8 @@ public class PedigreeChartFrame extends JFrame implements ActionListener, IDrawO
     private DiagramInfoStruct diagramInfo;
     
     private PedigreeRenderer renderer = new PedigreeRenderer();
-    private PedigreeAdapter adapter = new PedigreeSvgAdapter();
+    private PedigreeAdapter svgAdapter = new PedigreeSvgAdapter();
+    private PedigreeAdapter awtAdapter = new PedigreeAwtAdapter();
     
     public PedigreeChartFrame() {
         buttonsPanel.add(saveButton);
@@ -80,7 +79,8 @@ public class PedigreeChartFrame extends JFrame implements ActionListener, IDrawO
         Font font = new Font("Times", Font.PLAIN, 12 * chartOptions.getZoom());
         int width = 24;
         		
-        Component renderedTree = renderer.drawTree(diagramInfo.getRootId(), font, width, adapter, chartOptions);
+        renderer.drawTree(diagramInfo.getRootId(), font, width, svgAdapter, chartOptions);
+        Component renderedTree = renderer.drawTree(diagramInfo.getRootId(), font, width, awtAdapter, chartOptions);
         scrollPane.setViewportView(renderedTree);
         
         repaint();
@@ -111,16 +111,7 @@ public class PedigreeChartFrame extends JFrame implements ActionListener, IDrawO
                     if (extension.equals("png")) {
                         return true;
                     }
-                    if (extension.equals("jpg")) {
-                        return true;
-                    }
-                    if (extension.equals("gif")) {
-                        return true;
-                    }
-                    if (extension.equals("bmp")) {
-                        return true;
-                    }
-                    if (extension.equals("png")) {
+                    if (extension.equals("svg")) {
                         return true;
                     }
                     return false;
@@ -128,7 +119,7 @@ public class PedigreeChartFrame extends JFrame implements ActionListener, IDrawO
 
                 @Override
                 public String getDescription() {
-                    return "Supported graphics formats";
+                    return "Supported formats: png, svg";
                 }
 
             });
@@ -136,7 +127,14 @@ public class PedigreeChartFrame extends JFrame implements ActionListener, IDrawO
             if (returnVal == JFileChooser.APPROVE_OPTION) {
                 try {
                     String fileName = fileChooser.getSelectedFile().getCanonicalPath();
-                	adapter.saveImage(fileName);
+                    System.out.println(fileName);
+                    if (fileName.endsWith(".svg")) {
+                    	svgAdapter.saveImage(fileName);
+                    } else if (fileName.endsWith(".png")) {
+                    	awtAdapter.saveImage(fileName);
+                    } else {
+                    	JOptionPane.showMessageDialog(this, "Format not supported. Only png and svg formats are supported", "Info", JOptionPane.WARNING_MESSAGE);
+                    }
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(this, "Wystąpił błąd:\n" + ex.getMessage(), "Błąd", JOptionPane.ERROR_MESSAGE);
                 }
