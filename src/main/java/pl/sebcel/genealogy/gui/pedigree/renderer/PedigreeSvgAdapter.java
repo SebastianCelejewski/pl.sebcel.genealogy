@@ -3,6 +3,7 @@ package pl.sebcel.genealogy.gui.pedigree.renderer;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -25,9 +26,12 @@ public class PedigreeSvgAdapter implements PedigreeAdapter {
 	private DocumentBuilder documentBuilder;
 	private Document svgDocument;
 	private Element svg;
+	private int fontSize;
 
 	@Override
-	public void initialize(int fontSize, int widthOfGeneration) {
+	public void initialize(Font font, int widthOfGeneration) {
+		this.fontSize = font.getSize();
+		
 		try {
 			documentBuilder = dbf.newDocumentBuilder();
 		} catch (Exception ex) {
@@ -37,18 +41,11 @@ public class PedigreeSvgAdapter implements PedigreeAdapter {
 
 		svg = svgDocument.createElement("svg");
 		svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
-		svg.setAttribute("width", "10000");
-		svg.setAttribute("height", "10000");
 		svgDocument.appendChild(svg);
 	}
 
 	@Override
-	public int getFontSize() {
-		return 12;
-	}
-
-	@Override
-	public void drawText(String text, int x, int y, int fontSize, Color color) {
+	public void drawText(String text, int x, int y, Color color) {
 		Element nameNode = svg.getOwnerDocument().createElement("text");
 		nameNode.setAttribute("x", Integer.toString(x));
 		nameNode.setAttribute("y", Integer.toString(y));
@@ -77,6 +74,9 @@ public class PedigreeSvgAdapter implements PedigreeAdapter {
 
 	@Override
 	public Component getResult(Dimension dimension) {
+		svg.setAttribute("width", Integer.toString(dimension.width));
+		svg.setAttribute("height", Integer.toString(dimension.height));
+
 		JSVGCanvas canvas = new JSVGCanvas();
 		File svgFile = null;
 		try {

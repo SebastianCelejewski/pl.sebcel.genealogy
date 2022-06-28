@@ -25,15 +25,11 @@ public class PedigreeAwtAdapter implements PedigreeAdapter {
 
 	private PedigreeTreeComponent treeComponent = new PedigreeTreeComponent();
 	
-	@Override
-	public int getFontSize() {
-		return 12;
-	}
-
-	public void initialize(int fontSize, int widthOfGeneration) {
-		bufferDimensions = new Dimension(15 * fontSize * widthOfGeneration, 1000 * fontSize);
+	public void initialize(Font font, int widthOfGeneration) {
+		bufferDimensions = new Dimension(15 * font.getSize() * widthOfGeneration, 1000 * font.getSize());
 		image = new BufferedImage(bufferDimensions.width, bufferDimensions.height, BufferedImage.TYPE_BYTE_INDEXED);
 		g = image.getGraphics();
+		g.setFont(font);
 		g.setColor(Color.WHITE);
 		g.fillRect(0, 0, bufferDimensions.width, bufferDimensions.height);
 	}
@@ -50,11 +46,11 @@ public class PedigreeAwtAdapter implements PedigreeAdapter {
 		return treeComponent;
 	}
 
-	public void drawText(String text, int x, int y, int fontSize, Color color) {
+	public void drawText(String text, int x, int y, Color color) {
 		g.setColor(color);
-		g.setFont(new Font(g.getFont().getName(), Font.BOLD, fontSize));
+		g.setFont(new Font(g.getFont().getName(), Font.BOLD, g.getFont().getSize()));
 		g.drawString(text, x, y);
-		g.setFont(new Font(g.getFont().getName(), Font.PLAIN, fontSize));
+		g.setFont(new Font(g.getFont().getName(), Font.PLAIN, g.getFont().getSize()));
 	}
 
 	@Override

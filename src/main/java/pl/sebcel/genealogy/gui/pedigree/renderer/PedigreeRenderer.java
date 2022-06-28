@@ -21,13 +21,12 @@ public class PedigreeRenderer {
     private static Color marriageInfoColor = new Color(0, 200, 0);
 	
     public Component drawTree(Long personId, Font font, int widthOfGeneration, PedigreeAdapter g, PedigreeChartOptions chartOptions) {
-    	g.initialize(font.getSize(), widthOfGeneration);
-    	Dimension dimension = draw(personId, g, 0, 0, widthOfGeneration, chartOptions);
+    	g.initialize(font, widthOfGeneration);
+    	Dimension dimension = draw(personId, g, 0, 0, font.getSize(), widthOfGeneration, chartOptions);
     	return g.getResult(dimension);
     }
     
-    private Dimension draw(Long personId, PedigreeAdapter g, int x, int y, int widthOfGeneration, PedigreeChartOptions chartOptions) {
-        int fontSize = 12; //g.getFont().getSize();
+    private Dimension draw(Long personId, PedigreeAdapter g, int x, int y, int fontSize, int widthOfGeneration, PedigreeChartOptions chartOptions) {
         int width = widthOfGeneration * fontSize;
         int height = fontSize;
 
@@ -37,34 +36,34 @@ public class PedigreeRenderer {
             personName += " (" + person.getId() + ")";
         }
 
-        g.drawText(personName, x, y + height, fontSize, personColor);
+        g.drawText(personName, x, y + height, personColor);
 
         String birthInfo = person.getBirthData();
         if (birthInfo.length() > 0 && chartOptions.isShowBirthInfo()) {
             height += fontSize;
-            g.drawText(birthInfo, x, y + height, fontSize, personInfoColor);
+            g.drawText(birthInfo, x, y + height, personInfoColor);
         }
         String deathInfo = person.getDeathData();
         if (deathInfo.length() > 0 && chartOptions.isShowDeathInfo()) {
             height += fontSize;
-            g.drawText(deathInfo, x, y + height, fontSize, personInfoColor);
+            g.drawText(deathInfo, x, y + height, personInfoColor);
         }
         String residenceInfo = person.getResidenceData();
         if (residenceInfo.length() > 0 && chartOptions.isShowResidenceInfo()) {
             height += fontSize;
-            g.drawText(residenceInfo, x, y + height, fontSize, personInfoColor);
+            g.drawText(residenceInfo, x, y + height, personInfoColor);
         }
         String occupationInfo = person.getOccupationData();
         if (occupationInfo.length() > 0 && chartOptions.isShowOccupationInfo()) {
             height += fontSize;
-            g.drawText(occupationInfo, x, y + height, fontSize, personInfoColor);
+            g.drawText(occupationInfo, x, y + height, personInfoColor);
         }
         if (birthInfo.length() > 0 || deathInfo.length() > 0 || occupationInfo.length() > 0 || residenceInfo.length() > 0) {
             height += fontSize / 2;
         }
         
         int personNameWidth = g.getTextWidth(personName);
-        Dimension familiesDimension = drawFamilies(person, g, x, y + height, personNameWidth, height, widthOfGeneration, chartOptions);
+        Dimension familiesDimension = drawFamilies(person, g, x, y + height, fontSize, personNameWidth, height, widthOfGeneration, chartOptions);
         height += familiesDimension.height;
         if (familiesDimension.width > width) {
             width = familiesDimension.width;
@@ -73,8 +72,7 @@ public class PedigreeRenderer {
         return new Dimension(width, height);
     }
 
-    private Dimension drawFamilies(PersonTreeElement person, PedigreeAdapter g, int x, int y, int spouseInfoWidth, int spouseInfoHeight, int widthOfGeneration, PedigreeChartOptions chartOptions) {
-        int fontSize = g.getFontSize();
+    private Dimension drawFamilies(PersonTreeElement person, PedigreeAdapter g, int x, int y, int fontSize, int spouseInfoWidth, int spouseInfoHeight, int widthOfGeneration, PedigreeChartOptions chartOptions) {
         int height = 0;
         int width = widthOfGeneration * fontSize;
 
@@ -97,7 +95,7 @@ public class PedigreeRenderer {
                 x1 = x0;
                 y1 = y0 + fontSize;
                 
-                Dimension familiesDimension = drawFamily(family, spouse, g, x, y + height, counter == 0, spouseInfoWidth, spouseInfoHeight, widthOfGeneration, chartOptions);
+                Dimension familiesDimension = drawFamily(family, spouse, g, x, y + height, fontSize, counter == 0, spouseInfoWidth, spouseInfoHeight, widthOfGeneration, chartOptions);
                 int familiesHeight = familiesDimension.height;
                 if (familiesDimension.width > width) {
                     width = familiesDimension.width;
@@ -110,14 +108,13 @@ public class PedigreeRenderer {
         return new Dimension(width, height);
     }
 
-    private Dimension drawFamily(FamilyTreeElement family, PersonTreeElement spouse, PedigreeAdapter g, int x, int y, boolean lowered, int spouseInfoWidth, int spouseInfoHeight, int widthOfGeneration, PedigreeChartOptions chartOptions) {
-        int fontSize = g.getFontSize();
+    private Dimension drawFamily(FamilyTreeElement family, PersonTreeElement spouse, PedigreeAdapter g, int x, int y, int fontSize, boolean lowered, int spouseInfoWidth, int spouseInfoHeight, int widthOfGeneration, PedigreeChartOptions chartOptions) {
         int width = fontSize * widthOfGeneration;
 
         int childrenWidth = 0;
         int childrenHeight = 0;
 
-        Dimension spouseDimension = drawSpouse(family, spouse, g, x, y, widthOfGeneration, chartOptions);
+        Dimension spouseDimension = drawSpouse(family, spouse, g, x, y, fontSize, widthOfGeneration, chartOptions);
 
         String spouseName = spouse.getDescription();
         if (chartOptions.isShowIdentifiers()) {
@@ -134,7 +131,7 @@ public class PedigreeRenderer {
                 yy -= spouseInfoHeight;
                 xx = x + spouseInfoWidth + margin;
             }
-            Dimension childrenDimension = drawChildren(family.getChildrenIds(), g, x + width, yy, widthOfGeneration, chartOptions);
+            Dimension childrenDimension = drawChildren(family.getChildrenIds(), g, x + width, yy, fontSize, widthOfGeneration, chartOptions);
             childrenHeight += childrenDimension.height;
 
             if (childrenDimension.width > childrenWidth) {
@@ -151,8 +148,7 @@ public class PedigreeRenderer {
         return new Dimension(width + childrenWidth, familiesHeight);
     }
 
-    private Dimension drawSpouse(FamilyTreeElement family, PersonTreeElement spouse, PedigreeAdapter g, int x, int y, int widthOfGeneration, PedigreeChartOptions chartOptions) {
-        int fontSize = g.getFontSize();
+    private Dimension drawSpouse(FamilyTreeElement family, PersonTreeElement spouse, PedigreeAdapter g, int x, int y, int fontSize, int widthOfGeneration, PedigreeChartOptions chartOptions) {
         int height = fontSize;
 
         String spouseName = spouse.getDescription();
@@ -161,28 +157,28 @@ public class PedigreeRenderer {
         }
         int width = fontSize * widthOfGeneration;
         
-        g.drawText("+ " + spouseName, x, y + fontSize, fontSize, spouseColor);
+        g.drawText("+ " + spouseName, x, y + fontSize, spouseColor);
         
         
         String birthInfo = spouse.getBirthData();
         if (birthInfo.length() > 0 && chartOptions.isShowBirthInfo()) {
             height += fontSize;
-            g.drawText(birthInfo, x, y + height, fontSize, personInfoColor);
+            g.drawText(birthInfo, x, y + height, personInfoColor);
         }
         String deathInfo = spouse.getDeathData();
         if (deathInfo.length() > 0 && chartOptions.isShowDeathInfo()) {
             height += fontSize;
-            g.drawText(deathInfo, x, y + height, fontSize, personInfoColor);
+            g.drawText(deathInfo, x, y + height, personInfoColor);
         }
         String residenceInfo = spouse.getResidenceData();
         if (residenceInfo.length() > 0 && chartOptions.isShowResidenceInfo()) {
             height += fontSize;
-            g.drawText(residenceInfo, x, y + height, fontSize, personInfoColor);
+            g.drawText(residenceInfo, x, y + height, personInfoColor);
         }
         String occupationInfo = spouse.getOccupationData();
         if (occupationInfo.length() > 0 && chartOptions.isShowOccupationInfo()) {
             height += fontSize;
-            g.drawText(occupationInfo, x, y + height, fontSize, personInfoColor);
+            g.drawText(occupationInfo, x, y + height, personInfoColor);
         }
 
         height += fontSize / 2;
@@ -190,35 +186,34 @@ public class PedigreeRenderer {
         if (chartOptions.isShowIdentifiers()) {
             String relationshipInfo = "Id związku: " + family.getRelationshipId();
             height += fontSize;
-            g.drawText(relationshipInfo, x, y + height, fontSize, marriageInfoColor);
+            g.drawText(relationshipInfo, x, y + height, marriageInfoColor);
         }
 
         String firstMetInfo = family.getFirstMetData();
         if (firstMetInfo.length() > 0 && chartOptions.isShowFirstMetInfo()) {
             height += fontSize;
-            g.drawText(firstMetInfo, x, y + height, fontSize, marriageInfoColor);
+            g.drawText(firstMetInfo, x, y + height, marriageInfoColor);
         }
         String marriageInfo = family.getMarriageData();
         if (marriageInfo.length() > 0 && chartOptions.isShowMarriageInfo()) {
             height += fontSize;
-            g.drawText(marriageInfo, x, y + height, fontSize, marriageInfoColor);
+            g.drawText(marriageInfo, x, y + height, marriageInfoColor);
         }
         String separationInfo = family.getSeparationData();
         if (separationInfo.length() > 0 && chartOptions.isShowSeparationInfo()) {
             height += fontSize;
-            g.drawText(separationInfo, x, y + height, fontSize, marriageInfoColor);
+            g.drawText(separationInfo, x, y + height, marriageInfoColor);
         }
         String divorceInfo = family.getDivorceData();
         if (divorceInfo.length() > 0 && chartOptions.isShowDivorceInfo()) {
             height += fontSize;
-            g.drawText(divorceInfo, x, y + height, fontSize, marriageInfoColor);
+            g.drawText(divorceInfo, x, y + height, marriageInfoColor);
         }
 
         return new Dimension(width, height);
     }
 
-    private Dimension drawChildren(List<Long> childrenIds, PedigreeAdapter g, int x, int y, int widthOfGeneration, PedigreeChartOptions chartOptions) {
-        int fontSize = g.getFontSize();
+    private Dimension drawChildren(List<Long> childrenIds, PedigreeAdapter g, int x, int y, int fontSize, int widthOfGeneration, PedigreeChartOptions chartOptions) {
         int height = 0;
         int width = widthOfGeneration * fontSize;
         int oldX = 0;
@@ -226,7 +221,7 @@ public class PedigreeRenderer {
 
         if (childrenIds != null && childrenIds.size() > 0) {
             for (Long childId : childrenIds) {
-                Dimension childDimension = draw(childId, g, x + fontSize, y + height, widthOfGeneration, chartOptions);
+                Dimension childDimension = draw(childId, g, x + fontSize, y + height, fontSize, widthOfGeneration, chartOptions);
                 int childHeight = childDimension.height;
                 if (childDimension.width > width) {
                     width = childDimension.width;

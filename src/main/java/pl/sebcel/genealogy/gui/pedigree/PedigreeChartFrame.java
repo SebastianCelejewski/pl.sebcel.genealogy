@@ -76,11 +76,13 @@ public class PedigreeChartFrame extends JFrame implements ActionListener, IDrawO
     }
 
     private void draw(PedigreeChartOptions chartOptions) {
-        Font font = new Font("Times", Font.PLAIN, 12 * chartOptions.getZoom());
-        int width = 24;
+    	int fontSize = 12 * chartOptions.getZoom();
+        int widthOfTheGeneration = 24;
+
+        Font font = new Font("Times", Font.PLAIN, fontSize);
         		
-        renderer.drawTree(diagramInfo.getRootId(), font, width, svgAdapter, chartOptions);
-        Component renderedTree = renderer.drawTree(diagramInfo.getRootId(), font, width, awtAdapter, chartOptions);
+        renderer.drawTree(diagramInfo.getRootId(), font, widthOfTheGeneration, svgAdapter, chartOptions);
+        Component renderedTree = renderer.drawTree(diagramInfo.getRootId(), font, widthOfTheGeneration, awtAdapter, chartOptions);
         scrollPane.setViewportView(renderedTree);
         
         repaint();
@@ -126,7 +128,6 @@ public class PedigreeChartFrame extends JFrame implements ActionListener, IDrawO
             int returnVal = fileChooser.showSaveDialog(this);
             if (returnVal == JFileChooser.APPROVE_OPTION) {
                 try {
-                    String fileName = fileChooser.getSelectedFile().getCanonicalPath();
                     System.out.println(fileName);
                     if (fileName.endsWith(".svg")) {
                     	svgAdapter.saveImage(fileName);
