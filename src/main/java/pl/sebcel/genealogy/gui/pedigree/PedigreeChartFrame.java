@@ -128,7 +128,7 @@ public class PedigreeChartFrame extends JFrame implements ActionListener, IDrawO
             int returnVal = fileChooser.showSaveDialog(this);
             if (returnVal == JFileChooser.APPROVE_OPTION) {
                 try {
-                    System.out.println(fileName);
+                    String fileName = fileChooser.getSelectedFile().getCanonicalPath();
                     if (fileName.endsWith(".svg")) {
                     	svgAdapter.saveImage(fileName);
                     } else if (fileName.endsWith(".png")) {
