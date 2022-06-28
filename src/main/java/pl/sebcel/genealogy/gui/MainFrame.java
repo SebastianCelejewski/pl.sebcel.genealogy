@@ -31,6 +31,7 @@ public class MainFrame extends JFrame {
     private ListContainer relationshipsList = new ListContainer(new RelationshipListComponent(), relationshipEditContainer);
     private ListContainer clansList = new ListContainer(new ClanListComponent(), clanEditContainer);
     private ListContainer documentsList = new ListContainer(new DocumentsListComponent(), documentEditContainer);
+
     private JTabbedPane tabbedPane = new JTabbedPane();
 
     public final static long serialVersionUID = 0l;
@@ -38,7 +39,7 @@ public class MainFrame extends JFrame {
     public MainFrame() {
         this.setLayout(new BorderLayout());
         this.add(tabbedPane, BorderLayout.CENTER);
-        this.setTitle("Genealogy 1.3.2");
+        this.setTitle("Genealogy 1.4.0");
 
         tabbedPane.addTab("Lista osób", peopleList);
         tabbedPane.addTab("Lista związków", relationshipsList);
