@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.font.FontRenderContext;
+import java.awt.geom.AffineTransform;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -26,12 +28,14 @@ public class PedigreeSvgAdapter implements PedigreeAdapter {
 	private DocumentBuilder documentBuilder;
 	private Document svgDocument;
 	private Element svg;
-	private int fontSize;
+//	private int fontSize;
+//	private String fontFamily;
+	private Font font;
 
 	@Override
 	public void initialize(Font font, int widthOfGeneration) {
-		this.fontSize = font.getSize();
-		
+		this.font = font;
+
 		try {
 			documentBuilder = dbf.newDocumentBuilder();
 		} catch (Exception ex) {
@@ -46,30 +50,33 @@ public class PedigreeSvgAdapter implements PedigreeAdapter {
 
 	@Override
 	public void drawText(String text, int x, int y, Color color) {
-		Element nameNode = svg.getOwnerDocument().createElement("text");
-		nameNode.setAttribute("x", Integer.toString(x));
-		nameNode.setAttribute("y", Integer.toString(y));
-		nameNode.setAttribute("text-anchor", "start");
-		nameNode.setAttribute("fill", "black");
-		nameNode.setAttribute("style", "font-size: " + fontSize + "px");
-		nameNode.setTextContent(text);
-		svg.appendChild(nameNode);
+		Element textNode = svg.getOwnerDocument().createElement("text");
+		textNode.setAttribute("x", Integer.toString(x));
+		textNode.setAttribute("y", Integer.toString(y));
+		textNode.setAttribute("text-anchor", "start");
+		textNode.setAttribute("fill", getColorAttribute(color));
+		textNode.setAttribute("stroke", "none");
+		textNode.setAttribute("font-family", font.getFamily());
+		textNode.setAttribute("style", "font-size: " + font.getSize() + "px");
+		textNode.setTextContent(text);
+		svg.appendChild(textNode);
 	}
 
 	@Override
 	public void drawLine(int x1, int y1, int x2, int y2, Color color) {
-		Element line = svg.getOwnerDocument().createElement("line");
-		line.setAttribute("x1", Integer.toString(x1));
-		line.setAttribute("y1", Integer.toString(y1));
-		line.setAttribute("x2", Integer.toString(x2));
-		line.setAttribute("y2", Integer.toString(y2));
-		line.setAttribute("stroke", "grey");
-		svg.appendChild(line);
+		Element lineNode = svg.getOwnerDocument().createElement("line");
+		lineNode.setAttribute("x1", Integer.toString(x1));
+		lineNode.setAttribute("y1", Integer.toString(y1 + font.getSize() / 4));
+		lineNode.setAttribute("x2", Integer.toString(x2));
+		lineNode.setAttribute("y2", Integer.toString(y2 + font.getSize() / 4));
+		lineNode.setAttribute("stroke", getColorAttribute(color));
+		lineNode.setAttribute("fill", "none");
+		svg.appendChild(lineNode);
 	}
 
 	@Override
 	public int getTextWidth(String text) {
-		return 10; // TODO: Calculate it somehow
+		return (int) font.getStringBounds(text, new FontRenderContext(new AffineTransform(), false, false)).getWidth();
 	}
 
 	@Override
@@ -107,5 +114,12 @@ public class PedigreeSvgAdapter implements PedigreeAdapter {
 	@Override
 	public void saveImage(String fileName) throws IOException {
 		saveSvg(svgDocument, fileName);
+	}
+
+	private String getColorAttribute(Color color) {
+		int red = color.getRed();
+		int green = color.getGreen();
+		int blue = color.getBlue();
+		return "rgb(" + red + "," + green + "," + blue + ")";
 	}
 }

@@ -79,7 +79,7 @@ public class PedigreeChartFrame extends JFrame implements ActionListener, IDrawO
     	int fontSize = 12 * chartOptions.getZoom();
         int widthOfTheGeneration = 24;
 
-        Font font = new Font("Times", Font.PLAIN, fontSize);
+        Font font = new Font("Times New Roman", Font.PLAIN, fontSize);
         		
         renderer.drawTree(diagramInfo.getRootId(), font, widthOfTheGeneration, svgAdapter, chartOptions);
         Component renderedTree = renderer.drawTree(diagramInfo.getRootId(), font, widthOfTheGeneration, awtAdapter, chartOptions);
