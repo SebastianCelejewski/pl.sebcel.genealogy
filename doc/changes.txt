@@ -1,2 +1,5 @@
 # 1.4.0, 2022-06-28
 Export to SVG format.
+
+# 1.4.1, 2022-06-28
+Updating dependencies to remove technical debt

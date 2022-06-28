@@ -39,7 +39,7 @@ public class MainFrame extends JFrame {
     public MainFrame() {
         this.setLayout(new BorderLayout());
         this.add(tabbedPane, BorderLayout.CENTER);
-        this.setTitle("Genealogy 1.4.0");
+        this.setTitle("Genealogy 1.4.1");
 
         tabbedPane.addTab("Lista osób", peopleList);
         tabbedPane.addTab("Lista związków", relationshipsList);
