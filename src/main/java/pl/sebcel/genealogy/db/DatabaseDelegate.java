@@ -35,7 +35,6 @@ public class DatabaseDelegate {
     private final static DateFormat outputDF = new SimpleDateFormat("yyyy-MM-dd");
 
     public static List<PeopleListElement> getPeopleList() {
-        System.out.println("[DatabaseDelegate][getPeopleList]");
         Collection<Person> people = DatabaseLib.getPeople();
         List<PeopleListElement> peopleList = new ArrayList<PeopleListElement>();
         if (people != null && people.size() > 0) {
@@ -51,7 +50,6 @@ public class DatabaseDelegate {
     }
 
     public static String getPeopleListXML() {
-        System.out.println("[DatabaseDelegate][getPeopleListXML]");
         StringBuffer xmlData = new StringBuffer();
         xmlData.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
         xmlData.append("<people>\n");
@@ -66,7 +64,6 @@ public class DatabaseDelegate {
     }
 
     public static String getDocumentListXML() {
-        System.out.println("[DatabaseDelegate][getDocumentListXML]");
         StringBuffer xmlData = new StringBuffer();
         xmlData.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
         xmlData.append("<documents>\n");
@@ -81,7 +78,6 @@ public class DatabaseDelegate {
     }
 
     public static String getDocumentListTXT() {
-        System.out.println("[DatabaseDelegate][getDocumentListTXT]");
         StringBuffer xmlData = new StringBuffer();
         xmlData.append("id;title;symbol;description\n");
         Collection<Document> documents = DatabaseLib.getDocuments();
@@ -94,7 +90,6 @@ public class DatabaseDelegate {
     }
 
     public static String getPeopleListCSV() {
-        System.out.println("[DatabaseDelegate][getPeopleListTXT]");
         StringBuffer xmlData = new StringBuffer();
         xmlData.append("\"id\",\"first-names\",\"last-name\",\"birth-date\",\"birth-place\",\"death-date\",\"death-place\",\"burial-date\",\"burial-place\",\"residence\",\"occupation\",\"professions\",\"father\",\"mother\",\"relationships\"\n");
         Collection<Person> people = DatabaseLib.getPeople();
@@ -107,7 +102,6 @@ public class DatabaseDelegate {
     }
 
     public static String getDocumentXML(Document document) {
-        System.out.println("[DatabaseDelegate][getDocumentXML]");
         StringBuffer xmlData = new StringBuffer();
         xmlData.append("<document>\n");
         xmlData.append("  " + getXMLField("id", document.getId()));
@@ -119,12 +113,10 @@ public class DatabaseDelegate {
     }
 
     public static String getDocumentTXT(Document document) {
-        System.out.println("[DatabaseDelegate][getDocumentTXT]");
         return document.getId() + ";" + document.getTitle() + ";" + document.getSymbol() + ";" + document.getDescription() + "\n";
     }
 
     public static String getPersonXML(Person osoba) {
-        System.out.println("[DatabaseDelegate][getPersonXML]");
         StringBuffer xmlData = new StringBuffer();
         xmlData.append("<person>\n");
         xmlData.append("  " + getXMLField("id", osoba.getId()));
@@ -173,7 +165,6 @@ public class DatabaseDelegate {
     }
 
     public static String getPersonCSV(Person osoba) {
-        System.out.println("[DatabaseDelegate][getPersonTXT]");
         StringBuffer csvRow = new StringBuffer();
         csvRow.append(getCSVField(osoba.getId()));
         csvRow.append(getCSVField(osoba.getNames()));
@@ -246,7 +237,6 @@ public class DatabaseDelegate {
     }
 
     public static List<RelationshipsListElement> getRelationshipsList() {
-        System.out.println("[DatabaseDelegate][getRelationshipsList]");
         Collection<Relationship> relationships = DatabaseLib.getRelationships(null, null);
         List<RelationshipsListElement> relationshipsList = new ArrayList<RelationshipsListElement>();
         if (relationships != null && relationships.size() > 0) {
@@ -263,7 +253,6 @@ public class DatabaseDelegate {
     }
 
     public static List<ClanListElement> getClansList() {
-        System.out.println("[DatabaseDelegate][getClansList]");
         Collection<Clan> clans = DatabaseLib.getClans();
         List<ClanListElement> clansList = new ArrayList<ClanListElement>();
         if (clans != null && clans.size() > 0) {
@@ -280,7 +269,6 @@ public class DatabaseDelegate {
     }
 
     public static List<DocumentListElement> getDocumentsList() {
-        System.out.println("[DatabaseDelegate][getDocumentsList]");
         Collection<Document> documents = DatabaseLib.getDocuments();
         List<DocumentListElement> documentsList = new ArrayList<DocumentListElement>();
         if (documents != null && documents.size() > 0) {
@@ -296,7 +284,6 @@ public class DatabaseDelegate {
     }
 
     public static PersonTreeElement getPersonDataForPedigree(Long personId) {
-        System.out.println("[DatabaseDelegate][getPersonDataForPedigree]");
         Person person = DatabaseLib.getPerson(personId);
         PersonTreeElement result = new PersonTreeElement();
         result.setId(person.getId());
@@ -371,7 +358,6 @@ public class DatabaseDelegate {
     }
 
     public static PersonEditData getPersonEditData(Long personId) {
-        System.out.println("[DatabaseDelegate][getPersonEditData]");
         Person person = DatabaseLib.getPerson(personId);
         PersonEditData personEditData = new PersonEditData();
 
@@ -435,7 +421,6 @@ public class DatabaseDelegate {
     }
 
     public static RelationshipEditData getRelationshipEditData(Long relationshipId) {
-        System.out.println("[DatabaseDelegate][getRelationshipEditData]");
         Relationship relationship = DatabaseLib.getRelationship(relationshipId);
 
         RelationshipEditData relationshipEditData = new RelationshipEditData();
@@ -456,7 +441,6 @@ public class DatabaseDelegate {
     }
 
     public static ClanEditData getClanEditData(Long clanId) {
-        System.out.println("[DatabaseDelegate][getClanEditData]");
         Clan clan = DatabaseLib.getClan(clanId);
 
         ClanEditData clanEditData = new ClanEditData();
@@ -469,7 +453,6 @@ public class DatabaseDelegate {
     }
 
     public static DocumentEditData getDocumentEditData(Long documentId) {
-        System.out.println("[DatabaseDelegate][getDocumentEditData]");
         Document document = DatabaseLib.getDocument(documentId);
 
         DocumentEditData documentEditData = new DocumentEditData();
@@ -484,7 +467,6 @@ public class DatabaseDelegate {
     }
 
     public static void saveEditedPerson(PersonEditData personData) {
-        System.out.println("[DatabaseDelegate][saveEditedPerson]");
         Person person = DatabaseLib.getPerson(personData.getId());
 
         person.setSex(personData.getSex());
@@ -522,7 +504,6 @@ public class DatabaseDelegate {
     }
 
     public static void saveEditedRelationship(RelationshipEditData relationshipData) {
-        System.out.println("[DatabaseDelegate][saveEditedRelationship]");
         Relationship relationship = DatabaseLib.getRelationship(relationshipData.getId());
 
         if (relationshipData.getMale() != null) {
@@ -550,7 +531,6 @@ public class DatabaseDelegate {
     }
 
     public static void saveEditedClan(ClanEditData clanData) {
-        System.out.println("[DatabaseDelegate][saveClanData]");
         Clan clan = DatabaseLib.getClan(clanData.getId());
 
         clan.setName(clanData.getName());
@@ -566,7 +546,6 @@ public class DatabaseDelegate {
     }
 
     public static void saveEditedDocument(DocumentEditData documentData) {
-        System.out.println("[DatabaseDelegate][saveEditedDocument]");
         Document document = DatabaseLib.getDocument(documentData.getId());
 
         document.setTitle(documentData.getTitle());
@@ -588,7 +567,6 @@ public class DatabaseDelegate {
     }
 
     public static void saveNewPerson(PersonEditData personData) {
-        System.out.println("[DatabaseDelegate][saveNewPerson]");
         Person person = new Person();
 
         person.setSex(personData.getSex());
@@ -623,7 +601,6 @@ public class DatabaseDelegate {
     }
 
     public static void saveNewRelationship(RelationshipEditData relationshipData) {
-        System.out.println("[DatabaseDelegate][saveNewRelationship]");
         Relationship relationship = new Relationship();
 
         if (relationshipData.getMale() != null) {
@@ -651,7 +628,6 @@ public class DatabaseDelegate {
     }
 
     public static void saveNewClan(ClanEditData clanData) {
-        System.out.println("[DatabaseDelegate][saveNewClan]");
         Clan clan = new Clan();
 
         clan.setName(clanData.getName());
@@ -667,7 +643,6 @@ public class DatabaseDelegate {
     }
 
     public static void saveNewDocument(DocumentEditData documentData) {
-        System.out.println("[DatabaseDelegate][saveNewDocument]");
         Document document = new Document();
 
         document.setTitle(documentData.getTitle());
@@ -687,7 +662,6 @@ public class DatabaseDelegate {
     }
 
     public static List<ReferenceListElement> getRelationships() {
-        System.out.println("[DatabaseDelegate][getRelationships]");
         Collection<Relationship> relationships = DatabaseLib.getRelationships(null, null);
         List<ReferenceListElement> result = new ArrayList<ReferenceListElement>();
         if (relationships != null && relationships.size() > 0) {
@@ -699,25 +673,21 @@ public class DatabaseDelegate {
     }
 
     public static List<ReferenceListElement> getMales() {
-        System.out.println("[DatabaseDelegate][getMales]");
         Collection<Person> males = DatabaseLib.getMales();
         return toStruct(males);
     }
 
     public static List<ReferenceListElement> getFemales() {
-        System.out.println("[DatabaseDelegate][getFemales]");
         Collection<Person> females = DatabaseLib.getFemales();
         return toStruct(females);
     }
 
     public static List<ReferenceListElement> getPeople() {
-        System.out.println("[DatabaseDelegate][getPeople]");
         Collection<Person> people = DatabaseLib.getPeople();
         return toStruct(people);
     }
 
     public static List<ReferenceListElement> getDocuments() {
-        System.out.println("[DatabaseDelegate][getDocuments]");
         Collection<Document> documents = DatabaseLib.getDocuments();
         return dokumentsToReferencedListElements(documents);
     }
