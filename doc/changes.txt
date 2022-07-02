@@ -1,5 +1,10 @@
 # 1.4.0, 2022-06-28
-Export to SVG format.
+- Export to SVG format.
 
 # 1.4.1, 2022-06-28
-Updating dependencies to remove technical debt
+- Updating dependencies to remove technical debt.
+
+# 1.4.2, 2022-07-02
+- Bigger rendering buffer for AWT.
+- Handling of people who appear in a tree more than once.
+- Removal of Hibernate logging.

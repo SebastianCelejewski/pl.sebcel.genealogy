@@ -4,7 +4,10 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -24,9 +27,13 @@ public class PedigreeRenderer {
     private static Color childrenColor = Color.BLACK;
     private static Color spouseLineColor = new Color(200, 200, 200);
     private static Color marriageInfoColor = new Color(0, 200, 0);
+    private static Color doubleRelation = Color.GREEN;
+    
+    private Map<String, int[]> renderedRelations = new HashMap<>();
 	
     public Component drawTree(Long personId, Font font, int widthOfGeneration, PedigreeAdapter g, PedigreeChartOptions chartOptions) {
     	log.info("Rendering tree for person " + personId + " using " + g.getClass().toString());
+    	renderedRelations = new HashMap<>();
     	g.initialize(font, widthOfGeneration);
     	Dimension dimension = draw(personId, g, 0, 0, font.getSize(), widthOfGeneration, chartOptions);
     	log.debug("Rendering tree completed");
@@ -102,7 +109,7 @@ public class PedigreeRenderer {
                 x1 = x0;
                 y1 = y0 + fontSize;
                 
-                Dimension familiesDimension = drawFamily(family, spouse, g, x, y + height, fontSize, counter == 0, spouseInfoWidth, spouseInfoHeight, widthOfGeneration, chartOptions);
+                Dimension familiesDimension = drawFamily(person, family, spouse, g, x, y + height, fontSize, counter == 0, spouseInfoWidth, spouseInfoHeight, widthOfGeneration, chartOptions);
                 int familiesHeight = familiesDimension.height;
                 if (familiesDimension.width > width) {
                     width = familiesDimension.width;
@@ -114,8 +121,16 @@ public class PedigreeRenderer {
 
         return new Dimension(width, height);
     }
+    
+    private String getRelationId(Long personId1, Long personId2) {
+        Long[] relationIds = new Long[2];
+        relationIds[0] = personId1;
+        relationIds[1] = personId2;
+        Arrays.sort(relationIds);
+        return relationIds[0] + " + " + relationIds[1];     
+    }
 
-    private Dimension drawFamily(FamilyTreeElement family, PersonTreeElement spouse, PedigreeAdapter g, int x, int y, int fontSize, boolean lowered, int spouseInfoWidth, int spouseInfoHeight, int widthOfGeneration, PedigreeChartOptions chartOptions) {
+    private Dimension drawFamily(PersonTreeElement person, FamilyTreeElement family, PersonTreeElement spouse, PedigreeAdapter g, int x, int y, int fontSize, boolean lowered, int spouseInfoWidth, int spouseInfoHeight, int widthOfGeneration, PedigreeChartOptions chartOptions) {
         int width = fontSize * widthOfGeneration;
 
         int childrenWidth = 0;
@@ -130,6 +145,15 @@ public class PedigreeRenderer {
 
         int spouseNameWidth = g.getTextWidth("+ " + spouseName);
         int margin = 5;
+        
+        String relationId = getRelationId(person.getId(), spouse.getId());
+        if (renderedRelations.containsKey(relationId)) {
+        	log.debug("Relation " + relationId + " already rendered - skipping rendering of children");
+    		int[] renderedRelationCoordinates = renderedRelations.get(relationId);
+    		g.drawLine(x + spouseNameWidth, y, x + fontSize * widthOfGeneration / 2, y, doubleRelation);
+    		g.drawLine(x + fontSize * widthOfGeneration / 2, y, renderedRelationCoordinates[0] + fontSize * widthOfGeneration / 2, renderedRelationCoordinates[1], doubleRelation);
+    		return new Dimension(width, fontSize);
+        }   
 
         if (family.getChildrenIds() != null && family.getChildrenIds().size() > 0) {
             int yy = y;
@@ -152,6 +176,11 @@ public class PedigreeRenderer {
         }
         int familiesHeight = Math.max(spouseDimension.height, childrenHeight);
 
+        int[] coordinates = new int[2];
+        coordinates[0] = x;
+        coordinates[1] = y;
+        renderedRelations.put(relationId, coordinates);
+
         return new Dimension(width + childrenWidth, familiesHeight);
     }
 
@@ -163,9 +192,8 @@ public class PedigreeRenderer {
             spouseName += " (" + spouse.getId() + ")";
         }
         int width = fontSize * widthOfGeneration;
-        
+
         g.drawText("+ " + spouseName, x, y + fontSize, spouseColor);
-        
         
         String birthInfo = spouse.getBirthData();
         if (birthInfo.length() > 0 && chartOptions.isShowBirthInfo()) {

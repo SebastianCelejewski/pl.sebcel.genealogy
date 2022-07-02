@@ -26,7 +26,7 @@ public class PedigreeAwtAdapter implements PedigreeAdapter {
 	private PedigreeTreeComponent treeComponent = new PedigreeTreeComponent();
 	
 	public void initialize(Font font, int widthOfGeneration) {
-		bufferDimensions = new Dimension(15 * font.getSize() * widthOfGeneration, 1000 * font.getSize());
+		bufferDimensions = new Dimension(15 * font.getSize() * widthOfGeneration, 1500 * font.getSize());
 		image = new BufferedImage(bufferDimensions.width, bufferDimensions.height, BufferedImage.TYPE_BYTE_INDEXED);
 		g = image.getGraphics();
 		g.setFont(font);
