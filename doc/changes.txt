@@ -8,3 +8,7 @@
 - Bigger rendering buffer for AWT.
 - Handling of people who appear in a tree more than once.
 - Removal of Hibernate logging.
+
+# 1.4.3, 2022-09-10
+- Fixed bug in saving description of a new person
+- Fixed bug in tree rendering (new people and relations were not rendered)

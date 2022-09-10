@@ -580,10 +580,12 @@ public class DatabaseDelegate {
         person.setBurialPlace(personData.getBurialPlace());
         person.setEducation(personData.getEducation());
         person.setOccupation(personData.getOccupation());
+        person.setDescription(personData.getDescription());
 
+        Relationship parentsRelationship = null;
         if (personData.getParents() != null) {
             Long parentsRelationshipId = personData.getParents().getId();
-            Relationship parentsRelationship = DatabaseLib.getRelationship(parentsRelationshipId);
+            parentsRelationship = DatabaseLib.getRelationship(parentsRelationshipId);
             person.setParents(parentsRelationship);
         }
 
@@ -598,19 +600,27 @@ public class DatabaseDelegate {
         }
 
         DatabaseLib.save(person);
+
+        if (parentsRelationship != null) {
+            parentsRelationship.getChildren().add(person);
+            DatabaseLib.save(parentsRelationship);
+        }
     }
 
     public static void saveNewRelationship(RelationshipEditData relationshipData) {
         Relationship relationship = new Relationship();
 
+        Person male = null;
         if (relationshipData.getMale() != null) {
             Long maleId = relationshipData.getMale().getId();
-            Person male = DatabaseLib.getPerson(maleId);
+            male = DatabaseLib.getPerson(maleId);
             relationship.setMale(male);
         }
+        
+        Person female = null; 
         if (relationshipData.getFemale() != null) {
             Long femaleId = relationshipData.getFemale().getId();
-            Person female = DatabaseLib.getPerson(femaleId);
+            female = DatabaseLib.getPerson(femaleId);
             relationship.setFemale(female);
         }
 
@@ -625,6 +635,16 @@ public class DatabaseDelegate {
         relationship.setDescription(relationshipData.getDescription());
 
         DatabaseLib.save(relationship);
+
+        if (male != null) {
+            male.getRelationshipsAsMale().add(relationship);
+            DatabaseLib.save(male);
+        }
+        if (female != null) {
+            female.getRelationshipsAsFemale().add(relationship);
+            DatabaseLib.save(female);
+        }
+        
     }
 
     public static void saveNewClan(ClanEditData clanData) {
